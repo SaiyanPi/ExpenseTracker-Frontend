@@ -1,0 +1,49 @@
+<mat-sidenav-container class="sidenav-container">
+
+  <mat-sidenav
+    #sidenav
+    [mode]="isMobile ? 'over' : 'side'"
+    [opened]="!isMobile">
+
+    <div class="sidenav-header">
+      <h2>Expense Tracker</h2>
+    </div>
+
+    <nav>
+      <a mat-button routerLink="/categories">
+        <mat-icon>category</mat-icon>
+        Categories
+      </a>
+
+      <a mat-button routerLink="/budgets">
+        <mat-icon>account_balance_wallet</mat-icon>
+        Budgets
+      </a>
+
+      <a mat-button routerLink="/reports">
+        <mat-icon>bar_chart</mat-icon>
+        Reports
+      </a>
+    </nav>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+    <mat-toolbar>
+
+      @if (isMobile) {
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
+
+    </mat-toolbar>
+
+    <main class="content">
+      <router-outlet />
+    </main>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

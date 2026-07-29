@@ -2,11 +2,12 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": "60be19d2-00cd-43f3-981f-06fad105dae7"
   },
   "newProjectRoot": "projects",
   "projects": {
-    "ExpenseTrackerFrontEnd": {
+    "ponyracer": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -16,7 +17,6 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -24,9 +24,8 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ]
+            "styles": ["src/material-theme.scss", "src/styles.css"],
+            "allowedCommonJsDependencies": ["chart.js", "webstomp-client"]
           },
           "configurations": {
             "production": {
@@ -56,16 +55,53 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ExpenseTrackerFrontEnd:build:production"
+              "buildTarget": "ponyracer:build:production"
             },
             "development": {
-              "buildTarget": "ExpenseTrackerFrontEnd:build:development"
+              "buildTarget": "ponyracer:build:development"
+            },
+            "e2e": {
+              "buildTarget": "ponyracer:build:development",
+              "port": 4201,
+              "liveReload": false
             }
           },
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "runnerConfig": true,
+            "setupFiles": ["src/setup-test.ts"],
+            "browsers": ["ChromiumHeadless"],
+            "reporters": ["default", "json"],
+            "outputFile": "results/vitest-results.json",
+            "coverageReporters": ["json-summary", "text", "html"],
+            "coverageExclude": [
+              "src/app/app.*.ts",
+              "src/app/models",
+              "src/app/**/*.routes.ts",
+              "src/**/i18n-*.ts"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html", "e2e/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "e2e": {
+          "builder": "playwright-ng-schematics:playwright",
+          "options": {
+            "devServerTarget": "ponyracer:serve:e2e"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "ponyracer:serve:production"
+            }
+          }
         }
       }
     }

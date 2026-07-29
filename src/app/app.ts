@@ -1,8 +1,9 @@
 import { Component, signal } from '@angular/core';
+import { Layout } from "./layout/layout";
 
 @Component({
   selector: 'ep-root',
-  imports: [],
+  imports: [Layout],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
