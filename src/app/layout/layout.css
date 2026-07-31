@@ -24,3 +24,12 @@ nav a {
 .content {
   padding: 24px;
 }
+
+.user-email {
+  margin-top: 0.2rem;
+  font-size: 0.85rem;
+  color: #757575;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
