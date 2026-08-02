@@ -1,9 +1,20 @@
 <div class="row">
   <div class="col-md-6 offset-md-3">
     <h1>Log in</h1>
-    @if (loginFailed()) {
+    <!-- @if (loginFailed()) {
       <div class="alert alert-danger" role="alert">Nope, Try again.</div>
+    } -->
+
+    <!-- displaying server side validation errors -->
+    @if (credentials().errors().length) {
+      <div class="alert alert-danger">
+        @for (error of credentials().errors(); track error.kind) {
+          <div>{{ error.message }}</div>
+        }
+      </div>
     }
+
+    @let validationErrors = serverValidationErrors();
 
     <form [formRoot]="credentials">
       <div class="mb-3">
@@ -16,6 +27,14 @@
             <div class="invalid-feedback">email is required</div>
           }
         }
+        <!-- server side validation errors in the form field-->
+        @if (validationErrors['Email']) {
+          @for (message of validationErrors['Email']; track message) {
+            <div class="invalid-feedback d-block">
+              {{ message }}
+            </div>
+          }
+        }
       </div>
 
       <div class="mb-3">
@@ -26,6 +45,14 @@
         @if (password.touched() && !password.valid()) {
           @if (password.getError('required')) {
             <div class="invalid-feedback">Password is required</div>
+          }
+        }
+        <!-- server side validation errors in the form field-->
+        @if (validationErrors['Password']) {
+          @for (message of validationErrors['Password']; track message) {
+            <div class="invalid-feedback d-block">
+              {{ message }}
+            </div>
           }
         }
       </div>
