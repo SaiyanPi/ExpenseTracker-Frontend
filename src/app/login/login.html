@@ -1,64 +1,65 @@
-<div class="row">
-  <div class="col-md-6 offset-md-3">
-    <h1>Log in</h1>
-    <!-- @if (loginFailed()) {
-      <div class="alert alert-danger" role="alert">Nope, Try again.</div>
-    } -->
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6 col-lg-5">
 
-    <!-- displaying server side validation errors -->
-    @if (credentials().errors().length) {
-      <div class="alert alert-danger">
-        @for (error of credentials().errors(); track error.kind) {
-          <div>{{ error.message }}</div>
-        }
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+
+        <h1 class="mb-1 fw-bold">Welcome</h1>
+        <p class="text-muted mb-4">
+          Sign in to your account.
+        </p>
+
+        @let validationErrors = serverValidationErrors();
+
+        <form [formRoot]="credentials">
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input id="email" class="form-control" [formField]="credentials.email"
+              placeholder="Enter your email"/>
+            <!-- error message here -->
+            @let email = credentials.email();
+            @if (email.touched() && !email.valid()) {
+              @if (email.getError('required')) {
+                <div class="invalid-feedback mt-1">email is required</div>
+              }
+            }
+            <!-- server side validation errors in the form field-->
+            @if (validationErrors['Email']) {
+              @for (message of validationErrors['Email']; track message) {
+                <div class="invalid-feedback d-block mt">
+                  {{ message }}
+                </div>
+              }
+            }
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input id="password" type="password" class="form-control" [formField]="credentials.password"
+              placeholder="Enter your password"/>
+            <!-- error message here -->
+            @let password = credentials.password();
+            @if (password.touched() && !password.valid()) {
+              @if (password.getError('required')) {
+                <div class="invalid-feedback mt-1">Password is required</div>
+              }
+            }
+            <!-- server side validation errors in the form field-->
+            @if (validationErrors['Password']) {
+              @for (message of validationErrors['Password']; track message) {
+                <div class="invalid-feedback d-block mt-1">
+                  {{ message }}
+                </div>
+              }
+            }
+          </div>
+
+          <!-- <button class="btn btn-primary" type="submit" [disabled]="!credentials().valid()">Log me in!</button> -->
+          <button class="btn btn-primary" type="submit">Sign in!</button>
+        </form>
+
       </div>
-    }
+    </div>
 
-    @let validationErrors = serverValidationErrors();
-
-    <form [formRoot]="credentials">
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input id="email" class="form-control" [formField]="credentials.email" />
-        <!-- error message here -->
-        @let email = credentials.email();
-        @if (email.touched() && !email.valid()) {
-          @if (email.getError('required')) {
-            <div class="invalid-feedback">email is required</div>
-          }
-        }
-        <!-- server side validation errors in the form field-->
-        @if (validationErrors['Email']) {
-          @for (message of validationErrors['Email']; track message) {
-            <div class="invalid-feedback d-block">
-              {{ message }}
-            </div>
-          }
-        }
-      </div>
-
-      <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input id="password" type="password" class="form-control" [formField]="credentials.password" />
-        <!-- error message here -->
-        @let password = credentials.password();
-        @if (password.touched() && !password.valid()) {
-          @if (password.getError('required')) {
-            <div class="invalid-feedback">Password is required</div>
-          }
-        }
-        <!-- server side validation errors in the form field-->
-        @if (validationErrors['Password']) {
-          @for (message of validationErrors['Password']; track message) {
-            <div class="invalid-feedback d-block">
-              {{ message }}
-            </div>
-          }
-        }
-      </div>
-
-      <!-- <button class="btn btn-primary" type="submit" [disabled]="!credentials().valid()">Log me in!</button> -->
-      <button class="btn btn-primary" type="submit">Log me in!</button>
-    </form>
   </div>
 </div>
