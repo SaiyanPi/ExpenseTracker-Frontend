@@ -51,7 +51,7 @@ export class Login {
 
     try {
       await firstValueFrom(this.authService.login(request));
-      await this.router.navigateByUrl('/');
+      await this.router.navigateByUrl('/categories');
       return;
     } catch(error) {
       if (error instanceof HttpErrorResponse) {
