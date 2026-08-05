@@ -28,9 +28,18 @@
     <div class="card shadow-sm mb-4">
       <div class="card-body">
 
+        @let validationErrors = serverValidationErrors();
         <form class="row g-3" [formRoot]="category">
           <div class="col-md">
             <input id="name" class="form-control" placeholder="e.g. Groceries" [formField]="category.name">
+            <!-- server side validation errors in the form field-->
+            @if (validationErrors['Name']) {
+              @for (message of validationErrors['Name']; track message) {
+                <div class="invalid-feedback d-block mt">
+                  {{ message }}
+                </div>
+              }
+            }
           </div>
           <div class="col-auto d-flex align-items-end">
             <button class="btn btn-primary" type="submit">Add Category</button>

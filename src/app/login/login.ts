@@ -1,23 +1,22 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, Signal, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { email, form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../services/auth-service';
 import { LoginRequestModel } from '../models/auth/login-request-model';
-import { HttpErrorResponse } from '@angular/common/http';
-import { ApiErrorResponseModel } from '../models/error/api-error-response-model';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ApiErrorService } from '../services/api-error-service';
 
 @Component({
   selector: 'ep-login',
-  imports: [FormField, FormRoot, MatSnackBarModule],
+  imports: [FormField, FormRoot ],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly apiErrorService = inject(ApiErrorService);
+
 
   // protected readonly loginFailed = signal(false);
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
@@ -40,6 +39,24 @@ export class Login {
       }
     }
   )
+  
+  // unlike in the category component here are multiple fields so using effect for clearing every
+  // field is tedious so to reduce the boilerplate code, helper is create
+  private watchField<T>(
+    field: () => { value: Signal<T> },
+    errorKey: string
+  ) { 
+    effect(() => {
+      field().value();
+      this.apiErrorService.clearServerError(this.serverValidationErrors, errorKey);
+    });
+  }
+
+  // and then use helper to clear the field errors
+  constructor() {
+    this.watchField(this.credentials.email, 'Email');
+    this.watchField(this.credentials.password, 'Password');
+  }
 
   private async login() {
     // this.loginFailed.set(false);
@@ -54,27 +71,8 @@ export class Login {
       await this.router.navigateByUrl('/categories');
       return;
     } catch(error) {
-      if (error instanceof HttpErrorResponse) {
-        const apiError = error.error as ApiErrorResponseModel;
-
-        if (apiError.details) {
-          // Display field-level validation errors.
-          this.serverValidationErrors.set(apiError.details);
-          // 👇use snackBar only for general error not for field specific error
-          // this.snackBar.open(
-          //   apiError.message,
-          //   'Close', { duration: 5000}
-          // );
-        } else {
-          // Display a general error.
-          this.snackBar.open(apiError.message, 'Close', {
-            duration: 5000,
-            panelClass: ['error-snackbar']
-          });
-        }
-
-      }
-
+      const result = this.apiErrorService.handle(error);
+      this.serverValidationErrors.set(result.validationErrors);
       return [{ kind: 'server', message: 'Something went wrong.' }];
     }
   }

@@ -5,16 +5,40 @@ import { Observable, tap } from 'rxjs';
 import { LoginResponseModel } from '../models/auth/login-response-model';
 import { LoginRequestModel } from '../models/auth/login-request-model';
 import { jwtDecode } from 'jwt-decode';
+import { Router } from '@angular/router';
 
 const USER_LOCAL_STORAGE_KEY = 'rememberMe';
 
 @Service()
 export class AuthService {
   private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
 
   private readonly user = signal<LoginResponseModel | undefined>(this.retrieveUser());
 
   readonly currentUser = this.user.asReadonly();
+
+  private logoutTimer?: ReturnType<typeof setTimeout>;
+
+  private startTokenExpirationTimer(expiresAt: string): void {
+    console.log('expiresAt from API:', expiresAt);
+
+  const expiresIn = new Date(expiresAt).getTime() - Date.now();
+
+  console.log('Parsed date:', new Date(expiresAt));
+  console.log('Now:', new Date());
+  console.log('expiresIn (ms):', expiresIn);
+
+    if (expiresIn <= 0) {
+       console.log('Token already expired!');
+      this.logout();
+      return;
+    }
+    this.logoutTimer = setTimeout(() => {
+      console.log('Token expired. Logging out.');
+      this.logout();
+    }, expiresIn);
+  }
 
   constructor() {
     effect(() => {
@@ -47,13 +71,25 @@ export class AuthService {
     this.claims()?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] ?? null
   );
 
-readonly email = computed(() =>
-  this.claims()?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"] ?? null
-);
+  readonly email = computed(() =>
+    this.claims()?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"] ?? null
+  );
 
   login(request: LoginRequestModel): Observable<LoginResponseModel> {
     return this.http
     .post<LoginResponseModel>('http://localhost:5167/api/auth/login', request )
-    .pipe(tap(user => this.user.set(user)));;
+    .pipe(tap(user => {
+      this.user.set(user);
+      this.startTokenExpirationTimer(user.expiresAt);
+    }));
+  }
+
+  logout(): void {
+     if (this.logoutTimer) {
+        clearTimeout(this.logoutTimer);
+        this.logoutTimer = undefined;
+    }
+    this.user.set(undefined);
+    this.router.navigate(['/login']);
   }
 }
