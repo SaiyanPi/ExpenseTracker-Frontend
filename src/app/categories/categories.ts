@@ -1,3 +1,4 @@
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Component, effect, inject, signal } from '@angular/core';
 import { CategoryService } from '../services/category-service';
 import { DatePipe } from '@angular/common';
@@ -5,10 +6,12 @@ import { FormRoot, FormField, form, required } from '@angular/forms/signals';
 import { firstValueFrom } from 'rxjs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiErrorService } from '../services/api-error-service';
+import { EditCategoryDialog } from './edit-category-dialog/edit-category-dialog';
+import { CreateUpdateCategoryModel } from '../models/category/create-update-category-model';
 
 @Component({
   selector: 'ep-categories',
-  imports: [DatePipe, FormRoot, FormField, MatSnackBarModule],
+  imports: [DatePipe, FormRoot, FormField, MatSnackBarModule, MatDialogModule],
   templateUrl: './categories.html',
   styleUrl: './categories.css',
 })
@@ -23,10 +26,12 @@ export class Categories {
 
   private readonly creationFailed = signal(false);
 
+  private readonly dialog = inject(MatDialog);
+
   protected readonly field = signal({
     name: ''
   })
-  protected readonly category = form(
+  protected readonly categoryForm = form(
     this.field,
     f => {
       required(f.name);
@@ -40,7 +45,7 @@ export class Categories {
 
   // clearing server error from a field once the input value changes
   private readonly clearNameServerError = effect(() => {
-    this.category.name().value();
+    this.categoryForm.name().value();
     this.apiErrorService.clearServerError(this.serverValidationErrors, 'Name');
   });
 
@@ -48,12 +53,12 @@ export class Categories {
   private async createCategory() {
     this.serverValidationErrors.set({});
     this.creationFailed.set(false);
-    const { name } = this.category().value();
+    const { name } = this.categoryForm().value();
     try{
       await firstValueFrom(this.categoryService.create({ name }));
 
       this.field.set({ name:'' });
-      this.category().reset();
+      this.categoryForm().reset();
 
       this.getCategories.reload();
       this.apiErrorService.showSuccess('Category created successfully.');
@@ -73,6 +78,20 @@ export class Categories {
     } catch (error) {
       this.apiErrorService.handle(error);
     }
+  }
+
+  protected openEditDialog(category: CreateUpdateCategoryModel): void {
+    const dialogRef = this.dialog.open(EditCategoryDialog, {
+      width: '450px',
+      data: category
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getCategories.reload();
+        this.apiErrorService.showSuccess('Category updated successfully.');
+      }
+    });
   }
 
 }

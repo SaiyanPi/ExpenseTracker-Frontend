@@ -3,7 +3,7 @@ import { inject, ResourceRef, Service } from '@angular/core';
 import { CategoryModel } from '../models/category/category-model';
 import { PagedResultModel } from '../models/paged/paged-result-model';
 import { Observable } from 'rxjs';
-import { CreateCategoryModel } from '../models/category/create-category-model';
+import { CreateUpdateCategoryModel } from '../models/category/create-update-category-model';
 
 @Service()
 export class CategoryService {
@@ -15,11 +15,15 @@ export class CategoryService {
     }));
   }
 
-  create(category: CreateCategoryModel): Observable<void> {
+  create(category: CreateUpdateCategoryModel): Observable<void> {
     return this.http.post<void>('http://localhost:5167/api/v1/categories', category);
   }
 
   delete(id: string): Observable<void> {
     return this.http.delete<void>(`http://localhost:5167/api/v1/categories/${id}`);
+  }
+
+  update(id: string, category: CreateUpdateCategoryModel): Observable<void> {
+    return this.http.put<void>(`http://localhost:5167/api/v1/categories/${id}`, category);
   }
 }

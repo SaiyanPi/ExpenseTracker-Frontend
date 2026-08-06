@@ -1,0 +1,36 @@
+<form [formRoot]="categoryForm">
+
+  @let validationErrors = serverValidationErrors();
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Category Name</mat-label>
+
+    <input id="name" class="form-control" [formField]="categoryForm.name">
+    <!-- server side validation errors in the form field-->
+    @if (validationErrors['Name']) {
+      @for (message of validationErrors['Name']; track message) {
+        <div class="invalid-feedback d-block mt">
+          {{ message }}
+        </div>
+      }
+    }
+
+  </mat-form-field>
+
+</form>
+
+<mat-dialog-actions align="end">
+
+  <button
+    matButton
+    mat-dialog-close>
+    Cancel
+  </button>
+
+  <button
+    matButton
+    color="primary"
+    (click)="save()">
+    Save
+  </button>
+
+</mat-dialog-actions>

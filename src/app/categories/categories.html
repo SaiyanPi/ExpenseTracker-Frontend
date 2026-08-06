@@ -29,9 +29,9 @@
       <div class="card-body">
 
         @let validationErrors = serverValidationErrors();
-        <form class="row g-3" [formRoot]="category">
+        <form class="row g-3" [formRoot]="categoryForm">
           <div class="col-md">
-            <input id="name" class="form-control" placeholder="e.g. Groceries" [formField]="category.name">
+            <input id="name" class="form-control" placeholder="e.g. Groceries" [formField]="categoryForm.name">
             <!-- server side validation errors in the form field-->
             @if (validationErrors['Name']) {
               @for (message of validationErrors['Name']; track message) {
@@ -77,7 +77,8 @@
                   class="btn btn-outline-primary btn-sm"
                   type="button"
                   title="Edit category"
-                  aria-label="Edit category">
+                  aria-label="Edit category"
+                  (click)="openEditDialog(category)">
                   <i class="bi bi-pencil"></i>
                 </button>
 
