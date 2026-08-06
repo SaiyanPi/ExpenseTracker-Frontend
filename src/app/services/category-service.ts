@@ -18,4 +18,8 @@ export class CategoryService {
   create(category: CreateCategoryModel): Observable<void> {
     return this.http.post<void>('http://localhost:5167/api/v1/categories', category);
   }
+
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`http://localhost:5167/api/v1/categories/${id}`);
+  }
 }

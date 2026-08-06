@@ -18,7 +18,7 @@ export class Categories {
   protected readonly getCategories = this.categoryService.categories();
 
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
-  
+
   private readonly apiErrorService = inject(ApiErrorService);
 
   private readonly creationFailed = signal(false);
@@ -56,11 +56,22 @@ export class Categories {
       this.category().reset();
 
       this.getCategories.reload();
+      this.apiErrorService.showSuccess('Category created successfully.');
       return;
     } catch(error) {
       const result = this.apiErrorService.handle(error);
       this.serverValidationErrors.set(result.validationErrors);
       return [{ kind: 'server', message: 'Something went wrong.' }];
+    }
+  }
+
+  protected async deleteCategory(id: string) {
+    try {
+      await firstValueFrom(this.categoryService.delete(id));
+      this.getCategories.reload();
+      this.apiErrorService.showSuccess('Category deleted successfully.');
+    } catch (error) {
+      this.apiErrorService.handle(error);
     }
   }
 

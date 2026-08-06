@@ -43,6 +43,14 @@ export class ApiErrorService {
     return normalized;
   }
 
+  // success snack bar notification
+  showSuccess(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+      panelClass: ['success-snackbar']
+    });
+  }
+
   // clearing server field error
   clearServerError(
     errors: WritableSignal<Record<string, string[]>>,

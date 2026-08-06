@@ -72,9 +72,27 @@
                 </small>
               </div>
 
-              <button class="btn btn-outline-primary btn-sm">Edit</button>
+              <div class="d-flex gap-2">
+                <button
+                  class="btn btn-outline-primary btn-sm"
+                  type="button"
+                  title="Edit category"
+                  aria-label="Edit category">
+                  <i class="bi bi-pencil"></i>
+                </button>
+
+                <button
+                  class="btn btn-outline-danger btn-sm"
+                  type="button"
+                  title="Delete category"
+                  aria-label="Delete category"
+                  (click)="deleteCategory(category.id)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
 
             </div>
+
           </div>
 
         }
