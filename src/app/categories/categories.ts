@@ -18,8 +18,6 @@ import { CreateUpdateCategoryModel } from '../models/category/create-update-cate
 export class Categories {
   private readonly categoryService = inject(CategoryService);
 
-  protected readonly getCategories = this.categoryService.categories();
-
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
 
   private readonly apiErrorService = inject(ApiErrorService);
@@ -27,6 +25,8 @@ export class Categories {
   private readonly creationFailed = signal(false);
 
   private readonly dialog = inject(MatDialog);
+
+  protected readonly getCategories = this.categoryService.categories();
 
   protected readonly field = signal({
     name: ''
