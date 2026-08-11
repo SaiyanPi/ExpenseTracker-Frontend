@@ -1,7 +1,7 @@
 export interface CreateUpdateBudgetModel {
   name: string;
   amount: number;
-  categoryId: string;
-  startsOn: string;
-  endsOn: string;
+  startDate: string;
+  endDate: string;
+  categoryId: string | null;
 }

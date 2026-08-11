@@ -1,6 +1,9 @@
-<form [formRoot]="categoryForm">
+<form id="edit-category-form" [formRoot]="categoryForm" class="px-4 py-3">
+
+  <h2 mat-dialog-title>Edit Category</h2>
 
   @let validationErrors = serverValidationErrors();
+
   <mat-form-field appearance="outline" class="w-100">
     <mat-label>Category Name</mat-label>
 
@@ -20,17 +23,8 @@
 
 <mat-dialog-actions align="end">
 
-  <button
-    matButton
-    mat-dialog-close>
-    Cancel
-  </button>
+  <button matButton mat-dialog-close>Cancel</button>
 
-  <button
-    matButton
-    color="primary"
-    (click)="save()">
-    Save
-  </button>
+  <button matButton color="primary" type="submit" form="edit-category-form">Save</button>
 
 </mat-dialog-actions>

@@ -15,8 +15,8 @@ export class BudgetService {
     }));
   }
 
-  create(budget: CreateUpdateBudgetModel): Observable<void> {
-    return this.http.post<void>('http://localhost:5167/api/v1/budgets', budget);
+  create(request: CreateUpdateBudgetModel): Observable<void> {
+    return this.http.post<void>('http://localhost:5167/api/v1/budgets', request);
   }
 
   delete(id: string): Observable<void> {

@@ -3,8 +3,8 @@ export interface BudgetModel {
   name: string;
   amount: number;
   categoryId: string;
-  startOn: string
-  endsOn: string;
+  startDate: string
+  endDate: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string | null;

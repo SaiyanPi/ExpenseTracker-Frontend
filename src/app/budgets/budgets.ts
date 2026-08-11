@@ -2,14 +2,17 @@ import { Component, inject, signal } from '@angular/core';
 import { BudgetService } from '../services/budget-service';
 import { ApiErrorService } from '../services/api-error-service';
 import { MatDialog } from '@angular/material/dialog';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 // import { form, required } from '@angular/forms/signals';
 // import { firstValueFrom } from 'rxjs';
 // import { CreateUpdateBudgetModel } from '../models/budget/create-update-budget-model';
+import { HostListener } from '@angular/core';
+import { CreateBudgetDialog } from './create-budget-dialog/create-budget-dialog';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'ep-budgets',
-  imports: [DatePipe],
+  imports: [DatePipe, DecimalPipe],
   templateUrl: './budgets.html',
   styleUrl: './budgets.css',
 })
@@ -18,77 +21,53 @@ export class Budgets {
 
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
 
+  protected readonly openBudgetMenu = signal<string | null>(null);
+
   private readonly apiErrorService = inject(ApiErrorService);
 
   private readonly creationFailed = signal(false);
 
   private readonly dialog = inject(MatDialog);
 
+
   protected readonly getBudgets = this.budgetService.budgets();
 
-  // protected readonly field = signal({
-  //   name: ''
-  // })
-  // protected readonly budgetForm = form(
-  //   this.field,
-  //   f => {
-  //     required(f.name);
-  //   },
-  //   {
-  //     submission: {
-  //       action: async () => await this.createCategory()
-  //     }
-  //   }
-  // )
+  protected toggleBudgetMenu(id: string): void {
+    this.openBudgetMenu.update(current => current === id ? null : id);
+  }
 
-  // // clearing server error from a field once the input value changes
-  // private readonly clearNameServerError = effect(() => {
-  //   this.budgetForm.name().value();
-  //   this.apiErrorService.clearServerError(this.serverValidationErrors, 'Name');
-  // });
+  @HostListener('document:click', ['$event'])
+  protected onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    if (!target.closest('.budget-actions')) {
+      this.openBudgetMenu.set(null);
+    }
+  }
 
 
-  // private async createCategory() {
-  //   this.serverValidationErrors.set({});
-  //   this.creationFailed.set(false);
-  //   const { name } = this.budgetForm().value();
-  //   try{
-  //     await firstValueFrom(this.budgetService.create({ name }));
+  protected async deleteBudget(id: string) {
+    try {
+      await firstValueFrom(this.budgetService.delete(id));
+      this.getBudgets.reload();
+      this.apiErrorService.showSuccess('Budget deleted successfully.');
+    } catch (error) {
+      this.apiErrorService.handle(error);
+    }
+  }
 
-  //     this.field.set({ name:'' });
-  //     this.budgetForm().reset();
+  
+  protected openCreateBudgetDialog(): void {
+    const dialogRef = this.dialog.open(CreateBudgetDialog, {
+      width: '600px'
+    });
 
-  //     this.getBudgets.reload();
-  //     this.apiErrorService.showSuccess('Category created successfully.');
-  //     return;
-  //   } catch(error) {
-  //     const result = this.apiErrorService.handle(error);
-  //     this.serverValidationErrors.set(result.validationErrors);
-  //     return [{ kind: 'server', message: 'Something went wrong.' }];
-  //   }
-  // }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getBudgets.reload();
+        this.apiErrorService.showSuccess('Budget created successfully.');
+      }
+    });
+  }
 
-  // protected async deleteCategory(id: string) {
-  //   try {
-  //     await firstValueFrom(this.budgetService.delete(id));
-  //     this.getCategories.reload();
-  //     this.apiErrorService.showSuccess('Category deleted successfully.');
-  //   } catch (error) {
-  //     this.apiErrorService.handle(error);
-  //   }
-  // }
-
-  // protected openEditDialog(category: CreateUpdateBudgetModel): void {
-  //   const dialogRef = this.dialog.open(EditBudgetDialog, {
-  //     width: '450px',
-  //     data: category
-  //   });
-
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     if (result) {
-  //       this.getCategories.reload();
-  //       this.apiErrorService.showSuccess('Category updated successfully.');
-  //     }
-  //   });
-  // }
 }

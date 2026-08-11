@@ -1,7 +1,6 @@
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, HostListener, inject, signal } from '@angular/core';
 import { CategoryService } from '../services/category-service';
-import { DatePipe } from '@angular/common';
 import { FormRoot, FormField, form, required } from '@angular/forms/signals';
 import { firstValueFrom } from 'rxjs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -11,7 +10,7 @@ import { CreateUpdateCategoryModel } from '../models/category/create-update-cate
 
 @Component({
   selector: 'ep-categories',
-  imports: [DatePipe, FormRoot, FormField, MatSnackBarModule, MatDialogModule],
+  imports: [FormRoot, FormField, MatSnackBarModule, MatDialogModule],
   templateUrl: './categories.html',
   styleUrl: './categories.css',
 })
@@ -20,13 +19,27 @@ export class Categories {
 
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
 
-  private readonly apiErrorService = inject(ApiErrorService);
+  protected readonly openCategoryMenu = signal<string | null>(null);
 
-  private readonly creationFailed = signal(false);
+  private readonly apiErrorService = inject(ApiErrorService);
 
   private readonly dialog = inject(MatDialog);
 
+
   protected readonly getCategories = this.categoryService.categories();
+
+  protected toggleCategoryMenu(id: string): void {
+    this.openCategoryMenu.update(current => current === id ? null : id);
+  }
+  @HostListener('document:click', ['$event'])
+  protected onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    if (!target.closest('.budget-actions')) {
+      this.openCategoryMenu.set(null);
+    }
+  }
+
 
   protected readonly field = signal({
     name: ''
@@ -52,8 +65,8 @@ export class Categories {
 
   private async createCategory() {
     this.serverValidationErrors.set({});
-    this.creationFailed.set(false);
     const { name } = this.categoryForm().value();
+
     try{
       await firstValueFrom(this.categoryService.create({ name }));
 
@@ -70,6 +83,7 @@ export class Categories {
     }
   }
 
+
   protected async deleteCategory(id: string) {
     try {
       await firstValueFrom(this.categoryService.delete(id));
@@ -79,6 +93,7 @@ export class Categories {
       this.apiErrorService.handle(error);
     }
   }
+
 
   protected openEditDialog(category: CreateUpdateCategoryModel): void {
     const dialogRef = this.dialog.open(EditCategoryDialog, {

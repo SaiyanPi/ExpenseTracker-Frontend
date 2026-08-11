@@ -15,8 +15,8 @@ export class CategoryService {
     }));
   }
 
-  create(category: CreateUpdateCategoryModel): Observable<void> {
-    return this.http.post<void>('http://localhost:5167/api/v1/categories', category);
+  create(request: CreateUpdateCategoryModel): Observable<void> {
+    return this.http.post<void>('http://localhost:5167/api/v1/categories', request);
   }
 
   delete(id: string): Observable<void> {
