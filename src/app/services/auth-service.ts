@@ -54,13 +54,31 @@ export class AuthService {
     });
   }
 
+
   private retrieveUser(): LoginResponseModel | undefined {
     const value = window.localStorage.getItem(USER_LOCAL_STORAGE_KEY);
-    if (value) {
-      return JSON.parse(value) as LoginResponseModel;
+    if (!value) {
+      return undefined;
     }
-    return undefined;
+
+    try {
+      const user = JSON.parse(value) as LoginResponseModel;
+
+      const expiresAt = new Date(user.expiresAt).getTime();
+
+      if (expiresAt <= Date.now()) {
+        window.localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
+        return undefined;
+      }
+
+      return user;
+    } catch {
+      // Corrupted/invalid localStorage value
+      window.localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
+      return undefined;
+    }
   }
+
 
   private readonly claims = computed(() => {
     const token = this.user()?.token;

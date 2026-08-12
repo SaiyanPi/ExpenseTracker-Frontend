@@ -1,0 +1,128 @@
+<form id="create-budget-form" [formRoot]="budgetForm" class="px-4 py-3">
+
+  <h2 mat-dialog-title>Update Budget</h2>
+
+  @let validationErrors = serverValidationErrors();
+
+  <div class="mb-3">
+    <label for="name" class="form-label">Name</label>
+    <input id="name" class="form-control" [formField]="budgetForm.name">
+    <!-- error message here -->
+    @let name = budgetForm.name();
+    @if (name.touched() && !name.valid()) {
+      @if (name.getError('required')) {
+        <div class="invalid-feedback mt-1">Budget name is required</div>
+      }
+    }
+    <!-- server side validation errors in the form field-->
+    @if (validationErrors['Name']) {
+      @for (message of validationErrors['Name']; track message) {
+        <div class="invalid-feedback d-block mt">
+          {{ message }}
+        </div>
+      }
+    }
+  </div>
+
+  <div class="mb-3">
+    <label for="amount" class="form-label">Amount</label>
+    <div class="input-group">
+      <span class="input-group-text">Rs.</span>
+      <input id="amount" type="number" class="form-control" placeholder="2000" [formField]="budgetForm.amount">
+    </div>
+    <!-- error message here -->
+    @let amount = budgetForm.amount();
+    @if (amount.touched() && !amount.valid()) {
+      @if (amount.getError('required')) {
+        <div class="invalid-feedback mt-1">Budget amount is required</div>
+      }
+    }
+    <!-- server side validation errors in the form field-->
+    @if (validationErrors['Amount']) {
+      @for (message of validationErrors['Amount']; track message) {
+        <div class="invalid-feedback d-block mt">
+          {{ message }}
+        </div>
+      }
+    }
+  </div>
+
+  <div class="mb-3">
+    <label for="startDate" class="form-label">Start date</label>
+    <input id="startDate" type="date" class="form-control" [formField]="budgetForm.startDate">
+    <!-- error message here -->
+    @let startDate = budgetForm.startDate();
+    @if (startDate.touched() && !startDate.valid()) {
+      @if (startDate.getError('required')) {
+        <div class="invalid-feedback mt-1">Start date is required</div>
+      }
+    }
+    <!-- server side validation errors in the form field-->
+    @if (validationErrors['StartDate']) {
+      @for (message of validationErrors['StartDate']; track message) {
+        <div class="invalid-feedback d-block mt">
+          {{ message }}
+        </div>
+      }
+    }
+  </div>
+
+  <div class="mb-3">
+    <label for="endDate" class="form-label">End date</label>
+    <input id="endDate" type="date" class="form-control" [formField]="budgetForm.endDate">
+    <!-- error message here -->
+    @let endDate = budgetForm.endDate();
+    @if (endDate.touched() && !endDate.valid()) {
+      @if (endDate.getError('required')) {
+        <div class="invalid-feedback mt-1">End date is required</div>
+      }
+    }
+    <!-- server side validation errors in the form field-->
+    @if (validationErrors['EndDate']) {
+      @for (message of validationErrors['EndDate']; track message) {
+        <div class="invalid-feedback d-block mt">
+          {{ message }}
+        </div>
+      }
+    }
+  </div>
+
+  <div class="mb-3">
+    <label for="category" class="form-label">Category</label>
+    <select id="category" class="form-select" [formField]="budgetForm.categoryId">
+      <option value="">Select a category</option>
+      @if (categories.hasValue()) {
+        @for (category of categories.value().items; track category.id) {
+          <option [value]="category.id">
+            {{ category.name }}
+          </option>
+        }
+      }
+    </select>
+
+    @let category = budgetForm.categoryId();
+    @if (category.touched() && !category.valid()) {
+      @if (category.getError('required')) {
+        <div class="invalid-feedback d-block mt-1">
+          Budget category is required
+        </div>
+      }
+    }
+    <!-- @if (validationErrors['Category']) {
+      @for (message of validationErrors['Category']; track message) {
+        <div class="invalid-feedback d-block mt-1">
+          {{ message }}
+        </div>
+      }
+    } -->
+  </div>
+
+</form>
+
+<mat-dialog-actions align="end">
+
+  <button matButton mat-dialog-close>Cancel</button>
+
+  <button matButton color="primary" type="submit" form="create-budget-form">Save</button>
+
+</mat-dialog-actions>

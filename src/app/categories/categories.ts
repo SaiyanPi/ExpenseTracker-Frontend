@@ -95,7 +95,7 @@ export class Categories {
   }
 
 
-  protected openEditDialog(category: CreateUpdateCategoryModel): void {
+  protected openEditCategoryDialog(category: CreateUpdateCategoryModel): void {
     const dialogRef = this.dialog.open(EditCategoryDialog, {
       width: '450px',
       data: category

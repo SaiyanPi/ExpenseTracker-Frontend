@@ -7,9 +7,7 @@
     </span>
   }
 
-  <button
-    class="btn btn-primary"
-    type="button"
+  <button class="btn btn-primary" type="button"
     (click)="openCreateBudgetDialog()"
   >
     <i class="bi bi-plus-lg me-1"></i>
@@ -56,9 +54,8 @@
 
                 <div class="d-flex align-items-center gap-3">
 
-                  <div
-                    class="rounded-circle bg-primary-subtle text-primary
-                      d-flex align-items-center justify-content-center"
+                  <div class="rounded-circle bg-primary-subtle text-primary
+                  d-flex align-items-center justify-content-center"
                     style="width: 42px; height: 42px;"
                   >
                     <i class="bi bi-wallet2 fs-5"></i>
@@ -69,8 +66,7 @@
                       {{ budget.name }}
                     </h6>
 
-                    <span
-                      class="badge"
+                    <span class="badge"
                       [class.text-bg-success]="budget.isActive"
                       [class.text-bg-secondary]="!budget.isActive"
                     >
@@ -83,10 +79,7 @@
                 <!-- Actions -->
                 <div class="budget-actions position-relative">
 
-                  <button
-                    class="btn btn-sm btn-light"
-                    type="button"
-                    aria-label="Budget actions"
+                  <button class="btn btn-sm btn-light" type="button" aria-label="Budget actions"
                     (click)="toggleBudgetMenu(budget.id)"
                   >
                     <i class="bi bi-three-dots-vertical"></i>
@@ -96,18 +89,14 @@
 
                     <div class="dropdown-menu show position-absolute end-0">
 
-                      <button
-                        class="dropdown-item"
-                        type="button"
-                        /* (click)="openEditDialog(budget)" */
+                      <button class="dropdown-item" type="button"
+                        (click)="openEditBudgetDialog(budget)"
                       >
                         <i class="bi bi-pencil me-2"></i>
                         Edit
                       </button>
 
-                      <button
-                        class="dropdown-item text-danger"
-                        type="button"
+                      <button class="dropdown-item text-danger" type="button"
                         (click)="deleteBudget(budget.id)"
                       >
                         <i class="bi bi-trash me-2"></i>

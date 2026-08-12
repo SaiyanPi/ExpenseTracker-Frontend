@@ -9,6 +9,8 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { HostListener } from '@angular/core';
 import { CreateBudgetDialog } from './create-budget-dialog/create-budget-dialog';
 import { firstValueFrom } from 'rxjs';
+import { CreateUpdateBudgetModel } from '../models/budget/create-update-budget-model';
+import { EditBudgetDialog } from './edit-budget-dialog/edit-budget-dialog';
 
 @Component({
   selector: 'ep-budgets',
@@ -46,6 +48,20 @@ export class Budgets {
   }
 
 
+  protected openCreateBudgetDialog(): void {
+    const dialogRef = this.dialog.open(CreateBudgetDialog, {
+      width: '600px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getBudgets.reload();
+        this.apiErrorService.showSuccess('Budget created successfully.');
+      }
+    });
+  }
+
+
   protected async deleteBudget(id: string) {
     try {
       await firstValueFrom(this.budgetService.delete(id));
@@ -56,16 +72,17 @@ export class Budgets {
     }
   }
 
-  
-  protected openCreateBudgetDialog(): void {
-    const dialogRef = this.dialog.open(CreateBudgetDialog, {
-      width: '600px'
+
+  protected openEditBudgetDialog(budget: CreateUpdateBudgetModel): void {
+    const dialogRef = this.dialog.open(EditBudgetDialog, {
+      width: '600px',
+      data: budget
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.getBudgets.reload();
-        this.apiErrorService.showSuccess('Budget created successfully.');
+        this.apiErrorService.showSuccess('Budget updated successfully.');
       }
     });
   }

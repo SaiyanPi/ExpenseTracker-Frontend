@@ -1,18 +1,18 @@
 import { Component, effect, inject, Signal, signal } from '@angular/core';
-import { BudgetModel } from '../../models/budget/budget-model';
-import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogRef } from '@angular/material/dialog';
-import { BudgetService } from '../../services/budget-service';
-import { ApiErrorService } from '../../services/api-error-service';
+import { form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { form, FormField, FormRoot, required } from '@angular/forms/signals';
+import { BudgetModel } from '../../models/budget/budget-model';
+import { BudgetService } from '../../services/budget-service';
+import { ApiErrorService } from '../../services/api-error-service';
+import { CategoryService } from '../../services/category-service';
 import { CreateUpdateBudgetModel } from '../../models/budget/create-update-budget-model';
 import { firstValueFrom } from 'rxjs';
-import { CategoryService } from '../../services/category-service';
 
 @Component({
-  selector: 'ep-create-budget-dialog',
+  selector: 'ep-edit-budget-dialog',
   imports: [
     MatDialogActions,
     MatDialogClose,
@@ -22,13 +22,13 @@ import { CategoryService } from '../../services/category-service';
     FormRoot,
     FormField
   ],
-  templateUrl: './create-budget-dialog.html',
-  styleUrl: './create-budget-dialog.css',
+  templateUrl: './edit-budget-dialog.html',
+  styleUrl: './edit-budget-dialog.css',
 })
-export class CreateBudgetDialog {
+export class EditBudgetDialog {
   protected readonly budget = inject<BudgetModel>(MAT_DIALOG_DATA);
 
-  private readonly dialogRef = inject(MatDialogRef<CreateBudgetDialog>);
+  private readonly dialogRef = inject(MatDialogRef<EditBudgetDialog>);
 
   private readonly budgetService = inject(BudgetService);
 
@@ -54,18 +54,19 @@ export class CreateBudgetDialog {
       required(f.amount);
 
       required(f.startDate);
+
       required(f.endDate);
 
       // required(f.categoryId);
     },
     {
       submission: {
-        action: async () => await this.createBudget()
+        action: async () => await this.updateBudget()
       }
     }
   )
 
-  // form field server error clear
+  // form fields server error clear
   private watchField<T>(
     field: () => { value: Signal<T> },
     errorKey: string
@@ -77,20 +78,30 @@ export class CreateBudgetDialog {
   }
 
   constructor() {
+    // form fields server error clear
     this.watchField(this.budgetForm.name, 'Name');
     this.watchField(this.budgetForm.amount, 'Amount');
     this.watchField(this.budgetForm.startDate, 'StartDate');
     this.watchField(this.budgetForm.endDate, 'EndDate');
+
+    // populate fields with their current values
+    this.fields.set({
+      name: this.budget.name,
+      amount: this.budget.amount,
+      startDate: this.budget.startDate.split('T')[0],
+      endDate: this.budget.endDate.split('T')[0],
+      categoryId: this.budget.categoryId
+    });
   }
 
-  protected async createBudget() {
+  protected async updateBudget() {
     const { name, amount, startDate, endDate, categoryId } = this.budgetForm().value();
     const request: CreateUpdateBudgetModel = { name, amount, startDate, endDate, categoryId: categoryId || null };
 
     try {
-      await firstValueFrom(this.budgetService.create(request));
+      await firstValueFrom(this.budgetService.update(this.budget.id, request));
       this.dialogRef.close(true);
-      //this.apiErrorService.showSuccess('Category updated successfully.');
+      //this.apiErrorService.showSuccess('Budget updated successfully.');
     } catch (error) {
       const result = this.apiErrorService.handle(error);
       this.serverValidationErrors.set(result.validationErrors);

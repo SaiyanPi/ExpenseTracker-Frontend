@@ -1,6 +1,6 @@
 <form id="edit-category-form" [formRoot]="categoryForm" class="px-4 py-3">
 
-  <h2 mat-dialog-title>Edit Category</h2>
+  <h2 mat-dialog-title>Update Category</h2>
 
   @let validationErrors = serverValidationErrors();
 
@@ -8,6 +8,13 @@
     <mat-label>Category Name</mat-label>
 
     <input id="name" class="form-control" [formField]="categoryForm.name">
+    <!-- error message here -->
+    @let name = categoryForm.name();
+    @if (name.touched() && !name.valid()) {
+      @if (name.getError('required')) {
+        <div class="invalid-feedback mt-1">Name  is required</div>
+      }
+    }
     <!-- server side validation errors in the form field-->
     @if (validationErrors['Name']) {
       @for (message of validationErrors['Name']; track message) {
