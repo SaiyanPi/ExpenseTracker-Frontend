@@ -3,11 +3,13 @@ import { Login } from "./login/login";
 import { Home } from "./home/home";
 import { Categories } from "./categories/categories";
 import { Budgets } from "./budgets/budgets";
+import { Expenses } from "./expenses/expenses";
 
 export const routes: Routes = [
   { path: '', component: Home },
   { path: 'login', component: Login },
   { path: 'categories', component: Categories },
-  { path: 'budgets', component: Budgets }
-  
+  { path: 'budgets', component: Budgets },
+  { path: 'expenses', component: Expenses }
+
 ]
