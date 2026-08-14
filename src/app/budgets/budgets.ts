@@ -27,8 +27,6 @@ export class Budgets {
 
   private readonly apiErrorService = inject(ApiErrorService);
 
-  private readonly creationFailed = signal(false);
-
   private readonly dialog = inject(MatDialog);
 
 

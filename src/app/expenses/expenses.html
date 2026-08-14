@@ -7,8 +7,7 @@
     </span>
   }
 
-  <button class="btn btn-primary" type="button"
-    /* (click)="openCreateExpenseDialog()" */
+  <button class="btn btn-primary" type="button" (click)="openCreateExpenseDialog()"
   >
     <i class="bi bi-plus-lg me-1"></i>
     New Expense
@@ -87,19 +86,19 @@
                     class="btn btn-sm btn-light"
                     type="button"
                     aria-label="Expense actions"
-                    /* (click)="toggleExpenseMenu(expense.id)" */
+                    (click)="toggleExpenseMenu(expense.id)"
                   >
                     <i class="bi bi-three-dots-vertical"></i>
                   </button>
 
-                  <!-- @if (openExpenseMenu() === expense.id) {
+                  @if (openExpenseMenu() === expense.id) {
 
                     <div class="dropdown-menu show position-absolute end-0">
 
                       <button
                         class="dropdown-item"
                         type="button"
-                        (click)="openEditExpenseDialog(expense)"
+                        /* (click)="openEditExpenseDialog(expense)" */
                       >
                         <i class="bi bi-pencil me-2"></i>
                         Edit
@@ -116,7 +115,7 @@
 
                     </div>
 
-                  } -->
+                  }
 
                 </div>
 
@@ -136,11 +135,33 @@
 
               </div>
 
+              <!-- Expense Date -->
+              <div class="d-flex align-items-center gap-2 mb-4">
+
+                <div
+                  class="rounded-2 bg-body-secondary d-flex align-items-center justify-content-center flex-shrink-0"
+                  style="width: 36px; height: 36px;"
+                >
+                  <i class="bi bi-calendar3 text-primary"></i>
+                </div>
+
+                <div>
+                  <small class="text-muted d-block">
+                    Expense date
+                  </small>
+
+                  <span class="small fw-semibold text-body">
+                    {{ expense.date | date:'mediumDate' }}
+                  </span>
+                </div>
+
+              </div>
+
 
               <!-- Category / Budget -->
               <div class="d-flex flex-column gap-2 text-muted">
 
-                @if (expense.categoryId) {
+                @if (expense.categoryName) {
 
                   <div class="d-flex align-items-center gap-2">
 
@@ -160,7 +181,7 @@
 
                 }
 
-                @if (expense.budgetId) {
+                @if (expense.budgetName) {
 
                   <div class="d-flex align-items-center gap-2">
 

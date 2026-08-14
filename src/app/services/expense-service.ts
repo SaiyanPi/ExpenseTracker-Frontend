@@ -2,6 +2,8 @@ import { HttpClient, httpResource } from '@angular/common/http';
 import { inject, ResourceRef, Service } from '@angular/core';
 import { PagedResultModel } from '../models/paged/paged-result-model';
 import { ExpenseModel } from '../models/expense/expense-model';
+import { Observable } from 'rxjs';
+import { CreateUpdateExpenseModel } from '../models/expense/create-update-expense-model';
 
 @Service()
 export class ExpenseService {
@@ -13,13 +15,13 @@ export class ExpenseService {
     }));
   }
 
-  // create(request: CreateUpdateCategoryModel): Observable<void> {
-  //   return this.http.post<void>('http://localhost:5167/api/v1/categories', request);
-  // }
+  create(request: CreateUpdateExpenseModel): Observable<void> {
+    return this.http.post<void>('http://localhost:5167/api/v1/expenses', request);
+  }
 
-  // delete(id: string): Observable<void> {
-  //   return this.http.delete<void>(`http://localhost:5167/api/v1/categories/${id}`);
-  // }
+  delete(id: string): Observable<void> {
+    return this.http.delete<void>(`http://localhost:5167/api/v1/expenses/${id}`);
+  }
 
   // update(id: string, category: CreateUpdateCategoryModel): Observable<void> {
   //   return this.http.put<void>(`http://localhost:5167/api/v1/categories/${id}`, category);

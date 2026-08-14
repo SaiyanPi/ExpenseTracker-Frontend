@@ -3,6 +3,7 @@ export interface ExpenseModel {
   title: string;
   description: string;
   amount: number;
+  date: string;
 
   categoryId: string | null;
   categoryName: string | null;
