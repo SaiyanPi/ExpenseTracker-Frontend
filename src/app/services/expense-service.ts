@@ -23,7 +23,7 @@ export class ExpenseService {
     return this.http.delete<void>(`http://localhost:5167/api/v1/expenses/${id}`);
   }
 
-  // update(id: string, category: CreateUpdateCategoryModel): Observable<void> {
-  //   return this.http.put<void>(`http://localhost:5167/api/v1/categories/${id}`, category);
-  // }
+  update(id: string, expense: CreateUpdateExpenseModel): Observable<void> {
+    return this.http.put<void>(`http://localhost:5167/api/v1/expenses/${id}`, expense);
+  }
 }

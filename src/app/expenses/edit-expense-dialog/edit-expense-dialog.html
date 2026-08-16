@@ -1,6 +1,6 @@
-<form id="create-expense-form" [formRoot]="expenseForm" class="px-4 py-3">
+<form id="edit-expense-form" [formRoot]="expenseForm" class="px-4 py-3">
 
-  <h2 mat-dialog-title>New Expense</h2>
+  <h2 mat-dialog-title>Update Expense</h2>
 
   @let validationErrors = serverValidationErrors();
 
@@ -69,12 +69,7 @@
 
   <div class="mb-3">
     <label for="date" class="form-label">Date</label>
-
     <input id="date" type="date" class="form-control" [formField]="expenseForm.date">
-
-    <div class="form-text">
-      Optional. Leave blank to use today's date.
-    </div>
     <!-- server side validation errors in the form field-->
     @if (validationErrors['Date']) {
       @for (message of validationErrors['Date']; track message) {
@@ -119,7 +114,7 @@
         }
       }
     </select>
-
+    <!-- server side validation errors in the form field-->
     @if (validationErrors['BudgetId']) {
       @for (message of validationErrors['BudgetId']; track message) {
         <div class="invalid-feedback d-block mt-1">
@@ -135,6 +130,6 @@
 
   <button matButton mat-dialog-close>Cancel</button>
 
-  <button matButton color="primary" type="submit" form="create-expense-form">Save</button>
+  <button matButton color="primary" type="submit" form="edit-expense-form">Save</button>
 
 </mat-dialog-actions>

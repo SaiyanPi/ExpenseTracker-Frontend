@@ -77,10 +77,12 @@ export class CreateBudgetDialog {
   }
 
   constructor() {
+    // form fields server error clear
     this.watchField(this.budgetForm.name, 'Name');
     this.watchField(this.budgetForm.amount, 'Amount');
     this.watchField(this.budgetForm.startDate, 'StartDate');
     this.watchField(this.budgetForm.endDate, 'EndDate');
+    this.watchField(this.budgetForm.categoryId, 'CategoryId')
   }
 
   protected async createBudget() {

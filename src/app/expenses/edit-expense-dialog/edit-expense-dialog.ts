@@ -1,19 +1,19 @@
-import { Component, effect, inject, Signal, signal } from '@angular/core';
-import { CreateUpdateExpenseModel } from '../../models/expense/create-update-expense-model';
-import { firstValueFrom } from 'rxjs';
-import { ExpenseModel } from '../../models/expense/expense-model';
-import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogRef } from '@angular/material/dialog';
-import { ExpenseService } from '../../services/expense-service';
-import { ApiErrorService } from '../../services/api-error-service';
+import { Component, effect, inject, signal, Signal } from '@angular/core';
 import { form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ExpenseModel } from '../../models/expense/expense-model';
+import { ExpenseService } from '../../services/expense-service';
+import { ApiErrorService } from '../../services/api-error-service';
+import { CreateUpdateExpenseModel } from '../../models/expense/create-update-expense-model';
+import { firstValueFrom } from 'rxjs';
 import { CategoryService } from '../../services/category-service';
 import { BudgetService } from '../../services/budget-service';
 
 @Component({
-  selector: 'ep-create-expense-dialog',
+  selector: 'ep-edit-expense-dialog',
   imports: [
     MatDialogActions,
     MatDialogClose,
@@ -23,13 +23,13 @@ import { BudgetService } from '../../services/budget-service';
     FormRoot,
     FormField
   ],
-  templateUrl: './create-expense-dialog.html',
-  styleUrl: './create-expense-dialog.css',
+  templateUrl: './edit-expense-dialog.html',
+  styleUrl: './edit-expense-dialog.css',
 })
-export class CreateExpenseDialog {
+export class EditExpenseDialog {
   protected readonly expense = inject<ExpenseModel>(MAT_DIALOG_DATA);
 
-  private readonly dialogRef = inject(MatDialogRef<CreateExpenseDialog>);
+  private readonly dialogRef = inject(MatDialogRef<EditExpenseDialog>);
 
   private readonly expenseService = inject(ExpenseService);
 
@@ -37,10 +37,8 @@ export class CreateExpenseDialog {
 
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
 
-  protected readonly expenses = inject(ExpenseService).expenses();
-
   protected readonly categories = inject(CategoryService).categories();
-
+  
   protected readonly budgets = inject(BudgetService).budgets();
 
   protected readonly fields = signal({
@@ -63,12 +61,12 @@ export class CreateExpenseDialog {
     },
     {
       submission: {
-        action: async () => await this.createExpense()
+        action: async () => await this.updateExpense()
       }
     }
   )
 
-  // form field server error clear
+  // form fields server error clear
   private watchField<T>(
     field: () => { value: Signal<T> },
     errorKey: string
@@ -83,20 +81,31 @@ export class CreateExpenseDialog {
     // form fields server error clear
     this.watchField(this.expenseForm.title, 'Title');
     this.watchField(this.expenseForm.description, 'Description');
+    this.watchField(this.expenseForm.amount, 'Amount');
     this.watchField(this.expenseForm.date, 'Date');
     this.watchField(this.expenseForm.categoryId, 'CategoryId');
     this.watchField(this.expenseForm.budgetId, 'BudgetId');
+
+    // populate fields with their current values
+    this.fields.set({
+      title: this.expense.title,
+      description: this.expense.description,
+      amount: this.expense.amount,
+      date: this.expense.date.split('T')[0],
+      categoryId: this.expense.categoryId ?? '',
+      budgetId: this.expense.budgetId ?? '',
+    });
   }
 
-  protected async createExpense() {
+  protected async updateExpense() {
     const { title, description, amount, date, categoryId, budgetId } = this.expenseForm().value();
     const request: CreateUpdateExpenseModel =
       { title, description, amount, date: date || null, categoryId: categoryId || null, budgetId: budgetId || null };
-
-    try {
-      await firstValueFrom(this.expenseService.create(request));
+    
+      try {
+      await firstValueFrom(this.expenseService.update(this.expense.id, request));
       this.dialogRef.close(true);
-      //this.apiErrorService.showSuccess('Category updated successfully.');
+      //this.apiErrorService.showSuccess('Budget updated successfully.');
     } catch (error) {
       const result = this.apiErrorService.handle(error);
       this.serverValidationErrors.set(result.validationErrors);

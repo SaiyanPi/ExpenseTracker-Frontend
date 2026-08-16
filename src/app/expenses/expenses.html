@@ -82,10 +82,7 @@
                 <!-- Actions -->
                 <div class="expense-actions position-relative">
 
-                  <button
-                    class="btn btn-sm btn-light"
-                    type="button"
-                    aria-label="Expense actions"
+                  <button class="btn btn-sm btn-light" type="button" aria-label="Expense actions"
                     (click)="toggleExpenseMenu(expense.id)"
                   >
                     <i class="bi bi-three-dots-vertical"></i>
@@ -95,18 +92,14 @@
 
                     <div class="dropdown-menu show position-absolute end-0">
 
-                      <button
-                        class="dropdown-item"
-                        type="button"
-                        /* (click)="openEditExpenseDialog(expense)" */
+                      <button class="dropdown-item" type="button"
+                       (click)="openEditExpenseDialog(expense)"
                       >
                         <i class="bi bi-pencil me-2"></i>
                         Edit
                       </button>
 
-                      <button
-                        class="dropdown-item text-danger"
-                        type="button"
+                      <button class="dropdown-item text-danger" type="button"
                         (click)="deleteExpense(expense.id)"
                       >
                         <i class="bi bi-trash me-2"></i>

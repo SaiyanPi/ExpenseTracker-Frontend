@@ -56,8 +56,6 @@ export class EditBudgetDialog {
       required(f.startDate);
 
       required(f.endDate);
-
-      // required(f.categoryId);
     },
     {
       submission: {
@@ -83,6 +81,7 @@ export class EditBudgetDialog {
     this.watchField(this.budgetForm.amount, 'Amount');
     this.watchField(this.budgetForm.startDate, 'StartDate');
     this.watchField(this.budgetForm.endDate, 'EndDate');
+    this.watchField(this.budgetForm.categoryId, 'CategoryId');
 
     // populate fields with their current values
     this.fields.set({
@@ -90,7 +89,7 @@ export class EditBudgetDialog {
       amount: this.budget.amount,
       startDate: this.budget.startDate.split('T')[0],
       endDate: this.budget.endDate.split('T')[0],
-      categoryId: this.budget.categoryId
+      categoryId: this.budget.categoryId ?? ''
     });
   }
 
