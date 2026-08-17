@@ -11,10 +11,11 @@ import { CreateBudgetDialog } from './create-budget-dialog/create-budget-dialog'
 import { firstValueFrom } from 'rxjs';
 import { CreateUpdateBudgetModel } from '../models/budget/create-update-budget-model';
 import { EditBudgetDialog } from './edit-budget-dialog/edit-budget-dialog';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'ep-budgets',
-  imports: [DatePipe, DecimalPipe],
+  imports: [DatePipe, DecimalPipe, RouterLink],
   templateUrl: './budgets.html',
   styleUrl: './budgets.css',
 })
