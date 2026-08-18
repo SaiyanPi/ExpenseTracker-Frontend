@@ -129,47 +129,27 @@
               </div>
 
               <!-- Expense Date -->
-              <div class="d-flex align-items-center gap-2 mb-4">
+              <div class="d-flex align-items-center gap-2 mb-2">
 
-                <div
-                  class="rounded-2 bg-body-secondary d-flex align-items-center justify-content-center flex-shrink-0"
-                  style="width: 36px; height: 36px;"
-                >
-                  <i class="bi bi-calendar3 text-primary"></i>
-                </div>
-
-                <div>
-                  <small class="text-muted d-block">
-                    Expense date
-                  </small>
-
-                  <span class="small fw-semibold text-body">
+                <span class="expense-meta-badge small fw-medium text-body">
+                    <i class="bi bi-calendar3 me-2"></i>
                     {{ expense.date | date:'mediumDate' }}
-                  </span>
-                </div>
+                </span>
 
               </div>
 
 
-              <!-- Category / Budget -->
-              <div class="d-flex flex-column gap-2 text-muted">
+              <!-- Date, Category / Budget -->
+              <div class="d-flex flex-column gap-2">
 
                 @if (expense.categoryName) {
 
                   <div class="d-flex align-items-center gap-2">
 
-                    <i class="bi bi-tag"></i>
-
-                    <div>
-                      <small class="d-block">
-                        Category
-                      </small>
-
-                      <span class="small fw-medium text-body">
+                    <span class="expense-meta-badge small fw-medium text-body">
+                      <i class="bi bi-tag me-2"></i>
                         {{ expense.categoryName }}
-                      </span>
-                    </div>
-
+                    </span>
                   </div>
 
                 }
@@ -178,18 +158,10 @@
 
                   <div class="d-flex align-items-center gap-2">
 
-                    <i class="bi bi-wallet2"></i>
-
-                    <div>
-                      <small class="d-block">
-                        Budget
-                      </small>
-
-                      <span class="small fw-medium text-body">
+                    <span class="expense-meta-badge small fw-medium text-body">
+                      <i class="bi bi-wallet2 me-2"></i>
                         {{ expense.budgetName }}
-                      </span>
-                    </div>
-
+                    </span>
                   </div>
 
                 }
