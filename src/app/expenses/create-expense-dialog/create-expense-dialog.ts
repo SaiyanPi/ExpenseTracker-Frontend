@@ -5,12 +5,17 @@ import { ExpenseModel } from '../../models/expense/expense-model';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogRef } from '@angular/material/dialog';
 import { ExpenseService } from '../../services/expense-service';
 import { ApiErrorService } from '../../services/api-error-service';
-import { form, FormField, FormRoot, required } from '@angular/forms/signals';
+import { disabled, form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CategoryService } from '../../services/category-service';
 import { BudgetService } from '../../services/budget-service';
+
+export interface CreateExpenseDialogData {
+  budgetId?: string;
+  categoryId?: string;
+}
 
 @Component({
   selector: 'ep-create-expense-dialog',
@@ -28,6 +33,10 @@ import { BudgetService } from '../../services/budget-service';
 })
 export class CreateExpenseDialog {
   protected readonly expense = inject<ExpenseModel>(MAT_DIALOG_DATA);
+
+  protected readonly dialogData = inject<CreateExpenseDialogData>(MAT_DIALOG_DATA, {
+    optional: true
+  });
 
   private readonly dialogRef = inject(MatDialogRef<CreateExpenseDialog>);
 
@@ -48,8 +57,8 @@ export class CreateExpenseDialog {
     description: '',
     amount: 0,
     date: '',
-    categoryId: '',
-    budgetId: ''
+    categoryId: this.dialogData?.categoryId ?? '',  // for creating expense with already fixed categoryId
+    budgetId: this.dialogData?.budgetId ?? '' // for creating expense with already fixed budgetId
   })
 
   protected readonly expenseForm = form(
@@ -60,6 +69,14 @@ export class CreateExpenseDialog {
       required(f.description);
 
       required(f.amount);
+
+      disabled(f.categoryId, {
+        when: () => !!this.dialogData?.categoryId
+      });
+
+      disabled(f.budgetId, {
+        when: () => !!this.dialogData?.budgetId
+      });
     },
     {
       submission: {

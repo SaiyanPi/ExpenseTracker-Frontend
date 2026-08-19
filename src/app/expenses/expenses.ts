@@ -49,7 +49,7 @@ export class Expenses {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.getExpenses.reload();
-        this.apiErrorService.showSuccess('Budget created successfully.');
+        this.apiErrorService.showSuccess('Expense created successfully.');
       }
     });
   }
@@ -65,16 +65,16 @@ export class Expenses {
   }
 
   protected openEditExpenseDialog(expense: CreateUpdateExpenseModel): void {
-  const dialogRef = this.dialog.open(EditExpenseDialog, {
-    width: '600px',
-    data: expense
-  });
+    const dialogRef = this.dialog.open(EditExpenseDialog, {
+      width: '600px',
+      data: expense
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      this.getExpenses.reload();
-      this.apiErrorService.showSuccess('Expense updated successfully.');
-    }
-  });
-}
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getExpenses.reload();
+        this.apiErrorService.showSuccess('Expense updated successfully.');
+      }
+    });
+  }
 }

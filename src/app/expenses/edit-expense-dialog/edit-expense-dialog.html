@@ -26,7 +26,8 @@
 
   <div class="mb-3">
     <label for="description" class="form-label">Description</label>
-    <input id="description" class="form-control"  [formField]="expenseForm.description">
+    <input id="description" class="form-control"  [formField]="expenseForm.description"
+      placeholder="must not exceed 500 characters">
     <!-- error message here -->
     @let description = expenseForm.description();
     @if (description.touched() && !description.valid()) {
@@ -48,23 +49,23 @@
     <label for="amount" class="form-label">Amount</label>
     <div class="input-group">
       <span class="input-group-text">Rs.</span>
-      <input id="amount" type="number" class="form-control" placeholder="2000" [formField]="expenseForm.amount">
+      <input id="amount" type="number" class="form-control" [formField]="expenseForm.amount">
+      <!-- error message here -->
+      @let amount = expenseForm.amount();
+      @if (amount.touched() && !amount.valid()) {
+        @if (amount.getError('required')) {
+          <div class="invalid-feedback mt-1">Budget amount is required</div>
+        }
+      }
+      <!-- server side validation errors in the form field-->
+      @if (validationErrors['Amount']) {
+        @for (message of validationErrors['Amount']; track message) {
+          <div class="invalid-feedback d-block mt">
+            {{ message }}
+          </div>
+        }
+      }
     </div>
-    <!-- error message here -->
-    @let amount = expenseForm.amount();
-    @if (amount.touched() && !amount.valid()) {
-      @if (amount.getError('required')) {
-        <div class="invalid-feedback mt-1">Budget amount is required</div>
-      }
-    }
-    <!-- server side validation errors in the form field-->
-    @if (validationErrors['Amount']) {
-      @for (message of validationErrors['Amount']; track message) {
-        <div class="invalid-feedback d-block mt">
-          {{ message }}
-        </div>
-      }
-    }
   </div>
 
   <div class="mb-3">

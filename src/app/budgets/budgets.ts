@@ -20,6 +20,8 @@ import { RouterLink } from '@angular/router';
   styleUrl: './budgets.css',
 })
 export class Budgets {
+  readonly Math = Math;
+  
   private readonly budgetService = inject(BudgetService);
 
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
@@ -86,4 +88,44 @@ export class Budgets {
     });
   }
 
+
+  protected readonly budgetStatus = (budget: {
+    startDate: string;
+    endDate: string;
+  }) => {
+    const today = new Date();
+    const startDate = new Date(budget.startDate);
+    const endDate = new Date(budget.endDate);
+
+    // Ignore time portion
+    today.setHours(0, 0, 0, 0);
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(0, 0, 0, 0);
+
+    if (today < startDate) {
+      return 'upcoming';
+    }
+
+    if (today > endDate) {
+      return 'expired';
+    }
+
+    return 'active';
+  };
+
+
+  protected readonly spendingStatus = (budget: {
+    percentageUsed: number;
+    isOverBudget: boolean;
+  }) => {
+    if (budget.isOverBudget) {
+      return 'over';
+    }
+
+    if (budget.percentageUsed >= 80) {
+      return 'warning';
+    }
+
+    return 'healthy';
+  };
 }
