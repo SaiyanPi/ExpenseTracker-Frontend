@@ -16,7 +16,7 @@ export class Login {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly apiErrorService = inject(ApiErrorService);
-
+  protected readonly isLoggingIn = signal(false);
 
   // protected readonly loginFailed = signal(false);
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
@@ -39,13 +39,13 @@ export class Login {
       }
     }
   )
-  
+
   // unlike in the category component here are multiple fields so using effect for clearing every
   // field is tedious so to reduce the boilerplate code, helper is create
   private watchField<T>(
     field: () => { value: Signal<T> },
     errorKey: string
-  ) { 
+  ) {
     effect(() => {
       field().value();
       this.apiErrorService.clearServerError(this.serverValidationErrors, errorKey);
@@ -60,6 +60,8 @@ export class Login {
 
   private async login() {
     // this.loginFailed.set(false);
+    this.isLoggingIn.set(true);
+
     // Clearing serverValidationErrors them before every login attempt:
     this.serverValidationErrors.set({});
 
@@ -74,6 +76,8 @@ export class Login {
       const result = this.apiErrorService.handle(error);
       this.serverValidationErrors.set(result.validationErrors);
       return [{ kind: 'server', message: 'Something went wrong.' }];
+    } finally {
+      this.isLoggingIn.set(false);
     }
   }
 

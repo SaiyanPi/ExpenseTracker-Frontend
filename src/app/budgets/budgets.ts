@@ -12,17 +12,33 @@ import { firstValueFrom } from 'rxjs';
 import { CreateUpdateBudgetModel } from '../models/budget/create-update-budget-model';
 import { EditBudgetDialog } from './edit-budget-dialog/edit-budget-dialog';
 import { RouterLink } from '@angular/router';
+import { Pagination, SortOption } from '../shared/pagination/pagination/pagination';
+import { PaginationState } from '../shared/pagination/pagination-state/pagination-state';
 
 @Component({
   selector: 'ep-budgets',
-  imports: [DatePipe, DecimalPipe, RouterLink],
+  imports: [DatePipe, DecimalPipe, RouterLink, Pagination],
   templateUrl: './budgets.html',
   styleUrl: './budgets.css',
 })
 export class Budgets {
   readonly Math = Math;
-  
+
   private readonly budgetService = inject(BudgetService);
+
+  readonly pagination = new PaginationState();
+
+  protected readonly getBudgets = this.budgetService.budgets(this.pagination.query);
+
+  readonly sortOptions: SortOption[] = [
+    { label: 'Name', value: 'Name' },
+    { label: 'Amount', value: 'Amount' },
+    { label: 'End date', value: 'EndDate' },
+    { label: 'Start date', value: 'StartDate' },
+    { label: 'Usage', value: 'percentageUsed' }
+  ];
+
+
 
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
 
@@ -33,7 +49,6 @@ export class Budgets {
   private readonly dialog = inject(MatDialog);
 
 
-  protected readonly getBudgets = this.budgetService.budgets();
 
   protected toggleBudgetMenu(id: string): void {
     this.openBudgetMenu.update(current => current === id ? null : id);

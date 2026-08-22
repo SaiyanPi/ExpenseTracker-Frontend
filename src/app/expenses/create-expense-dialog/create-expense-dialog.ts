@@ -1,7 +1,6 @@
 import { Component, effect, inject, Signal, signal } from '@angular/core';
 import { CreateUpdateExpenseModel } from '../../models/expense/create-update-expense-model';
 import { firstValueFrom } from 'rxjs';
-import { ExpenseModel } from '../../models/expense/expense-model';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogRef } from '@angular/material/dialog';
 import { ExpenseService } from '../../services/expense-service';
 import { ApiErrorService } from '../../services/api-error-service';
@@ -32,7 +31,6 @@ export interface CreateExpenseDialogData {
   styleUrl: './create-expense-dialog.css',
 })
 export class CreateExpenseDialog {
-  protected readonly expense = inject<ExpenseModel>(MAT_DIALOG_DATA);
 
   protected readonly dialogData = inject<CreateExpenseDialogData>(MAT_DIALOG_DATA, {
     optional: true
@@ -45,8 +43,6 @@ export class CreateExpenseDialog {
   private readonly apiErrorService = inject(ApiErrorService);
 
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
-
-  protected readonly expenses = inject(ExpenseService).expenses();
 
   protected readonly categories = inject(CategoryService).categories();
 

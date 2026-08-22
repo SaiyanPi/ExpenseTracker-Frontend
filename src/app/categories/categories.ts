@@ -7,15 +7,28 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiErrorService } from '../services/api-error-service';
 import { EditCategoryDialog } from './edit-category-dialog/edit-category-dialog';
 import { CreateUpdateCategoryModel } from '../models/category/create-update-category-model';
+import { RouterLink } from '@angular/router';
+import { Pagination, SortOption } from '../shared/pagination/pagination/pagination';
+import { PaginationState } from '../shared/pagination/pagination-state/pagination-state';
 
 @Component({
   selector: 'ep-categories',
-  imports: [FormRoot, FormField, MatSnackBarModule, MatDialogModule],
+  imports: [FormRoot, FormField, MatSnackBarModule, MatDialogModule, RouterLink, Pagination],
   templateUrl: './categories.html',
   styleUrl: './categories.css',
 })
 export class Categories {
+
   private readonly categoryService = inject(CategoryService);
+
+  readonly pagination = new PaginationState();
+  
+  protected readonly getCategories = this.categoryService.categories(this.pagination.query);
+
+  readonly sortOptions: SortOption[] = [
+    { label: 'Name', value: 'Name' }
+  ];
+
 
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
 
@@ -26,11 +39,10 @@ export class Categories {
   private readonly dialog = inject(MatDialog);
 
 
-  protected readonly getCategories = this.categoryService.categories();
-
   protected toggleCategoryMenu(id: string): void {
     this.openCategoryMenu.update(current => current === id ? null : id);
   }
+
   @HostListener('document:click', ['$event'])
   protected onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;

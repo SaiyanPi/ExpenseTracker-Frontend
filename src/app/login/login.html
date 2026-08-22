@@ -55,7 +55,17 @@
           </div>
 
           <!-- <button class="btn btn-primary" type="submit" [disabled]="!credentials().valid()">Log me in!</button> -->
-          <button class="btn btn-primary" type="submit">Sign in!</button>
+          <button class="btn btn-primary" type="submit" [disabled]="isLoggingIn()">
+            @if (isLoggingIn()) {
+              <span
+                class="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+              Signing in...
+            } @else {
+              Sign in!
+            }
+          </button>
         </form>
 
       </div>

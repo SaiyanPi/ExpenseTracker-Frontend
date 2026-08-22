@@ -1,5 +1,5 @@
 import { ExpenseModel } from "../expense/expense-model";
-import { PagedResultModel } from "../paged/paged-result-model";
+import { PagedResultModel } from "../pagination/paged-result-model";
 
 export interface BudgetDetailModel {
   id: string;
@@ -10,7 +10,7 @@ export interface BudgetDetailModel {
   remaining: number;
   percentageUsed: number;
   isOverBudget: boolean;
-  
+
   isActive: boolean;
   startDate: string;
   endDate: string;

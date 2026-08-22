@@ -7,16 +7,31 @@ import { ApiErrorService } from '../services/api-error-service';
 import { CreateExpenseDialog } from './create-expense-dialog/create-expense-dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { EditExpenseDialog } from './edit-expense-dialog/edit-expense-dialog';
-
+import { PaginationState } from '../shared/pagination/pagination-state/pagination-state';
+import { Pagination, SortOption } from '../shared/pagination/pagination/pagination';
 
 @Component({
   selector: 'ep-expenses',
-  imports: [DecimalPipe, DatePipe],
+  imports: [DecimalPipe, DatePipe, Pagination],
   templateUrl: './expenses.html',
   styleUrl: './expenses.css',
 })
+
 export class Expenses {
+  
   private readonly expenseService = inject(ExpenseService);
+
+  readonly pagination = new PaginationState();
+
+  protected readonly getExpenses = this.expenseService.expenses(this.pagination.query);
+
+  readonly sortOptions: SortOption[] = [
+    { label: 'Title', value: 'Title' },
+    { label: 'Amount', value: 'Amount' },
+    { label: 'Expense date', value: 'Date' },
+    { label: 'Created date', value: 'CreatedAt' }
+  ];
+
 
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
 
@@ -26,7 +41,6 @@ export class Expenses {
 
   private readonly dialog = inject(MatDialog);
 
-  protected readonly getExpenses = this.expenseService.expenses();
 
   protected toggleExpenseMenu(id: string): void {
     this.openExpenseMenu.update(current => current === id ? null : id);
@@ -77,4 +91,5 @@ export class Expenses {
       }
     });
   }
+
 }

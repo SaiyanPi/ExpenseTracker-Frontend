@@ -1,0 +1,108 @@
+<div class="d-flex justify-content-between align-items-center gap-3">
+
+  <!-- Page size -->
+  <select
+    id="pageSize"
+    class="form-select form-select-sm w-auto"
+    [value]="pagination().pageSize()"
+    (change)="changePageSize($event)">
+
+    @for (size of pageSizeOptions; track size) {
+      <option
+        [value]="size"
+        [selected]="pagination().pageSize() === size">
+
+        {{ size }} / page
+
+      </option>
+    }
+
+  </select>
+
+
+  <!-- Sorting -->
+  <div class="d-flex align-items-center gap-2">
+
+    <select
+      id="sortBy"
+      class="form-select form-select-sm w-auto"
+      [value]="pagination().sortBy() ?? ''"
+      (change)="changeSortBy($event)">
+
+      <option
+        value="" 
+        [selected]="pagination().sortBy() === null"
+      >
+        Sort by...
+      </option>
+
+      @for (option of sortOptions(); track option.value) {
+        <option
+          [value]="option.value"
+          [selected]="pagination().sortBy() === option.value"
+        >
+          {{ option.label }}
+        </option>
+      }
+
+    </select>
+
+    <button
+      type="button"
+      class="btn btn-outline-secondary btn-sm"
+      [disabled]="pagination().sortBy() === null"
+      (click)="toggleSortDirection()">
+
+      {{ pagination().sortDesc() ? '⬇️' : '⬆️' }}
+
+    </button>
+
+
+    <!-- reset -->
+    <button
+      type="button"
+      class="btn btn-outline-secondary btn-sm"
+      [disabled]="pagination().sortBy() === null"
+      (click)="reset()">
+
+      Reset
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- Pagination -->
+@if (result(); as result) {
+
+  <div class="d-flex justify-content-between align-items-center mt-3">
+
+    <button
+      type="button"
+      class="btn btn-outline-secondary btn-sm"
+      [disabled]="loading() || !result.hasPrevious"
+      (click)="previousPage()">
+
+      Previous
+
+    </button>
+
+    <span>
+      Page {{ result.page }} of {{ result.totalPages }}
+    </span>
+
+    <button
+      type="button"
+      class="btn btn-outline-secondary btn-sm"
+      [disabled]="loading() || !result.hasNext"
+      (click)="nextPage()">
+
+      Next
+
+    </button>
+
+  </div>
+
+}

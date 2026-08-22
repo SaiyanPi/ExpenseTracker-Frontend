@@ -38,7 +38,7 @@ export class EditExpenseDialog {
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
 
   protected readonly categories = inject(CategoryService).categories();
-  
+
   protected readonly budgets = inject(BudgetService).budgets();
 
   protected readonly fields = signal({
@@ -101,7 +101,7 @@ export class EditExpenseDialog {
     const { title, description, amount, date, categoryId, budgetId } = this.expenseForm().value();
     const request: CreateUpdateExpenseModel =
       { title, description, amount, date: date || null, categoryId: categoryId || null, budgetId: budgetId || null };
-    
+
       try {
       await firstValueFrom(this.expenseService.update(this.expense.id, request));
       this.dialogRef.close(true);

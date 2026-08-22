@@ -5,6 +5,7 @@ import { Categories } from "./categories/categories";
 import { Budgets } from "./budgets/budgets";
 import { Expenses } from "./expenses/expenses";
 import { BudgetDetail } from "./budgets/budget-detail/budget-detail";
+import { CategoryDetail } from "./categories/category-detail/category-detail";
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -18,6 +19,8 @@ export const routes: Routes = [
   { path: 'expenses', component: Expenses },
 
   // Route-based navigation not an input signal-based
-  { path: 'budgets/:budgetId', component: BudgetDetail }
+  { path: 'budgets/:budgetId', component: BudgetDetail },
+
+  { path: 'categories/:categoryId', component: CategoryDetail }
 
 ]
