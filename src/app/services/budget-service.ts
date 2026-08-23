@@ -45,9 +45,21 @@ export class BudgetService {
     return this.http.put<void>(`http://localhost:5167/api/v1/budgets/${budgetId}`, budget);
   }
 
-  budgetDetailsWithExpenses(budgetId: string): ResourceRef<BudgetDetailModel | undefined> {
-    return httpResource<BudgetDetailModel>(() =>
-      `http://localhost:5167/api/v1/budgets/budget-detail-with-expenses?budgetId=${budgetId}`
-    );
+  budgetDetailsWithExpenses(budgetId: string, query: () => PagedQueryModel)
+    : ResourceRef<BudgetDetailModel | undefined> {
+    return httpResource<BudgetDetailModel>(() =>{
+      const q = query();
+      return {
+        url: 'http://localhost:5167/api/v1/budgets/budget-detail-with-expenses',
+        params: {
+          budgetId: budgetId,
+
+          page: q.page,
+          pageSize: q.pageSize,
+          ...(q.sortBy !== null? { sortBy: q.sortBy }: {}),
+          sortDesc: q.sortDesc
+        }
+      };
+    });
   }
 }

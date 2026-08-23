@@ -1,19 +1,26 @@
 <!-- Header -->
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex justify-content-between align-items-center mb-4 flex-shrink-0">
 
   <div>
+
     <div class="d-flex align-items-center gap-2 mb-1">
+
       @if (getCategoryDetailsWithExpense.hasValue()) {
+
         @let category = getCategoryDetailsWithExpense.value();
+
         <h4 class="mb-0 fw-semibold">
           {{ category.items[0]?.categoryName ?? 'Category' }}
         </h4>
+
       }
+
     </div>
 
     <small class="text-muted">
       All expenses in this category
     </small>
+
   </div>
 
 </div>
@@ -48,7 +55,7 @@
 
 
   <!-- Category Summary -->
-  <div class="card shadow-sm border-0 mb-4">
+  <div class="card shadow-sm border-0 mb-4 flex-shrink-0">
 
     <div class="card-body">
 
@@ -91,19 +98,13 @@
 
 
   <!-- Expenses Header -->
-  <div class="d-flex justify-content-between align-items-center mb-3">
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-shrink-0">
 
     <div>
 
       <h5 class="mb-1 fw-semibold">
         Expenses
       </h5>
-
-      <small class="text-muted">
-        {{ category.totalCount }}
-        {{ category.totalCount === 1 ? 'expense' : 'expenses' }}
-      </small>
-
     </div>
 
   </div>
@@ -116,11 +117,13 @@
       class="alert alert-success d-flex align-items-center gap-2 mb-3"
       role="alert"
     >
+
       <i class="bi bi-info-circle me-2"></i>
 
       <div>
         No expenses have been added to this category yet.
       </div>
+
     </div>
 
   }
@@ -129,63 +132,81 @@
   <!-- Expense List -->
   @if (category.items.length > 0) {
 
-    <div class="card shadow-sm border-0">
+    <!-- Fixed pagination section -->
+    <div class="flex-shrink-0 mb-3">
 
-      <div class="list-group list-group-flush">
+      <ep-pagination
+        [pagination]="pagination"
+        [result]="getCategoryDetailsWithExpense.value()"
+        [loading]="getCategoryDetailsWithExpense.isLoading()"
+        [sortOptions]="sortOptions"
+      />
 
-        @for (expense of category.items; track expense.id) {
-
-          <div class="list-group-item px-3 py-3">
-
-            <div
-              class="d-flex justify-content-between align-items-start gap-3"
-            >
-
-              <!-- Expense Information -->
-              <div class="d-flex align-items-start gap-3 min-width-0">
-
-                <div
-                  class="rounded-circle bg-light text-secondary
-                         d-flex align-items-center justify-content-center flex-shrink-0"
-                  style="width: 40px; height: 40px;"
-                >
-                  <i class="bi bi-receipt"></i>
-                </div>
-
-                <div class="min-width-0">
-
-                  <div class="fw-semibold text-truncate">
-                    {{ expense.title }}
-                  </div>
-
-                  <div class="d-flex flex-wrap gap-2 mt-2">
-
-                    <span class="expense-meta-badge">
-                      <i class="bi bi-calendar3 me-1"></i>
-                      {{ expense.date | date:'mediumDate' }}
-                    </span>
-
-                    <span class="expense-meta-badge">
-                      <i class="bi bi-wallet2 me-1"></i>
-                      {{ expense.budgetName }}
-                    </span>
-
-                  </div>
-
-                </div>
-
-              </div>
+    </div>
 
 
-              <!-- Amount + Actions -->
+    <!-- ONLY THIS SECTION SCROLLS -->
+    <div class="item-list border rounded p-3">
+
+      <div class="card shadow-sm border-0">
+
+        <div class="list-group list-group-flush">
+
+          @for (expense of category.items; track expense.id) {
+
+            <div class="list-group-item px-3 py-3">
+
               <div
-                class="d-flex align-items-center gap-2 flex-shrink-0"
+                class="d-flex justify-content-between align-items-start gap-3"
               >
 
-                <div class="text-end">
+                <!-- Expense Information -->
+                <div class="d-flex align-items-start gap-3 min-width-0">
 
-                  <div class="fw-bold">
-                    Rs. {{ expense.amount | number:'1.2-2' }}
+                  <div
+                    class="rounded-circle bg-light text-secondary
+                           d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="width: 40px; height: 40px;"
+                  >
+                    <i class="bi bi-receipt"></i>
+                  </div>
+
+                  <div class="min-width-0">
+
+                    <div class="fw-semibold text-truncate">
+                      {{ expense.title }}
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2 mt-2">
+
+                      <span class="item-meta-badge">
+                        <i class="bi bi-calendar3 me-1"></i>
+                        {{ expense.date | date:'mediumDate' }}
+                      </span>
+
+                      <span class="item-meta-badge">
+                        <i class="bi bi-wallet2 me-1"></i>
+                        {{ expense.budgetName }}
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+
+                <!-- Amount -->
+                <div
+                  class="d-flex align-items-center gap-2 flex-shrink-0"
+                >
+
+                  <div class="text-end">
+
+                    <div class="fw-bold">
+                      Rs. {{ expense.amount | number:'1.2-2' }}
+                    </div>
+
                   </div>
 
                 </div>
@@ -194,31 +215,15 @@
 
             </div>
 
-          </div>
+          }
 
-        }
+        </div>
 
       </div>
 
     </div>
 
 
-    <!-- Pagination Info -->
-    <div class="d-flex justify-content-between align-items-center mt-3">
-
-      <small class="text-muted">
-        Page {{ category.page }}
-        of {{ category.totalPages }}
-      </small>
-
-      <small class="text-muted">
-        Showing {{ category.items.length }}
-        of {{ category.totalCount }} expenses
-      </small>
-
-    </div>
-
   }
 
 }
-

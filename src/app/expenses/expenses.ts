@@ -18,7 +18,7 @@ import { Pagination, SortOption } from '../shared/pagination/pagination/paginati
 })
 
 export class Expenses {
-  
+
   private readonly expenseService = inject(ExpenseService);
 
   readonly pagination = new PaginationState();
@@ -26,7 +26,7 @@ export class Expenses {
   protected readonly getExpenses = this.expenseService.expenses(this.pagination.query);
 
   readonly sortOptions: SortOption[] = [
-    { label: 'Title', value: 'Title' },
+    { label: 'Name', value: 'Title' },
     { label: 'Amount', value: 'Amount' },
     { label: 'Expense date', value: 'Date' },
     { label: 'Created date', value: 'CreatedAt' }

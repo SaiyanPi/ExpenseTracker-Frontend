@@ -9,17 +9,21 @@ import { ExpenseService } from '../../services/expense-service';
 import { ApiErrorService } from '../../services/api-error-service';
 import { firstValueFrom } from 'rxjs';
 import { CreateExpenseDialog } from '../../expenses/create-expense-dialog/create-expense-dialog';
+import { PaginationState } from '../../shared/pagination/pagination-state/pagination-state';
+import { Pagination, SortOption } from '../../shared/pagination/pagination/pagination';
 
 @Component({
   selector: 'ep-budget-detail',
-  imports: [DecimalPipe, DatePipe],
+  imports: [DecimalPipe, DatePipe, Pagination],
   templateUrl: './budget-detail.html',
   styleUrl: './budget-detail.css',
 })
 export class BudgetDetail {
   readonly Math = Math;
-  
+
   private readonly budgetService = inject(BudgetService);
+
+  readonly pagination = new PaginationState();
 
   // Route-based navigation not an input signal-based
   private readonly route = inject(ActivatedRoute);
@@ -35,8 +39,13 @@ export class BudgetDetail {
 
 
   protected readonly getBudgetDetailsWithExpense =
-    this.budgetService.budgetDetailsWithExpenses(this.budgetId);
+    this.budgetService.budgetDetailsWithExpenses(this.budgetId, this.pagination.query);
 
+  readonly sortOptions: SortOption[] = [
+      { label: 'Name', value: 'Title' },
+      { label: 'Amount', value: 'Amount' },
+      { label: 'Expense date', value: 'Date' }
+    ];
 
   protected toggleExpenseMenu(id: string): void {
     this.openExpenseMenu.update(current => current === id ? null : id);

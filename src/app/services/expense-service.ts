@@ -38,13 +38,22 @@ export class ExpenseService {
     return this.http.put<void>(`http://localhost:5167/api/v1/expenses/${expenseId}`, expense);
   }
 
-  categoryDetailsWithExpenses(categoryId: string): ResourceRef<PagedResultModel<ExpenseModel> | undefined> {
-    return httpResource<PagedResultModel<ExpenseModel>>(() => ({
-      url: `http://localhost:5167/api/v1/expenses/category-expenses/my?categoryId=${categoryId}`,
-      params: {
+  categoryDetailsWithExpenses(categoryId: string, query: () => PagedQueryModel)
+    : ResourceRef<PagedResultModel<ExpenseModel> | undefined> {
+    return httpResource<PagedResultModel<ExpenseModel>>(() => {
+      const q = query();
+      return {
+        url: 'http://localhost:5167/api/v1/expenses/category-expenses/my',
+        params: {
+          categoryId: categoryId,
 
-      }
-    })
+          page: q.page,
+          pageSize: q.pageSize,
+          ...(q.sortBy !== null? { sortBy: q.sortBy }: {}),
+          sortDesc: q.sortDesc
+        }
+      };
+    }
     );
   }
 }
