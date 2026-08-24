@@ -43,16 +43,16 @@
     @if (getBudgetDetailsWithExpense.hasValue()) {
 
       <div class="d-flex align-items-center gap-2 mt-2">
-        <span class="item-meta-badge">
+        <span class="item-meta-badge small fw-medium text-body">
 
           @if (getBudgetDetailsWithExpense.value().categoryName) {
-            
+
             <i class="bi bi-tag me-1"></i>
             {{ getBudgetDetailsWithExpense.value().categoryName }}
 
           } @else {
 
-            <i class="bi bi-tag-x me-1 text-muted"></i>
+            <i class="bi bi-x-circle me-1"></i>
             No category
           }
         </span>

@@ -46,7 +46,7 @@ export class CreateExpenseDialog {
 
   protected readonly categories = inject(CategoryService).categories();
 
-  protected readonly budgets = inject(BudgetService).budgets();
+  protected readonly activeBudgets = inject(BudgetService).activeBudgets();
 
   protected readonly fields = signal({
     title: '',

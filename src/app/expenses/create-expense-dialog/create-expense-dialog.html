@@ -3,7 +3,7 @@
   <h2 mat-dialog-title>New Expense</h2>
 
   @let validationErrors = serverValidationErrors();
- 
+
   <div class="mb-3">
     <label for="title" class="form-label">Title</label>
     <input id="title" class="form-control" [formField]="expenseForm.title">
@@ -112,8 +112,8 @@
     <label for="budget" class="form-label">Budget</label>
     <select id="budget" class="form-select" [formField]="expenseForm.budgetId">
       <option value="">Select a budget</option>
-      @if (budgets.hasValue()) {
-        @for (budget of budgets.value().items; track budget.id) {
+      @if (activeBudgets.hasValue()) {
+        @for (budget of activeBudgets.value().items; track budget.id) {
           <option [value]="budget.id">
             {{ budget.name }}
           </option>

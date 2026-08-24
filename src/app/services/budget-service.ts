@@ -33,6 +33,26 @@ export class BudgetService {
     });
   }
 
+  activeBudgets(query?: () => PagedQueryModel): ResourceRef<PagedResultModel<BudgetModel> | undefined> {
+    return httpResource<PagedResultModel<BudgetModel>>(() => {
+      const q = query?.();
+      return {
+        url: 'http://localhost:5167/api/v1/budgets/active',
+        params: q? {
+          page: q.page,
+          pageSize: q.pageSize,
+          ...(q.sortBy !== null? { sortBy: q.sortBy }: {}),
+          sortDesc: q.sortDesc
+        }: {
+          page: 1,
+          pageSize: MAX_PAGE_SIZE,
+          sortBy: 'Name',
+          sortDesc: false
+        }
+      }
+    });
+  }
+
   create(request: CreateUpdateBudgetModel): Observable<void> {
     return this.http.post<void>('http://localhost:5167/api/v1/budgets', request);
   }
