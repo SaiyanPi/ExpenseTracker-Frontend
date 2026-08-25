@@ -4,3 +4,225 @@
   height: 100%;
   min-height: 0;
 }
+
+
+/* =========================================================
+   Main Scroll Area
+   ========================================================= */
+
+.item-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+
+/* =========================================================
+   Expense Icon
+   ========================================================= */
+
+.expense-icon {
+  width: 40px;
+  height: 40px;
+}
+
+
+/* =========================================================
+   Summary Icon
+   ========================================================= */
+
+.summary-icon {
+  width: 42px;
+  height: 42px;
+}
+
+
+/* =========================================================
+   Text Truncation
+   ========================================================= */
+
+.min-width-0 {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   Mobile-only elements
+   ========================================================= */
+
+.mobile-expense-count {
+  display: none;
+}
+
+
+/* =========================================================
+   Mobile
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+  /* -----------------------------------------
+     Page Header
+     ----------------------------------------- */
+
+  .category-page-header {
+    margin-bottom: 1rem !important;
+  }
+
+  .category-page-header h4 {
+    font-size: 1.1rem;
+  }
+
+  .category-page-header small {
+    font-size: 0.75rem;
+  }
+
+
+  /* -----------------------------------------
+     Hide desktop summary card
+     ----------------------------------------- */
+
+  .category-summary {
+    display: none;
+  }
+
+
+  /* -----------------------------------------
+     Expenses Header
+     ----------------------------------------- */
+
+  .expenses-header {
+    margin-bottom: 0.75rem !important;
+  }
+
+  .expenses-header h5 {
+    font-size: 1rem;
+  }
+
+  .mobile-expense-count {
+    display: inline-block;
+    font-size: 0.7rem;
+  }
+
+
+  /* -----------------------------------------
+     Pagination
+     ----------------------------------------- */
+
+  .pagination-container {
+    margin-bottom: 0.75rem !important;
+  }
+
+
+  /* -----------------------------------------
+     Scroll Container
+     ----------------------------------------- */
+
+  .item-list {
+    padding: 0.5rem !important;
+    border-radius: 0.5rem !important;
+  }
+
+
+  /* -----------------------------------------
+     Expense Item
+     ----------------------------------------- */
+
+  .expense-item {
+    padding: 0.75rem !important;
+  }
+
+
+  /* -----------------------------------------
+     Expense Icon
+     ----------------------------------------- */
+
+  .expense-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+
+  /* -----------------------------------------
+     Expense Title
+     ----------------------------------------- */
+
+  .expense-title {
+    font-size: 0.9rem;
+  }
+
+
+  /* -----------------------------------------
+     Expense Metadata
+     ----------------------------------------- */
+
+  .expense-meta {
+    margin-top: 0.35rem !important;
+    gap: 0.35rem !important;
+  }
+
+
+  /* -----------------------------------------
+     Expense Amount
+     ----------------------------------------- */
+
+  .expense-amount {
+    font-size: 0.85rem;
+  }
+}
+
+
+/* =========================================================
+   Very Small Phones
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+  .category-page-header {
+    margin-bottom: 0.75rem !important;
+  }
+
+  .category-page-header h4 {
+    font-size: 1rem;
+  }
+
+  .category-page-header small {
+    font-size: 0.7rem;
+  }
+
+
+  .expenses-header {
+    margin-bottom: 0.5rem !important;
+  }
+
+
+  .pagination-container {
+    margin-bottom: 0.5rem !important;
+  }
+
+
+  .item-list {
+    padding: 0.25rem !important;
+  }
+
+
+  .expense-item {
+    padding: 0.65rem !important;
+  }
+
+
+  .expense-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+
+  .expense-title {
+    font-size: 0.85rem;
+  }
+
+
+  .expense-amount {
+    font-size: 0.8rem;
+  }
+}

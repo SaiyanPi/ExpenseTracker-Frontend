@@ -1,7 +1,7 @@
 import { Component, effect, inject, Signal, signal } from '@angular/core';
 import { CreateUpdateExpenseModel } from '../../models/expense/create-update-expense-model';
 import { firstValueFrom } from 'rxjs';
-import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { ExpenseService } from '../../services/expense-service';
 import { ApiErrorService } from '../../services/api-error-service';
 import { disabled, form, FormField, FormRoot, required } from '@angular/forms/signals';
@@ -21,6 +21,7 @@ export interface CreateExpenseDialogData {
   imports: [
     MatDialogActions,
     MatDialogClose,
+    MatDialogContent,
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
@@ -35,6 +36,10 @@ export class CreateExpenseDialog {
   protected readonly dialogData = inject<CreateExpenseDialogData>(MAT_DIALOG_DATA, {
     optional: true
   });
+
+  protected readonly categoryFieldDisabled = signal(
+    !!this.dialogData?.categoryId
+  );
 
   private readonly dialogRef = inject(MatDialogRef<CreateExpenseDialog>);
 
@@ -66,13 +71,14 @@ export class CreateExpenseDialog {
 
       required(f.amount);
 
-      disabled(f.categoryId, {
-        when: () => !!this.dialogData?.categoryId
-      });
-
       disabled(f.budgetId, {
         when: () => !!this.dialogData?.budgetId
       });
+
+      disabled(f.categoryId, {
+        when: () => this.categoryFieldDisabled()
+      });
+
     },
     {
       submission: {
@@ -99,6 +105,24 @@ export class CreateExpenseDialog {
     this.watchField(this.expenseForm.date, 'Date');
     this.watchField(this.expenseForm.categoryId, 'CategoryId');
     this.watchField(this.expenseForm.budgetId, 'BudgetId');
+
+    // get the categoryId for category field based on the budget value selected
+    effect(() => {
+      const budgetId = this.expenseForm.budgetId().value();
+      const budget = this.activeBudgets.value()?.items
+        .find(b => b.id === budgetId);
+      if (budget?.categoryId) {
+        // automatically select category
+        this.expenseForm.categoryId().value.set(budget.categoryId);
+        // disable category
+        this.categoryFieldDisabled.set(true);
+      } else {
+        // clear category
+        this.expenseForm.categoryId().value.set('');
+        // enable category
+        this.categoryFieldDisabled.set(false);
+      }
+    });
   }
 
   protected async createExpense() {
@@ -115,4 +139,5 @@ export class CreateExpenseDialog {
       this.serverValidationErrors.set(result.validationErrors);
     }
   }
+
 }

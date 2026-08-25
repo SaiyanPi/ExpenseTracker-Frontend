@@ -1,72 +1,81 @@
-<div class="d-flex justify-content-between align-items-center gap-3">
+<!-- Pagination controls -->
+<div class="pagination-controls">
 
   <!-- Page size -->
   <select
     id="pageSize"
-    class="form-select form-select-sm w-auto"
+    class="form-select form-select-sm page-size-select"
     [value]="pagination().pageSize()"
-    (change)="changePageSize($event)">
+    (change)="changePageSize($event)"
+  >
 
     @for (size of pageSizeOptions; track size) {
+
       <option
         [value]="size"
-        [selected]="pagination().pageSize() === size">
-
+        [selected]="pagination().pageSize() === size"
+      >
         {{ size }} / page
-
       </option>
+
     }
 
   </select>
 
 
   <!-- Sorting -->
-  <div class="d-flex align-items-center gap-2">
+  <div class="sorting-controls">
 
     <select
       id="sortBy"
-      class="form-select form-select-sm w-auto"
+      class="form-select form-select-sm sort-select"
       [value]="pagination().sortBy() ?? ''"
-      (change)="changeSortBy($event)">
+      (change)="changeSortBy($event)"
+    >
 
       <option
-        value="" 
+        value=""
         [selected]="pagination().sortBy() === null"
       >
         Sort by...
       </option>
 
       @for (option of sortOptions(); track option.value) {
+
         <option
           [value]="option.value"
           [selected]="pagination().sortBy() === option.value"
         >
           {{ option.label }}
         </option>
+
       }
 
     </select>
 
+
     <button
       type="button"
-      class="btn btn-outline-secondary btn-sm"
+      class="btn btn-outline-secondary btn-sm sort-direction-button"
       [disabled]="pagination().sortBy() === null"
-      (click)="toggleSortDirection()">
-
+      (click)="toggleSortDirection()"
+      [attr.aria-label]="
+        pagination().sortDesc()
+          ? 'Sort descending'
+          : 'Sort ascending'
+      "
+    >
       {{ pagination().sortDesc() ? '⬇️' : '⬆️' }}
-
     </button>
 
 
-    <!-- reset -->
     <button
       type="button"
-      class="btn btn-outline-secondary btn-sm"
+      class="btn btn-outline-secondary btn-sm reset-button"
       [disabled]="pagination().sortBy() === null"
-      (click)="reset()">
-
+      (click)="reset()"
+    >
       Reset
-
     </button>
 
   </div>
@@ -74,33 +83,33 @@
 </div>
 
 
-<!-- Pagination -->
+<!-- Page navigation -->
 @if (result(); as result) {
 
-  <div class="d-flex justify-content-between align-items-center mt-3">
+  <div class="page-navigation">
 
     <button
       type="button"
       class="btn btn-outline-secondary btn-sm"
       [disabled]="loading() || !result.hasPrevious"
-      (click)="previousPage()">
-
+      (click)="previousPage()"
+    >
       Previous
-
     </button>
 
-    <span>
+
+    <span class="page-indicator">
       Page {{ result.page }} of {{ result.totalPages }}
     </span>
+
 
     <button
       type="button"
       class="btn btn-outline-secondary btn-sm"
       [disabled]="loading() || !result.hasNext"
-      (click)="nextPage()">
-
+      (click)="nextPage()"
+    >
       Next
-
     </button>
 
   </div>

@@ -1,13 +1,13 @@
-<!-- Header -->
-<div class="d-flex justify-content-between align-items-center mb-4 flex-shrink-0">
+<!-- Page Header -->
+<div class="page-header">
 
-  <div>
+  <div class="page-header-content">
 
-    <div class="d-flex align-items-center gap-2 mb-1">
+    <div class="title-row">
 
       @if (getBudgetDetailsWithExpense.hasValue()) {
 
-        <h4 class="mb-0 fw-semibold">
+        <h4 class="page-title">
           {{ getBudgetDetailsWithExpense.value().name }}
         </h4>
 
@@ -28,7 +28,7 @@
 
       } @else {
 
-        <h4 class="mb-0 fw-semibold">
+        <h4 class="page-title">
           Budget details
         </h4>
 
@@ -42,30 +42,39 @@
 
     @if (getBudgetDetailsWithExpense.hasValue()) {
 
-      <div class="d-flex align-items-center gap-2 mt-2">
-        <span class="item-meta-badge small fw-medium text-body">
+      @let budgetHeader = getBudgetDetailsWithExpense.value();
 
-          @if (getBudgetDetailsWithExpense.value().categoryName) {
+      <div class="budget-meta">
 
-            <i class="bi bi-tag me-1"></i>
-            {{ getBudgetDetailsWithExpense.value().categoryName }}
+        <span class="meta-badge">
+
+          @if (budgetHeader.categoryName) {
+
+            <i class="bi bi-tag"></i>
+            <span>{{ budgetHeader.categoryName }}</span>
 
           } @else {
 
-            <i class="bi bi-x-circle me-1"></i>
-            No category
+            <i class="bi bi-x-circle"></i>
+            <span>No category</span>
+
           }
+
         </span>
 
-        <span class="item-meta-badge small fw-medium text-body">
+        <span class="meta-badge">
 
-          <i class="bi bi-calendar3 me-2"></i>
+          <i class="bi bi-calendar3"></i>
 
-          {{ getBudgetDetailsWithExpense.value().startDate | date:'mediumDate' }}
+          <span>
+            {{ budgetHeader.startDate | date:'mediumDate' }}
+          </span>
 
-          <span class="text-muted mx-1">→</span>
+          <span class="date-arrow">→</span>
 
-          {{ getBudgetDetailsWithExpense.value().endDate | date:'mediumDate' }}
+          <span>
+            {{ budgetHeader.endDate | date:'mediumDate' }}
+          </span>
 
         </span>
 
@@ -81,7 +90,7 @@
 <!-- Loading -->
 @if (getBudgetDetailsWithExpense.isLoading()) {
 
-  <div class="text-center py-5">
+  <div class="loading-state">
 
     <div class="spinner-border" role="status"></div>
 
@@ -91,52 +100,48 @@
 
   </div>
 
+}
+
 
 <!-- Error -->
-} @else if (getBudgetDetailsWithExpense.error()) {
+@else if (getBudgetDetailsWithExpense.error()) {
 
   <div class="alert alert-danger" role="alert">
     Unable to load budget details.
   </div>
 
+}
+
 
 <!-- Data -->
-} @else if (getBudgetDetailsWithExpense.hasValue()) {
+@else if (getBudgetDetailsWithExpense.hasValue()) {
 
   @let budget = getBudgetDetailsWithExpense.value();
 
 
   <!-- Budget Summary -->
-  <div class="card shadow-sm border-0 mb-4 flex-shrink-0">
+  <section class="budget-card card shadow-sm border-0">
 
     <div class="card-body">
 
-      <div class="row g-4">
+      <div class="summary-grid">
 
         <!-- Budget Limit -->
-        <div class="col-12 col-md-4">
+        <div class="summary-item">
 
-          <div class="d-flex align-items-center gap-3">
+          <div class="summary-icon bg-primary-subtle text-primary">
+            <i class="bi bi-wallet2"></i>
+          </div>
 
-            <div
-              class="rounded-circle bg-primary-subtle text-primary
-                     d-flex align-items-center justify-content-center"
-              style="width: 42px; height: 42px;"
-            >
-              <i class="bi bi-wallet2 fs-5"></i>
-            </div>
+          <div class="summary-content">
 
-            <div>
+            <small class="text-muted">
+              Budget limit
+            </small>
 
-              <small class="text-muted d-block">
-                Budget limit
-              </small>
-
-              <span class="fs-5 fw-bold">
-                Rs. {{ budget.limit | number:'1.2-2' }}
-              </span>
-
-            </div>
+            <strong>
+              Rs. {{ budget.limit | number:'1.2-2' }}
+            </strong>
 
           </div>
 
@@ -144,29 +149,21 @@
 
 
         <!-- Total Spent -->
-        <div class="col-12 col-md-4">
+        <div class="summary-item">
 
-          <div class="d-flex align-items-center gap-3">
+          <div class="summary-icon bg-danger-subtle text-danger">
+            <i class="bi bi-arrow-down-circle"></i>
+          </div>
 
-            <div
-              class="rounded-circle bg-danger-subtle text-danger
-                     d-flex align-items-center justify-content-center"
-              style="width: 42px; height: 42px;"
-            >
-              <i class="bi bi-arrow-down-circle fs-5"></i>
-            </div>
+          <div class="summary-content">
 
-            <div>
+            <small class="text-muted">
+              Total spent
+            </small>
 
-              <small class="text-muted d-block">
-                Total spent
-              </small>
-
-              <span class="fs-5 fw-bold">
-                Rs. {{ budget.totalSpent | number:'1.2-2' }}
-              </span>
-
-            </div>
+            <strong>
+              Rs. {{ budget.totalSpent | number:'1.2-2' }}
+            </strong>
 
           </div>
 
@@ -174,33 +171,24 @@
 
 
         <!-- Remaining -->
-        <div class="col-12 col-md-4">
+        <div class="summary-item">
 
-          <div class="d-flex align-items-center gap-3">
+          <div class="summary-icon bg-success-subtle text-success">
+            <i class="bi bi-wallet"></i>
+          </div>
 
-            <div
-              class="rounded-circle bg-success-subtle text-success
-                     d-flex align-items-center justify-content-center"
-              style="width: 42px; height: 42px;"
+          <div class="summary-content">
+
+            <small class="text-muted">
+              Remaining
+            </small>
+
+            <strong
+              [class.text-danger]="budget.isOverBudget"
+              [class.text-success]="!budget.isOverBudget"
             >
-              <i class="bi bi-wallet fs-5"></i>
-            </div>
-
-            <div>
-
-              <small class="text-muted d-block">
-                Remaining
-              </small>
-
-              <span
-                class="fs-5 fw-bold"
-                [class.text-danger]="budget.isOverBudget"
-                [class.text-success]="!budget.isOverBudget"
-              >
-                Rs. {{ budget.remaining | number:'1.2-2' }}
-              </span>
-
-            </div>
+              Rs. {{ budget.remaining | number:'1.2-2' }}
+            </strong>
 
           </div>
 
@@ -210,11 +198,11 @@
 
 
       <!-- Progress -->
-      <div class="mt-4">
+      <div class="progress-section">
 
         @let spending = spendingStatus();
 
-        <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="progress-header">
 
           <small class="text-muted">
             Budget usage
@@ -230,12 +218,11 @@
         </div>
 
         <div
-          class="progress mb-3"
+          class="progress"
           role="progressbar"
           [attr.aria-valuenow]="budget.percentageUsed"
           aria-valuemin="0"
           aria-valuemax="100"
-          style="height: 8px;"
         >
 
           <div
@@ -249,57 +236,66 @@
         </div>
 
 
+        <!-- Spending Status -->
         @if (isBudgetUpcoming()) {
 
-          <div class="alert alert-info py-2 px-3 small mb-3">
+          <div class="alert alert-info status-alert">
+            <i class="bi bi-clock"></i>
 
-            <i class="bi bi-clock me-1"></i>
-
-            Budget starts
-            {{ budget.startDate | date:'mediumDate' }}.
-
+            <span>
+              Budget starts
+              {{ budget.startDate | date:'mediumDate' }}.
+            </span>
           </div>
 
-        } @else if (spending === 'over') {
+        }
 
-          <div class="alert alert-danger py-2 px-3 small mb-3">
+        @else if (spending === 'over') {
 
-            <i class="bi bi-exclamation-triangle me-1"></i>
+          <div class="alert alert-danger status-alert">
+            <i class="bi bi-exclamation-triangle"></i>
 
-            You've exceeded this budget.
-
+            <span>
+              You've exceeded this budget.
+            </span>
           </div>
 
-        } @else if (spending === 'warning') {
+        }
 
-          <div class="alert alert-warning py-2 px-3 small mb-3">
+        @else if (spending === 'warning') {
 
-            <i class="bi bi-exclamation-circle me-1"></i>
+          <div class="alert alert-warning status-alert">
+            <i class="bi bi-exclamation-circle"></i>
 
-            You're getting close to your budget limit.
-
+            <span>
+              You're getting close to your budget limit.
+            </span>
           </div>
 
-        } @else if (isBudgetExpired()) {
+        }
 
-          <div class="alert alert-secondary py-2 px-3 small mb-3">
+        @else if (isBudgetExpired()) {
 
-            <i class="bi bi-calendar-check me-1"></i>
+          <div class="alert alert-secondary status-alert">
+            <i class="bi bi-calendar-check"></i>
 
-            Budget ended with
-            Rs. {{ budget.remaining | number:'1.2-2' }}
-            remaining.
-
+            <span>
+              Budget ended with
+              Rs. {{ budget.remaining | number:'1.2-2' }}
+              remaining.
+            </span>
           </div>
 
-        } @else {
+        }
 
-          <div class="alert alert-success py-2 px-3 small mb-3">
+        @else {
 
-            <i class="bi bi-check-circle me-1"></i>
+          <div class="alert alert-success status-alert">
+            <i class="bi bi-check-circle"></i>
 
-            You're within your budget.
-
+            <span>
+              You're within your budget.
+            </span>
           </div>
 
         }
@@ -308,221 +304,174 @@
 
     </div>
 
-  </div>
+  </section>
 
 
   <!-- Expenses Header -->
-  <div class="d-flex justify-content-between align-items-center mb-3 flex-shrink-0">
+  <section class="expenses-section">
 
-    <div>
+    <div class="expenses-header">
 
-      <h5 class="mb-1 fw-semibold">
-        Expenses
-      </h5>
+      <div>
 
-      <small class="text-muted">
-        {{ budget.expenses.totalCount }}
-        {{ budget.expenses.totalCount === 1 ? 'expense' : 'expenses' }}
-      </small>
+        <small class="badge text-bg-secondary mobile-expense-count">
+          {{ budget.expenses.totalCount }}
+          {{ budget.expenses.totalCount === 1 ? 'expense' : 'expenses' }}
+        </small>
+
+      </div>
+
+
+      @if (isBudgetCurrentlyActive()) {
+
+        <button
+          type="button"
+          class="btn btn-primary add-expense-button"
+          (click)="openCreateExpenseDialog()"
+        >
+          <i class="bi bi-plus-lg me-1"></i>
+          Add Expense
+        </button>
+
+      }
 
     </div>
 
 
-    @if (isBudgetCurrentlyActive()) {
+    <!-- Budget Status -->
+    @if (isBudgetUpcoming()) {
 
-      <button
-        type="button"
-        class="btn btn-primary"
-        (click)="openCreateExpenseDialog()"
+      <div
+        class="alert alert-info status-banner"
+        role="alert"
       >
-        <i class="bi bi-plus-lg me-1"></i>
-        Add Expense
-      </button>
+        <i class="bi bi-clock"></i>
+
+        <div>
+          <strong>Budget not active yet.</strong>
+          <span>
+            You can add expenses once this budget starts.
+          </span>
+        </div>
+
+      </div>
 
     }
 
-  </div>
+    @else if (isBudgetExpired()) {
 
+      <div
+        class="alert alert-secondary status-banner"
+        role="alert"
+      >
+        <i class="bi bi-calendar-x"></i>
 
-  <!-- Budget Status -->
-  @if (isBudgetUpcoming()) {
+        <div>
+          <strong>Budget expired.</strong>
+          <span>
+            This budget is no longer accepting new expenses.
+          </span>
+        </div>
 
-    <div
-      class="alert alert-info d-flex align-items-center gap-2 mb-3 flex-shrink-0"
-      role="alert"
-    >
-
-      <i class="bi bi-clock"></i>
-
-      <div>
-        <strong>Budget not active yet.</strong>
-        You can add expenses once this budget starts.
       </div>
 
-    </div>
+    }
 
-  } @else if (isBudgetExpired()) {
 
-    <div
-      class="alert alert-secondary d-flex align-items-center gap-2 mb-3 flex-shrink-0"
-      role="alert"
-    >
+    <!-- No Expenses -->
+    @if (
+      isBudgetCurrentlyActive() &&
+      budget.expenses.items.length === 0
+    ) {
 
-      <i class="bi bi-calendar-x"></i>
+      <div
+        class="alert alert-success status-banner"
+        role="alert"
+      >
+        <i class="bi bi-info-circle"></i>
 
-      <div>
-        <strong>Budget expired.</strong>
-        This budget is no longer accepting new expenses.
+        <span>
+          No expenses have been added to this budget yet.
+        </span>
+
       </div>
 
-    </div>
-
-  }
+    }
 
 
-  <!-- No Expenses -->
-  @if (isBudgetCurrentlyActive() && budget.expenses.items.length === 0) {
+    <!-- Expenses -->
+    @if (budget.expenses.items.length > 0) {
 
-    <div
-      class="alert alert-success d-flex align-items-center gap-2 mb-3 flex-shrink-0"
-      role="alert"
-    >
+      <!-- Pagination -->
+      <div class="pagination-wrapper">
 
-      <i class="bi bi-info-circle me-2"></i>
+        <ep-pagination
+          [pagination]="pagination"
+          [result]="budget.expenses"
+          [loading]="getBudgetDetailsWithExpense.isLoading()"
+          [sortOptions]="sortOptions"
+        />
 
-      No expenses have been added to this budget yet.
-
-    </div>
-
-  }
+      </div>
 
 
-  <!-- Expense List -->
-  @if (budget.expenses.items.length > 0) {
+      <!-- Expense List -->
+      <div class="item-list border rounded p-3">
 
-    <!-- Fixed pagination section -->
-    <div class="flex-shrink-0 mb-3">
+        @for (expense of budget.expenses.items; track expense.id) {
 
-      <ep-pagination
-        [pagination]="pagination"
-        [result]="budget.expenses"
-        [loading]="getBudgetDetailsWithExpense.isLoading()"
-        [sortOptions]="sortOptions"
-      />
+          <article class="expense-card">
 
-    </div>
+            <!-- Expense Main Content -->
+            <div class="expense-main">
 
-    <div class="item-list border rounded p-3">
+              <div class="expense-icon">
+                <i class="bi bi-receipt"></i>
+              </div>
 
-      <div class="card shadow-sm border-0">
 
-        <div class="list-group list-group-flush">
+              <div class="expense-info">
 
-          @for (expense of budget.expenses.items; track expense.id) {
-
-            <div class="list-group-item px-3 py-3">
-
-              <div class="d-flex justify-content-between align-items-start gap-3">
-
-                <!-- Expense Information -->
-                <div class="d-flex align-items-start gap-3 min-width-0">
-
-                  <div
-                    class="rounded-circle bg-light text-secondary
-                           d-flex align-items-center justify-content-center flex-shrink-0"
-                    style="width: 40px; height: 40px;"
-                  >
-                    <i class="bi bi-receipt"></i>
-                  </div>
-
-                  <div class="min-width-0">
-
-                    <div class="fw-semibold text-truncate">
-                      {{ expense.title }}
-                    </div>
-
-                    @if (expense.description) {
-
-                      <div class="small text-muted mt-1">
-                        {{ expense.description }}
-                      </div>
-
-                    }
-
-                    <div class="d-flex flex-wrap gap-2 mt-2">
-
-                      @if (expense.categoryName) {
-
-                        <span class="item-meta-badge">
-                          <i class="bi bi-tag me-1"></i>
-                          {{ expense.categoryName }}
-                        </span>
-
-                      }
-
-                      <span class="item-meta-badge">
-                        <i class="bi bi-calendar3 me-1"></i>
-                        {{ expense.date | date:'mediumDate' }}
-                      </span>
-
-                    </div>
-
-                  </div>
-
+                <div class="expense-title">
+                  {{ expense.title }}
                 </div>
 
 
-                <!-- Amount + Actions -->
-                <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                @if (expense.description) {
 
-                  <div class="text-end">
-
-                    <div class="fw-bold">
-                      Rs. {{ expense.amount | number:'1.2-2' }}
-                    </div>
-
+                  <div class="expense-description">
+                    {{ expense.description }}
                   </div>
 
+                }
 
-                  <!-- Actions -->
-                  <div class="expense-actions position-relative">
 
-                    <button
-                      type="button"
-                      class="btn btn-sm btn-light"
-                      aria-label="Expense actions"
-                      (click)="toggleExpenseMenu(expense.id)"
-                    >
-                      <i class="bi bi-three-dots-vertical"></i>
-                    </button>
+                <div class="expense-meta">
 
-                    @if (openExpenseMenu() === expense.id) {
+                  @if (expense.categoryName) {
 
-                      <div class="dropdown-menu show position-absolute end-0">
+                    <span class="meta-badge">
 
-                        <button
-                          class="dropdown-item"
-                          type="button"
-                          (click)="openEditExpenseDialog(expense)"
-                        >
-                          <i class="bi bi-pencil me-2"></i>
-                          Edit
-                        </button>
+                      <i class="bi bi-tag"></i>
 
-                        <button
-                          class="dropdown-item text-danger"
-                          type="button"
-                          (click)="deleteExpense(expense.id)"
-                        >
-                          <i class="bi bi-trash me-2"></i>
-                          Delete
-                        </button>
+                      <span>
+                        {{ expense.categoryName }}
+                      </span>
 
-                      </div>
+                    </span>
 
-                    }
+                  }
 
-                  </div>
+
+                  <span class="meta-badge">
+
+                    <i class="bi bi-calendar3"></i>
+
+                    <span>
+                      {{ expense.date | date:'mediumDate' }}
+                    </span>
+
+                  </span>
 
                 </div>
 
@@ -530,14 +479,65 @@
 
             </div>
 
-          }
 
-        </div>
+            <!-- Amount + Actions -->
+            <div class="expense-side">
+
+              <div class="expense-amount">
+                Rs. {{ expense.amount | number:'1.2-2' }}
+              </div>
+
+
+              <div class="expense-actions">
+
+                <button
+                  type="button"
+                  class="btn btn-sm btn-light action-button"
+                  aria-label="Expense actions"
+                  (click)="toggleExpenseMenu(expense.id)"
+                >
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+
+
+                @if (openExpenseMenu() === expense.id) {
+
+                  <div class="expense-menu">
+
+                    <button
+                      type="button"
+                      class="dropdown-item"
+                      (click)="openEditExpenseDialog(expense)"
+                    >
+                      <i class="bi bi-pencil me-2"></i>
+                      Edit
+                    </button>
+
+                    <button
+                      type="button"
+                      class="dropdown-item text-danger"
+                      (click)="deleteExpense(expense.id)"
+                    >
+                      <i class="bi bi-trash me-2"></i>
+                      Delete
+                    </button>
+
+                  </div>
+
+                }
+
+              </div>
+
+            </div>
+
+          </article>
+
+        }
 
       </div>
 
-    </div>
+    }
 
-  }
+  </section>
 
 }

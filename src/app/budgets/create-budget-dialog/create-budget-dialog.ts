@@ -1,6 +1,6 @@
 import { Component, effect, inject, Signal, signal } from '@angular/core';
 import { BudgetModel } from '../../models/budget/budget-model';
-import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { BudgetService } from '../../services/budget-service';
 import { ApiErrorService } from '../../services/api-error-service';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +14,7 @@ import { CategoryService } from '../../services/category-service';
 @Component({
   selector: 'ep-create-budget-dialog',
   imports: [
+    MatDialogContent,
     MatDialogActions,
     MatDialogClose,
     MatButtonModule,

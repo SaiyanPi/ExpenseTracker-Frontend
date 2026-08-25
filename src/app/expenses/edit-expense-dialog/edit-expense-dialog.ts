@@ -1,7 +1,7 @@
 import { Component, effect, inject, signal, Signal } from '@angular/core';
-import { form, FormField, FormRoot, required } from '@angular/forms/signals';
+import { disabled, form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ExpenseModel } from '../../models/expense/expense-model';
@@ -15,6 +15,7 @@ import { BudgetService } from '../../services/budget-service';
 @Component({
   selector: 'ep-edit-expense-dialog',
   imports: [
+    MatDialogContent,
     MatDialogActions,
     MatDialogClose,
     MatButtonModule,
@@ -29,6 +30,8 @@ import { BudgetService } from '../../services/budget-service';
 export class EditExpenseDialog {
   protected readonly expense = inject<ExpenseModel>(MAT_DIALOG_DATA);
 
+  protected readonly categoryFieldDisabled = signal(false);
+
   private readonly dialogRef = inject(MatDialogRef<EditExpenseDialog>);
 
   private readonly expenseService = inject(ExpenseService);
@@ -39,7 +42,7 @@ export class EditExpenseDialog {
 
   protected readonly categories = inject(CategoryService).categories();
 
-  protected readonly budgets = inject(BudgetService).budgets();
+  protected readonly activeBudgets = inject(BudgetService).activeBudgets();
 
   protected readonly fields = signal({
     title: '',
@@ -58,6 +61,10 @@ export class EditExpenseDialog {
       required(f.description);
 
       required(f.amount);
+
+      disabled(f.categoryId, {
+        when: () => this.categoryFieldDisabled()
+      });
     },
     {
       submission: {
@@ -77,6 +84,23 @@ export class EditExpenseDialog {
     });
   }
 
+  // get the categoryId for category field based on the budget value select
+  private watchBudget() {
+    effect(() => {
+      const budgetId = this.expenseForm.budgetId().value();
+
+      const budget = this.activeBudgets.value()?.items
+        .find(b => b.id === budgetId);
+
+      if (budget?.categoryId) {
+        this.expenseForm.categoryId().value.set(budget.categoryId);
+        this.categoryFieldDisabled.set(true);
+      } else {
+        this.categoryFieldDisabled.set(false);
+      }
+    });
+  }
+
   constructor() {
     // form fields server error clear
     this.watchField(this.expenseForm.title, 'Title');
@@ -86,14 +110,17 @@ export class EditExpenseDialog {
     this.watchField(this.expenseForm.categoryId, 'CategoryId');
     this.watchField(this.expenseForm.budgetId, 'BudgetId');
 
+    // Budget -> Category relationship
+    this.watchBudget();
+
     // populate fields with their current values
     this.fields.set({
       title: this.expense.title,
       description: this.expense.description,
       amount: this.expense.amount,
       date: this.expense.date.split('T')[0],
-      categoryId: this.expense.categoryId ?? '',
       budgetId: this.expense.budgetId ?? '',
+      categoryId: this.expense.categoryId ?? '',
     });
   }
 

@@ -1,131 +1,135 @@
-<form id="edit-expense-form" [formRoot]="expenseForm" class="px-4 py-3">
+<h3 mat-dialog-title class="px-4 pt-3 mb-0"> Update Expense </h3>
 
-  <h2 mat-dialog-title>Update Expense</h2>
+<mat-dialog-content>
 
-  @let validationErrors = serverValidationErrors();
+  <form id="edit-expense-form" [formRoot]="expenseForm">
 
-  <div class="mb-3">
-    <label for="title" class="form-label">Title</label>
-    <input id="title" class="form-control" [formField]="expenseForm.title">
-    <!-- error message here -->
-    @let title = expenseForm.title();
-    @if (title.touched() && !title.valid()) {
-      @if (title.getError('required')) {
-        <div class="invalid-feedback mt-1">Expense title is required</div>
-      }
-    }
-    <!-- server side validation errors in the form field-->
-    @if (validationErrors['Title']) {
-      @for (message of validationErrors['Title']; track message) {
-        <div class="invalid-feedback d-block mt">
-          {{ message }}
-        </div>
-      }
-    }
-  </div>
+    @let validationErrors = serverValidationErrors();
 
-  <div class="mb-3">
-    <label for="description" class="form-label">Description</label>
-    <input id="description" class="form-control"  [formField]="expenseForm.description"
-      placeholder="must not exceed 500 characters">
-    <!-- error message here -->
-    @let description = expenseForm.description();
-    @if (description.touched() && !description.valid()) {
-      @if (description.getError('required')) {
-        <div class="invalid-feedback mt-1">Expense description is required</div>
-      }
-    }
-    <!-- server side validation errors in the form field-->
-    @if (validationErrors['Description']) {
-      @for (message of validationErrors['Description']; track message) {
-        <div class="invalid-feedback d-block mt">
-          {{ message }}
-        </div>
-      }
-    }
-  </div>
-
-  <div class="mb-3">
-    <label for="amount" class="form-label">Amount</label>
-    <div class="input-group">
-      <span class="input-group-text">Rs.</span>
-      <input id="amount" type="number" class="form-control" [formField]="expenseForm.amount">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input id="title" class="form-control" [formField]="expenseForm.title">
       <!-- error message here -->
-      @let amount = expenseForm.amount();
-      @if (amount.touched() && !amount.valid()) {
-        @if (amount.getError('required')) {
-          <div class="invalid-feedback mt-1">Budget amount is required</div>
+      @let title = expenseForm.title();
+      @if (title.touched() && !title.valid()) {
+        @if (title.getError('required')) {
+          <div class="invalid-feedback mt-1">Expense title is required</div>
         }
       }
       <!-- server side validation errors in the form field-->
-      @if (validationErrors['Amount']) {
-        @for (message of validationErrors['Amount']; track message) {
+      @if (validationErrors['Title']) {
+        @for (message of validationErrors['Title']; track message) {
           <div class="invalid-feedback d-block mt">
             {{ message }}
           </div>
         }
       }
     </div>
-  </div>
 
-  <div class="mb-3">
-    <label for="date" class="form-label">Date</label>
-    <input id="date" type="date" class="form-control" [formField]="expenseForm.date">
-    <!-- server side validation errors in the form field-->
-    @if (validationErrors['Date']) {
-      @for (message of validationErrors['Date']; track message) {
-        <div class="invalid-feedback d-block mt">
-          {{ message }}
-        </div>
-      }
-    }
-  </div>
-
-  <div class="mb-3">
-    <label for="category" class="form-label">Category</label>
-    <select id="category" class="form-select" [formField]="expenseForm.categoryId">
-      <option value="">Select a category</option>
-      @if (categories.hasValue()) {
-        @for (category of categories.value().items; track category.id) {
-          <option [value]="category.id">
-            {{ category.name }}
-          </option>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <input id="description" class="form-control"  [formField]="expenseForm.description"
+        placeholder="must not exceed 500 characters">
+      <!-- error message here -->
+      @let description = expenseForm.description();
+      @if (description.touched() && !description.valid()) {
+        @if (description.getError('required')) {
+          <div class="invalid-feedback mt-1">Expense description is required</div>
         }
       }
-    </select>
-    <!-- server side validation errors in the form field-->
-    @if (validationErrors['CategoryId']) {
-      @for (message of validationErrors['CategoryId']; track message) {
-        <div class="invalid-feedback d-block mt-1">
-          {{ message }}
-        </div>
-      }
-    }
-  </div>
-
-  <div class="mb-3">
-    <label for="budget" class="form-label">Budget</label>
-    <select id="budget" class="form-select" [formField]="expenseForm.budgetId">
-      <option value="">Select a budget</option>
-      @if (budgets.hasValue()) {
-        @for (budget of budgets.value().items; track budget.id) {
-          <option [value]="budget.id">
-            {{ budget.name }}
-          </option>
+      <!-- server side validation errors in the form field-->
+      @if (validationErrors['Description']) {
+        @for (message of validationErrors['Description']; track message) {
+          <div class="invalid-feedback d-block mt">
+            {{ message }}
+          </div>
         }
       }
-    </select>
-    <!-- server side validation errors in the form field-->
-    @if (validationErrors['BudgetId']) {
-      @for (message of validationErrors['BudgetId']; track message) {
-        <div class="invalid-feedback d-block mt-1">
-          {{ message }}
-        </div>
-      }
-    }
-  </div>
+    </div>
 
-</form>
+    <div class="mb-3">
+      <label for="amount" class="form-label">Amount</label>
+      <div class="input-group">
+        <span class="input-group-text">Rs.</span>
+        <input id="amount" type="number" class="form-control" [formField]="expenseForm.amount">
+        <!-- error message here -->
+        @let amount = expenseForm.amount();
+        @if (amount.touched() && !amount.valid()) {
+          @if (amount.getError('required')) {
+            <div class="invalid-feedback mt-1">Budget amount is required</div>
+          }
+        }
+        <!-- server side validation errors in the form field-->
+        @if (validationErrors['Amount']) {
+          @for (message of validationErrors['Amount']; track message) {
+            <div class="invalid-feedback d-block mt">
+              {{ message }}
+            </div>
+          }
+        }
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="date" class="form-label">Date</label>
+      <input id="date" type="date" class="form-control" [formField]="expenseForm.date">
+      <!-- server side validation errors in the form field-->
+      @if (validationErrors['Date']) {
+        @for (message of validationErrors['Date']; track message) {
+          <div class="invalid-feedback d-block mt">
+            {{ message }}
+          </div>
+        }
+      }
+    </div>
+
+    <div class="mb-3">
+      <label for="budget" class="form-label">Budget</label>
+      <select id="budget" class="form-select" [formField]="expenseForm.budgetId">
+        <option value="">Select a budget</option>
+        @if (activeBudgets.hasValue()) {
+          @for (budget of activeBudgets.value().items; track budget.id) {
+            <option [value]="budget.id">
+              {{ budget.name }}
+            </option>
+          }
+        }
+      </select>
+      <!-- server side validation errors in the form field-->
+      @if (validationErrors['BudgetId']) {
+        @for (message of validationErrors['BudgetId']; track message) {
+          <div class="invalid-feedback d-block mt-1">
+            {{ message }}
+          </div>
+        }
+      }
+    </div>
+
+    <div class="mb-3">
+      <label for="category" class="form-label">Category</label>
+      <select id="category" class="form-select" [formField]="expenseForm.categoryId">
+        <option value="">Select a category</option>
+        @if (categories.hasValue()) {
+          @for (category of categories.value().items; track category.id) {
+            <option [value]="category.id">
+              {{ category.name }}
+            </option>
+          }
+        }
+      </select>
+      <!-- server side validation errors in the form field-->
+      @if (validationErrors['CategoryId']) {
+        @for (message of validationErrors['CategoryId']; track message) {
+          <div class="invalid-feedback d-block mt-1">
+            {{ message }}
+          </div>
+        }
+      }
+    </div>
+
+  </form>
+  
+</mat-dialog-content>
 
 <mat-dialog-actions align="end">
 

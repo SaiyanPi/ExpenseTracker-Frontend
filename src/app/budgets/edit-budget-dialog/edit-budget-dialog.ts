@@ -1,7 +1,7 @@
 import { Component, effect, inject, Signal, signal } from '@angular/core';
 import { form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BudgetModel } from '../../models/budget/budget-model';
@@ -14,6 +14,7 @@ import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'ep-edit-budget-dialog',
   imports: [
+    MatDialogContent,
     MatDialogActions,
     MatDialogClose,
     MatButtonModule,
