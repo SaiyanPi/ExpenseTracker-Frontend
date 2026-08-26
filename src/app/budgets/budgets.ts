@@ -58,7 +58,7 @@ export class Budgets {
   protected onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
 
-    if (!target.closest('.budget-actions')) {
+    if (!target.closest('.item-actions')) {
       this.openBudgetMenu.set(null);
     }
   }

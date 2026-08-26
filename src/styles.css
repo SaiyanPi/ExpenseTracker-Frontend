@@ -7,21 +7,126 @@
   color: white !important;
 }
 
+/* =========================================================
+   Shared Item Components
+   ========================================================= */
+
+.item-list {
+  min-height: 0;
+
+  border: 1px solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+
+  padding: 1rem;
+}
+
+
+.item-pagination {
+  flex-shrink: 0;
+}
+
+
+.item-icon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background-color: var(--bs-primary-bg-subtle);
+  color: var(--bs-primary);
+}
+
+
+.item-icon-muted {
+  background-color: var(--bs-light);
+  color: var(--bs-secondary);
+}
+
+
+.item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+
 .item-meta-badge {
   display: inline-flex;
   align-items: center;
+  gap: 0.5rem;
+
   padding: 0.35rem 0.6rem;
-  border: 1px solid var(--bs-border-color);
-  border-radius: 0.375rem;
-  background-color: var(--bs-tertiary-bg);
-  color: var(--bs-body-color);
-  font-size: 0.75rem;
-  line-height: 1;
+
+  border-radius: var(--bs-border-radius);
+  font-size: 0.78rem;
+  background-color: var(--bs-secondary-bg);
 }
 
-.scrollable-item-list {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
+
+.item-actions {
+  position: relative;
+  flex-shrink: 0;
+}
+
+
+.item-description {
+  overflow-wrap: anywhere;
+}
+
+
+.item-title {
+  font-weight: 600;
+  font-size: large;
+  overflow-wrap: anywhere;
+}
+
+
+.item-amount {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+
+.item-progress {
+  height: 8px;
+}
+
+
+.item-card-clickable {
+  cursor: pointer;
+}
+
+
+.item-content {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   Shared Page Components
+   ========================================================= */
+
+.page-header {
+  margin-bottom: 1.5rem;
+}
+
+
+.page-title {
+  margin: 0 0 0.25rem;
+}
+
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 3rem 0;
 }
 

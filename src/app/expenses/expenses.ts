@@ -50,7 +50,7 @@ export class Expenses {
   protected onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
 
-    if (!target.closest('.expense-actions')) {
+    if (!target.closest('.item-actions')) {
       this.openExpenseMenu.set(null);
     }
   }

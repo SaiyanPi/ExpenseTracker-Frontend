@@ -1,34 +1,38 @@
 <!-- Page Header -->
-<div
-  class="d-flex justify-content-between align-items-center mb-4 flex-shrink-0 category-page-header"
->
-  <div>
-    <div class="d-flex align-items-center gap-2 mb-1">
-      @if (getCategoryDetailsWithExpense.hasValue()) {
-        @let category = getCategoryDetailsWithExpense.value();
+<div class="page-header flex-shrink-0">
 
-        <h4 class="mb-0 fw-semibold">
-          {{ category.items[0]?.categoryName ?? 'Category' }}
-        </h4>
-      }
-    </div>
+  <div>
+
+    @if (getCategoryDetailsWithExpense.hasValue()) {
+
+      @let category = getCategoryDetailsWithExpense.value();
+
+      <h4 class="page-title fw-semibold">
+        {{ category.items[0]?.categoryName ?? 'Category' }}
+      </h4>
+
+    }
 
     <small class="text-muted">
       All expenses in this category
     </small>
+
   </div>
+
 </div>
 
 
 <!-- Loading -->
 @if (getCategoryDetailsWithExpense.isLoading()) {
 
-  <div class="text-center py-5">
+  <div class="loading-state">
+
     <div class="spinner-border" role="status"></div>
 
     <p class="mt-3 mb-0 text-muted">
       Loading category expenses...
     </p>
+
   </div>
 
 
@@ -47,9 +51,8 @@
 
 
   <!-- Category Summary -->
-  <div
-    class="card shadow-sm border-0 mb-4 flex-shrink-0 category-summary"
-  >
+  <div class="card shadow-sm border-0 mb-4 flex-shrink-0">
+
     <div class="card-body">
 
       <div class="row g-4">
@@ -59,9 +62,7 @@
 
           <div class="d-flex align-items-center gap-3">
 
-            <div class="rounded-circle bg-primary-subtle text-primary
-              d-flex align-items-center justify-content-center summary-icon"
-            >
+            <div class="item-icon">
               <i class="bi bi-receipt fs-5"></i>
             </div>
 
@@ -84,23 +85,17 @@
       </div>
 
     </div>
+
   </div>
 
 
   <!-- Expenses Header -->
-  <div
-    class="d-flex justify-content-between align-items-center mb-3 flex-shrink-0 expenses-header"
-  >
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-shrink-0">
 
-    <div class="d-flex align-items-center gap-2">
-
-      <!-- Total count shown on mobile -->
-      <span class="badge text-bg-secondary mobile-expense-count">
-        {{ category.totalCount }}
-        {{ category.totalCount === 1 ? 'Expense' : 'Expenses' }}
-      </span>
-
-    </div>
+    <span class="badge text-bg-secondary">
+      {{ category.totalCount }}
+      {{ category.totalCount === 1 ? 'Expense' : 'Expenses' }}
+    </span>
 
   </div>
 
@@ -112,11 +107,13 @@
       class="alert alert-success d-flex align-items-center gap-2 mb-3"
       role="alert"
     >
+
       <i class="bi bi-info-circle me-2"></i>
 
       <div>
         No expenses have been added with this category yet.
       </div>
+
     </div>
 
   }
@@ -126,7 +123,7 @@
   @if (category.items.length > 0) {
 
     <!-- Pagination -->
-    <div class="flex-shrink-0 mb-3 pagination-container">
+    <div class="item-pagination mb-3">
 
       <ep-pagination
         [pagination]="pagination"
@@ -138,55 +135,42 @@
     </div>
 
 
-    <!-- Scrollable Expense List -->
-    <div class="item-list border rounded p-3">
+    <!-- Expense List -->
+    <div class="item-list gap-3">
 
-      <div class="card shadow-sm border-0">
+      <div class="d-flex flex-column gap-3">
 
-        <div class="list-group list-group-flush">
+        @for (expense of category.items; track expense.id) {
 
-          @for (expense of category.items; track expense.id) {
+          <div class="card shadow-sm border-0">
 
-            <div class="list-group-item px-3 py-3 expense-item">
+            <div class="card-body px-3 py-3">
 
-              <div
-                class="d-flex justify-content-between align-items-start gap-3"
-              >
+              <div class="d-flex justify-content-between align-items-start gap-3">
 
                 <!-- Expense Information -->
-                <div
-                  class="d-flex align-items-start gap-3 min-width-0"
-                >
+                <div class="d-flex align-items-start gap-3 item-content">
 
-                  <!-- Expense Icon -->
-                  <div
-                    class="rounded-circle bg-light text-secondary
-                           d-flex align-items-center justify-content-center
-                           flex-shrink-0 expense-icon"
-                  >
+                  <div class="item-icon item-icon-muted">
                     <i class="bi bi-receipt"></i>
                   </div>
 
+                  <div class="item-content">
 
-                  <!-- Expense Details -->
-                  <div class="min-width-0">
-
-                    <div class="fw-semibold text-truncate expense-title">
+                    <div class="item-title">
                       {{ expense.title }}
                     </div>
 
-                    <div class="d-flex flex-wrap gap-2 mt-2 expense-meta">
+                    <div class="item-meta mt-2">
 
-                      <!-- Date -->
                       <span class="item-meta-badge">
-                        <i class="bi bi-calendar3 me-1"></i>
+                        <i class="bi bi-calendar3"></i>
                         {{ expense.date | date:'mediumDate' }}
                       </span>
 
-                      <!-- Budget -->
                       @if (expense.budgetName) {
                         <span class="item-meta-badge">
-                          <i class="bi bi-wallet2 me-1"></i>
+                          <i class="bi bi-wallet2"></i>
                           {{ expense.budgetName }}
                         </span>
                       }
@@ -197,30 +181,18 @@
 
                 </div>
 
-
                 <!-- Amount -->
-                <div
-                  class="d-flex align-items-center gap-2
-                         flex-shrink-0"
-                >
-
-                  <div class="text-end">
-
-                    <div class="fw-bold expense-amount">
-                      Rs. {{ expense.amount | number:'1.2-2' }}
-                    </div>
-
-                  </div>
-
+                <div class="item-amount text-end">
+                  Rs. {{ expense.amount | number:'1.2-2' }}
                 </div>
 
               </div>
 
             </div>
 
-          }
+          </div>
 
-        </div>
+        }
 
       </div>
 

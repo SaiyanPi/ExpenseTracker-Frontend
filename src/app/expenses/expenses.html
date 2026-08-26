@@ -1,4 +1,4 @@
-<!-- Fixed top section -->
+<!-- Header -->
 <div class="d-flex justify-content-between align-items-center mb-4 flex-shrink-0">
 
   @if (getExpenses.hasValue()) {
@@ -44,8 +44,8 @@
 
   } @else {
 
-    <!-- Fixed pagination section -->
-    <div class="flex-shrink-0 mb-3">
+    <!-- Pagination -->
+    <div class="item-pagination flex-shrink-0 mb-3">
 
       <ep-pagination
         [pagination]="pagination"
@@ -57,8 +57,8 @@
     </div>
 
 
-    <!-- ONLY THIS SECTION SCROLLS -->
-    <div class="item-list border rounded p-3">
+    <!-- Item list -->
+    <div class="item-list">
 
       <div class="row g-3">
 
@@ -66,31 +66,27 @@
 
           <div class="col-12 col-md-6 col-xl-4">
 
-            <div class="card h-100 shadow-sm border-0">
+            <div class="card h-100 shadow-sm border-0 expense-card">
 
               <div class="card-body">
 
                 <!-- Header -->
-                <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="d-flex justify-content-between align-items-start mb-4">
 
-                  <div class="d-flex align-items-start gap-3">
+                  <div class="d-flex align-items-center gap-3">
 
-                    <div
-                      class="rounded-circle bg-primary-subtle text-primary
-                      d-flex align-items-center justify-content-center flex-shrink-0"
-                      style="width: 42px; height: 42px;"
-                    >
+                    <div class="item-icon">
                       <i class="bi bi-receipt fs-5"></i>
                     </div>
 
-                    <div class="flex-grow-1 min-width-0">
+                    <div>
 
-                      <h6 class="mb-1 fw-semibold text-break">
+                      <h6 class="item-title">
                         {{ expense.title }}
                       </h6>
 
                       @if (expense.description) {
-                        <small class="text-muted description">
+                        <small class="text-muted item-description">
                           {{ expense.description }}
                         </small>
                       }
@@ -99,8 +95,9 @@
 
                   </div>
 
+
                   <!-- Actions -->
-                  <div class="expense-actions position-relative">
+                  <div class="item-actions">
 
                     <button
                       class="btn btn-sm btn-light"
@@ -141,6 +138,7 @@
 
                 </div>
 
+
                 <!-- Amount -->
                 <div class="mb-4">
 
@@ -154,15 +152,17 @@
 
                 </div>
 
+
                 <!-- Expense Date -->
                 <div class="d-flex align-items-center gap-2 mb-2">
 
                   <span class="item-meta-badge small fw-medium text-body">
-                    <i class="bi bi-calendar3 me-2"></i>
+                    <i class="bi bi-calendar3"></i>
                     {{ expense.date | date:'mediumDate' }}
                   </span>
 
                 </div>
+
 
                 <!-- Category / Budget -->
                 <div class="d-flex flex-column gap-2">
@@ -172,7 +172,7 @@
                     <div class="d-flex align-items-center gap-2">
 
                       <span class="item-meta-badge small fw-medium text-body">
-                        <i class="bi bi-tag me-2"></i>
+                        <i class="bi bi-tag"></i>
                         {{ expense.categoryName }}
                       </span>
 
@@ -185,7 +185,7 @@
                     <div class="d-flex align-items-center gap-2">
 
                       <span class="item-meta-badge small fw-medium text-body">
-                        <i class="bi bi-wallet2 me-2"></i>
+                        <i class="bi bi-wallet2"></i>
                         {{ expense.budgetName }}
                       </span>
 
@@ -196,6 +196,7 @@
                 </div>
 
               </div>
+
 
               <!-- Footer -->
               <div class="card-footer bg-transparent border-top">

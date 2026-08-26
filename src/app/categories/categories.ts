@@ -22,7 +22,7 @@ export class Categories {
   private readonly categoryService = inject(CategoryService);
 
   readonly pagination = new PaginationState();
-  
+
   protected readonly getCategories = this.categoryService.categories(this.pagination.query);
 
   readonly sortOptions: SortOption[] = [
@@ -47,7 +47,7 @@ export class Categories {
   protected onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
 
-    if (!target.closest('.budget-actions')) {
+    if (!target.closest('.item-actions')) {
       this.openCategoryMenu.set(null);
     }
   }
