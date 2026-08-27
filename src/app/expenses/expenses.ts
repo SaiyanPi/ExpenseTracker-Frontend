@@ -1,5 +1,5 @@
 import { CreateUpdateExpenseModel } from './../models/expense/create-update-expense-model';
-import { Component, HostListener, inject, signal } from '@angular/core';
+import { Component, computed, HostListener, inject, signal } from '@angular/core';
 import { ExpenseService } from '../services/expense-service';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
@@ -9,10 +9,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { EditExpenseDialog } from './edit-expense-dialog/edit-expense-dialog';
 import { PaginationState } from '../shared/pagination/pagination-state/pagination-state';
 import { Pagination, SortOption } from '../shared/pagination/pagination/pagination';
+import { ExpenseFilterState } from '../expenseFilter/expense-filter-state/expense-filter-state';
+import { FilterExpenseQueryModel } from '../models/pagination/filter-expense-query-model';
+import { ExpenseFilter } from '../expenseFilter/expense-filter/expense-filter';
 
 @Component({
   selector: 'ep-expenses',
-  imports: [DecimalPipe, DatePipe, Pagination],
+  imports: [DecimalPipe, DatePipe, Pagination, ExpenseFilter],
   templateUrl: './expenses.html',
   styleUrl: './expenses.css',
 })
@@ -22,8 +25,20 @@ export class Expenses {
   private readonly expenseService = inject(ExpenseService);
 
   readonly pagination = new PaginationState();
+  readonly expenseFilters = new ExpenseFilterState();
 
-  protected readonly getExpenses = this.expenseService.expenses(this.pagination.query);
+  protected readonly filterQuery = computed<FilterExpenseQueryModel>(() => ({
+    categoryId: this.expenseFilters.categoryId(),
+    budgetId: this.expenseFilters.budgetId(),
+    startDate: this.expenseFilters.startDate(),
+    endDate: this.expenseFilters.endDate(),
+    minAmount: this.expenseFilters.minAmount(),
+    maxAmount: this.expenseFilters.maxAmount(),
+
+    ...this.pagination.query(),
+  }));
+
+  protected readonly getExpenses = this.expenseService.filterExpenses(this.filterQuery);
 
   readonly sortOptions: SortOption[] = [
     { label: 'Name', value: 'Title' },
@@ -32,6 +47,7 @@ export class Expenses {
     { label: 'Created date', value: 'CreatedAt' }
   ];
 
+  readonly showFilters = signal(false);
 
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
 
@@ -44,6 +60,10 @@ export class Expenses {
 
   protected toggleExpenseMenu(id: string): void {
     this.openExpenseMenu.update(current => current === id ? null : id);
+  }
+
+  protected toggleExpenseFilter(): void {
+    this.showFilters.update(value => !value);
   }
 
   @HostListener('document:click', ['$event'])

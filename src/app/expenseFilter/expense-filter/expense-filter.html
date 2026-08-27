@@ -1,0 +1,158 @@
+<!-- Expense Filters -->
+<div class="card shadow-sm border-0 mb-4 expense-filter-card">
+
+  <div class="card-body">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+      <h6 class="mb-0 fw-semibold">
+        Filters
+      </h6>
+
+      <button
+        class="btn btn-sm btn-outline-secondary"
+        type="button"
+        (click)="resetFilters()"
+      >
+        Reset
+      </button>
+
+    </div>
+
+
+    <div class="row g-2">
+
+      <!-- Category -->
+      <div class="col-12 col-md-6 col-xl-3">
+
+        <label class="form-label filter-label" for="category">
+          Category
+        </label>
+
+        <select
+          id="category"
+          class="form-select form-select-sm"
+          [value]="expenseFilters().categoryId() ?? ''"
+          (change)="onCategoryChange($event)"
+        >
+          <option value="">Categories</option>
+
+          @if (categories.hasValue()) {
+            @for (category of categories.value().items; track category.id) {
+              <option [value]="category.id">
+                {{ category.name }}
+              </option>
+            }
+          }
+
+        </select>
+
+      </div>
+
+
+      <!-- Budget -->
+      <div class="col-12 col-md-6 col-xl-3">
+
+        <label class="form-label filter-label" for="budget">
+          Budget
+        </label>
+
+        <select
+          id="budget"
+          class="form-select form-select-sm"
+          [value]="expenseFilters().budgetId() ?? ''"
+          (change)="onBudgetChange($event)"
+        >
+          <option value="">Budgets</option>
+
+          @if (budgets.hasValue()) {
+            @for (budget of budgets.value().items; track budget.id) {
+              <option [value]="budget.id">
+                {{ budget.name }}
+              </option>
+            }
+          }
+
+        </select>
+
+      </div>
+
+
+      <!-- Start Date -->
+      <div class="col-12 col-md-6 col-xl-3">
+
+        <label class="form-label filter-label" for="startDate">
+          From
+        </label>
+
+        <input
+          id="startDate"
+          type="date"
+          class="form-control form-control-sm"
+          [value]="expenseFilters().startDate() ?? ''"
+          (change)="onStartDateChange($event)"
+        />
+
+      </div>
+
+
+      <!-- End Date -->
+      <div class="col-12 col-md-6 col-xl-3">
+
+        <label class="form-label filter-label" for="endDate">
+          To
+        </label>
+
+        <input
+          id="endDate"
+          type="date"
+          class="form-control form-control-sm"
+          [value]="expenseFilters().endDate() ?? ''"
+          (change)="onEndDateChange($event)"
+        />
+
+      </div>
+
+
+      <!-- Minimum Amount -->
+      <div class="col-12 col-md-6 col-xl-3">
+
+        <label class="form-label filter-label" for="minAmount">
+          Minimum spent
+        </label>
+
+        <input
+          id="minAmount"
+          type="number"
+          class="form-control form-control-sm"
+          placeholder="e.g. 100"
+          [value]="expenseFilters().minAmount() ?? ''"
+          (change)="onMinAmountChange($event)"
+        />
+
+      </div>
+
+
+      <!-- Maximum Amount -->
+      <div class="col-12 col-md-6 col-xl-3">
+
+        <label class="form-label filter-label" for="maxAmount">
+          Maximum spent
+        </label>
+
+        <input
+          id="maxAmount"
+          type="number"
+          class="form-control form-control-sm"
+          placeholder="e.g. 50000"
+          [value]="expenseFilters().maxAmount() ?? ''"
+          (change)="onMaxAmountChange($event)"
+        />
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -3,8 +3,8 @@
 
   @if (getExpenses.hasValue()) {
     <span class="badge text-bg-secondary">
-      {{ getExpenses.value().totalCount }}
-      {{ getExpenses.value().totalCount === 1 ? 'Expense' : 'Expenses' }}
+      {{ getExpenses.value().expenses.totalCount }}
+      {{ getExpenses.value().expenses.totalCount === 1 ? 'Expense' : 'Expenses' }}
     </span>
   }
 
@@ -18,6 +18,28 @@
   </button>
 
 </div>
+
+
+<!-- Show/Hide expense filter option -->
+<div class="d-flex justify-content-end mb-3">
+  <button
+    type="button"
+    class="btn btn-outline-info btn-sm"
+    (click)="toggleExpenseFilter()"
+  >
+    <i class="bi bi-funnel me-1"></i>
+
+    {{ showFilters() ? 'Hide Filters' : 'Filters' }}
+  </button>
+</div>
+
+
+<!-- Filters -->
+@if (showFilters()) {
+  <ep-expense-filter
+    [expenseFilters]="expenseFilters"
+  />
+}
 
 
 <!-- Loading / Error / Empty states -->
@@ -36,7 +58,7 @@
 
 } @else if (getExpenses.hasValue()) {
 
-  @if (getExpenses.value().items.length === 0) {
+  @if (getExpenses.value().expenses.items.length === 0) {
 
     <div class="alert alert-info" role="alert">
       You don't have any expenses yet.
@@ -49,7 +71,7 @@
 
       <ep-pagination
         [pagination]="pagination"
-        [result]="getExpenses.value()"
+        [result]="getExpenses.value().expenses"
         [loading]="getExpenses.isLoading()"
         [sortOptions]="sortOptions"
       />
@@ -62,7 +84,7 @@
 
       <div class="row g-3">
 
-        @for (expense of getExpenses.value().items; track expense.id) {
+        @for (expense of getExpenses.value().expenses.items; track expense.id) {
 
           <div class="col-12 col-md-6 col-xl-4">
 

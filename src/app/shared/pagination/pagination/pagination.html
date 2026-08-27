@@ -71,7 +71,7 @@
 
     <button
       type="button"
-      class="btn btn-outline-secondary btn-sm reset-button"
+      class="btn btn-outline-info btn-sm reset-button"
       [disabled]="pagination().sortBy() === null"
       (click)="reset()"
     >
@@ -90,7 +90,7 @@
 
     <button
       type="button"
-      class="btn btn-outline-secondary btn-sm"
+      class="btn btn-dark btn-sm"
       [disabled]="loading() || !result.hasPrevious"
       (click)="previousPage()"
     >
@@ -105,7 +105,7 @@
 
     <button
       type="button"
-      class="btn btn-outline-secondary btn-sm"
+      class="btn btn-dark btn-sm"
       [disabled]="loading() || !result.hasNext"
       (click)="nextPage()"
     >

@@ -5,6 +5,8 @@ import { ExpenseModel } from '../models/expense/expense-model';
 import { Observable } from 'rxjs';
 import { CreateUpdateExpenseModel } from '../models/expense/create-update-expense-model';
 import { PagedQueryModel } from '../models/pagination/paged-query-model';
+import { FilterExpenseQueryModel } from '../models/pagination/filter-expense-query-model';
+import { FilterExpenseModel } from '../models/expense/filter-expense-model';
 
 @Service()
 export class ExpenseService {
@@ -55,5 +57,26 @@ export class ExpenseService {
       };
     }
     );
+  }
+
+  filterExpenses(query: () => FilterExpenseQueryModel): ResourceRef<FilterExpenseModel | undefined> {
+    return httpResource<FilterExpenseModel>(() =>{
+      const q = query();
+      return {
+        url: 'http://localhost:5167/api/v1/expenses/filter',
+        params: {
+          ...(q.categoryId !== null? { categoryId: q.categoryId }: {}),
+          ...(q.budgetId !== null? { budgetId: q.budgetId }: {}),
+          ...(q.startDate !== null? { startDate: q.startDate }: {}),
+          ...(q.endDate !== null? { endDate: q.endDate }: {}),
+          ...(q.minAmount !== null? { minAmount: q.minAmount }: {}),
+          ...(q.maxAmount !== null? { maxAmount: q.maxAmount }: {}),
+          page: q.page,
+          pageSize: q.pageSize,
+          ...(q.sortBy !== null? { sortBy: q.sortBy }: {}),
+          sortDesc: q.sortDesc
+        }
+      };
+    });
   }
 }

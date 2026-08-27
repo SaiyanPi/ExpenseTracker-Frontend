@@ -1,0 +1,46 @@
+/* =========================================================
+   EXPENSE FILTER
+   ========================================================= */
+
+.expense-filter-card {
+  width: 100%;
+  min-width: 0;
+}
+
+.expense-filter-card .card-body {
+  min-width: 0;
+}
+
+
+/* =========================================================
+   FILTER LABELS
+   ========================================================= */
+
+.filter-label {
+  margin-bottom: 0.25rem;
+
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+
+/* =========================================================
+   PHONE
+   ========================================================= */
+
+@media (max-width: 575.98px) {
+
+  .expense-filter-card {
+    margin-bottom: 1rem !important;
+  }
+
+  .expense-filter-card .card-body {
+    padding: 0.875rem;
+  }
+
+  .expense-filter-card .row {
+    --bs-gutter-x: 0.75rem;
+    --bs-gutter-y: 0.5rem;
+  }
+
+}
