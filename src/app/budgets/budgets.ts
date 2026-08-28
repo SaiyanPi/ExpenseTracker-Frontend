@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { BudgetService } from '../services/budget-service';
 import { ApiErrorService } from '../services/api-error-service';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,10 +14,13 @@ import { EditBudgetDialog } from './edit-budget-dialog/edit-budget-dialog';
 import { RouterLink } from '@angular/router';
 import { Pagination, SortOption } from '../shared/pagination/pagination/pagination';
 import { PaginationState } from '../shared/pagination/pagination-state/pagination-state';
+import { Search } from '../shared/search/search/search';
+import { SearchState } from '../shared/search/search-state/search-state/search-state';
+import { SearchPagedQueryModel } from '../models/search/search-paged-query-model';
 
 @Component({
   selector: 'ep-budgets',
-  imports: [DatePipe, DecimalPipe, RouterLink, Pagination],
+  imports: [DatePipe, DecimalPipe, RouterLink, Pagination, Search],
   templateUrl: './budgets.html',
   styleUrl: './budgets.css',
 })
@@ -27,8 +30,14 @@ export class Budgets {
   private readonly budgetService = inject(BudgetService);
 
   readonly pagination = new PaginationState();
+  readonly searchState = new SearchState()
 
-  protected readonly getBudgets = this.budgetService.budgets(this.pagination.query);
+  protected readonly query = computed<SearchPagedQueryModel>(() => ({
+    ...this.pagination.query(),
+    search: this.searchState.search()
+  }));
+
+  protected readonly getBudgets = this.budgetService.budgets(this.query);
 
   readonly sortOptions: SortOption[] = [
     { label: 'Name', value: 'Name' },

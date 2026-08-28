@@ -16,6 +16,6 @@ export interface BudgetDetailModel {
   endDate: string;
   categoryId: string | null;
   categoryName: string | null,
-  
+
   expenses: PagedResultModel<ExpenseModel>;
 }

@@ -1,5 +1,5 @@
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { Component, effect, HostListener, inject, signal } from '@angular/core';
+import { Component, computed, effect, HostListener, inject, signal } from '@angular/core';
 import { CategoryService } from '../services/category-service';
 import { FormRoot, FormField, form, required } from '@angular/forms/signals';
 import { firstValueFrom } from 'rxjs';
@@ -10,10 +10,13 @@ import { CreateUpdateCategoryModel } from '../models/category/create-update-cate
 import { RouterLink } from '@angular/router';
 import { Pagination, SortOption } from '../shared/pagination/pagination/pagination';
 import { PaginationState } from '../shared/pagination/pagination-state/pagination-state';
+import { Search } from '../shared/search/search/search';
+import { SearchState } from '../shared/search/search-state/search-state/search-state';
+import { SearchPagedQueryModel } from '../models/search/search-paged-query-model';
 
 @Component({
   selector: 'ep-categories',
-  imports: [FormRoot, FormField, MatSnackBarModule, MatDialogModule, RouterLink, Pagination],
+  imports: [FormRoot, FormField, MatSnackBarModule, MatDialogModule, RouterLink, Pagination, Search],
   templateUrl: './categories.html',
   styleUrl: './categories.css',
 })
@@ -22,8 +25,14 @@ export class Categories {
   private readonly categoryService = inject(CategoryService);
 
   readonly pagination = new PaginationState();
+  readonly searchState = new SearchState()
 
-  protected readonly getCategories = this.categoryService.categories(this.pagination.query);
+  protected readonly query = computed<SearchPagedQueryModel>(() => ({
+    ...this.pagination.query(),
+    search: this.searchState.search()
+  }));
+
+  protected readonly getCategories = this.categoryService.categories(this.query);
 
   readonly sortOptions: SortOption[] = [
     { label: 'Name', value: 'Name' }

@@ -20,6 +20,14 @@
 </div>
 
 
+<!-- Search -->
+<div class="item-pagination flex-shrink-0 mb-3">
+  <ep-search
+    [searchState]="searchState"
+  />
+</div>
+
+
 <!-- Loading / Error / Empty states -->
 @if (getBudgets.isLoading()) {
 

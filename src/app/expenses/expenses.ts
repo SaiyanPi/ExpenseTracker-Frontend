@@ -1,4 +1,4 @@
-import { CreateUpdateExpenseModel } from './../models/expense/create-update-expense-model';
+import { CreateUpdateExpenseModel } from '../models/expense/create-update-expense-model';
 import { Component, computed, HostListener, inject, signal } from '@angular/core';
 import { ExpenseService } from '../services/expense-service';
 import { DatePipe, DecimalPipe } from '@angular/common';
@@ -10,12 +10,14 @@ import { EditExpenseDialog } from './edit-expense-dialog/edit-expense-dialog';
 import { PaginationState } from '../shared/pagination/pagination-state/pagination-state';
 import { Pagination, SortOption } from '../shared/pagination/pagination/pagination';
 import { ExpenseFilterState } from '../expenseFilter/expense-filter-state/expense-filter-state';
-import { FilterExpenseQueryModel } from '../models/pagination/filter-expense-query-model';
+import { FilterExpenseQueryModel } from '../models/filter-expense/filter-expense-query-model';
 import { ExpenseFilter } from '../expenseFilter/expense-filter/expense-filter';
+import { SearchState } from '../shared/search/search-state/search-state/search-state';
+import { Search } from '../shared/search/search/search';
 
 @Component({
   selector: 'ep-expenses',
-  imports: [DecimalPipe, DatePipe, Pagination, ExpenseFilter],
+  imports: [DecimalPipe, DatePipe, Pagination, ExpenseFilter, Search],
   templateUrl: './expenses.html',
   styleUrl: './expenses.css',
 })
@@ -26,8 +28,11 @@ export class Expenses {
 
   readonly pagination = new PaginationState();
   readonly expenseFilters = new ExpenseFilterState();
+  readonly searchState = new SearchState();
 
-  protected readonly filterQuery = computed<FilterExpenseQueryModel>(() => ({
+  protected readonly query = computed<FilterExpenseQueryModel>(() => ({
+    ...this.pagination.query(),
+
     categoryId: this.expenseFilters.categoryId(),
     budgetId: this.expenseFilters.budgetId(),
     startDate: this.expenseFilters.startDate(),
@@ -35,10 +40,10 @@ export class Expenses {
     minAmount: this.expenseFilters.minAmount(),
     maxAmount: this.expenseFilters.maxAmount(),
 
-    ...this.pagination.query(),
+    search: this.searchState.search()
   }));
 
-  protected readonly getExpenses = this.expenseService.filterExpenses(this.filterQuery);
+  protected readonly getExpenses = this.expenseService.filterExpenses(this.query);
 
   readonly sortOptions: SortOption[] = [
     { label: 'Name', value: 'Title' },

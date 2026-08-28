@@ -5,7 +5,7 @@ import { ExpenseModel } from '../models/expense/expense-model';
 import { Observable } from 'rxjs';
 import { CreateUpdateExpenseModel } from '../models/expense/create-update-expense-model';
 import { PagedQueryModel } from '../models/pagination/paged-query-model';
-import { FilterExpenseQueryModel } from '../models/pagination/filter-expense-query-model';
+import { FilterExpenseQueryModel } from '../models/filter-expense/filter-expense-query-model';
 import { FilterExpenseModel } from '../models/expense/filter-expense-model';
 
 @Service()
@@ -13,20 +13,20 @@ export class ExpenseService {
 
   private readonly http = inject(HttpClient);
 
-  expenses(query: () => PagedQueryModel): ResourceRef<PagedResultModel<ExpenseModel> | undefined> {
-  return httpResource<PagedResultModel<ExpenseModel>>(() => {
-    const q = query();
-    return {
-      url: 'http://localhost:5167/api/v1/expenses/my',
-      params: {
-        page: q.page,
-        pageSize: q.pageSize,
-        ...(q.sortBy !== null? { sortBy: q.sortBy }: {}),
-        sortDesc: q.sortDesc
-      }
-    };
-  });
-}
+  // expenses(query: () => PagedQueryModel): ResourceRef<PagedResultModel<ExpenseModel> | undefined> {
+  //   return httpResource<PagedResultModel<ExpenseModel>>(() => {
+  //     const q = query();
+  //     return {
+  //       url: 'http://localhost:5167/api/v1/expenses/my',
+  //       params: {
+  //         page: q.page,
+  //         pageSize: q.pageSize,
+  //         ...(q.sortBy !== null? { sortBy: q.sortBy }: {}),
+  //         sortDesc: q.sortDesc
+  //       }
+  //     };
+  //   });
+  // }
 
   create(request: CreateUpdateExpenseModel): Observable<void> {
     return this.http.post<void>('http://localhost:5167/api/v1/expenses', request);
@@ -71,6 +71,7 @@ export class ExpenseService {
           ...(q.endDate !== null? { endDate: q.endDate }: {}),
           ...(q.minAmount !== null? { minAmount: q.minAmount }: {}),
           ...(q.maxAmount !== null? { maxAmount: q.maxAmount }: {}),
+          ...(q.search !== null? { search: q.search }: {}),
           page: q.page,
           pageSize: q.pageSize,
           ...(q.sortBy !== null? { sortBy: q.sortBy }: {}),

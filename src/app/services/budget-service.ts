@@ -5,25 +5,28 @@ import { CreateUpdateBudgetModel } from '../models/budget/create-update-budget-m
 import { Observable } from 'rxjs';
 import { BudgetDetailModel } from '../models/budget/budget-detail-model';
 import { PagedResultModel } from '../models/pagination/paged-result-model';
-import { PagedQueryModel } from '../models/pagination/paged-query-model';
 import { MAX_PAGE_SIZE } from '../shared/constants/service.constants';
+import { SearchPagedQueryModel } from '../models/search/search-paged-query-model';
+import { PagedQueryModel } from '../models/pagination/paged-query-model';
 
 
 @Service()
 export class BudgetService {
   private readonly http = inject(HttpClient);
 
-  budgets(query?: () => PagedQueryModel): ResourceRef<PagedResultModel<BudgetModel> | undefined> {
+  budgets(query?: () => SearchPagedQueryModel): ResourceRef<PagedResultModel<BudgetModel> | undefined> {
     return httpResource<PagedResultModel<BudgetModel>>(() => {
       const q = query?.();
       return {
         url: 'http://localhost:5167/api/v1/budgets/my',
         params: q? {
+          ...(q.search !== null? { search: q.search }: {}),
           page: q.page,
           pageSize: q.pageSize,
           ...(q.sortBy !== null? { sortBy: q.sortBy }: {}),
           sortDesc: q.sortDesc
         }: {
+          search: '',
           page: 1,
           pageSize: MAX_PAGE_SIZE,
           sortBy: 'Name',

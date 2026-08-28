@@ -1,0 +1,24 @@
+<div class="input-group">
+  <span class="input-group-text">
+    <i class="bi bi-search"></i>
+  </span>
+
+  <input
+    type="text"
+    class="form-control"
+    placeholder="Search..."
+    [value]="searchState().search() ?? ''"
+    (input)="onSearch($event)"
+  />
+
+  @if (searchState().search()) {
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="searchState().reset()"
+      aria-label="Clear search"
+    >
+      <i class="bi bi-x"></i>
+    </button>
+  }
+</div>
