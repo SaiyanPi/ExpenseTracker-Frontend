@@ -135,23 +135,34 @@
 
                       <div class="dropdown-menu show position-absolute end-0">
 
-                        <button
-                          class="dropdown-item"
-                          type="button"
-                          (click)="openEditBudgetDialog(budget); $event.stopPropagation()"
-                        >
-                          <i class="bi bi-pencil me-2"></i>
-                          Edit
-                        </button>
-                        
-                        <button
-                          class="dropdown-item text-danger"
-                          type="button"
-                          (click)="deleteBudget(budget.id); $event.stopPropagation()"
-                        >
-                          <i class="bi bi-trash me-2"></i>
-                          Delete
-                        </button>
+                        @if(status === 'expired') {
+                           <button
+                            class="dropdown-item text-danger"
+                            type="button"
+                            (click)="deleteBudget(budget.id); $event.stopPropagation()"
+                          >
+                            <i class="bi bi-trash me-2"></i>
+                            Delete
+                          </button>
+                        } @else {
+                          <button
+                            class="dropdown-item"
+                            type="button"
+                            (click)="openEditBudgetDialog(budget); $event.stopPropagation()"
+                          >
+                            <i class="bi bi-pencil me-2"></i>
+                            Edit
+                          </button>
+                          
+                          <button
+                            class="dropdown-item text-danger"
+                            type="button"
+                            (click)="deleteBudget(budget.id); $event.stopPropagation()"
+                          >
+                            <i class="bi bi-trash me-2"></i>
+                            Delete
+                          </button>
+                        }
 
                       </div>
 
