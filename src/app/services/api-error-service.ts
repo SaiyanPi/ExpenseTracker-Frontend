@@ -51,6 +51,14 @@ export class ApiErrorService {
     });
   }
 
+  // failure snack bar notification
+  showError(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+      panelClass: ['error-snackbar']
+    });
+  }
+
   // clearing server field error
   clearServerError(
     errors: WritableSignal<Record<string, string[]>>,

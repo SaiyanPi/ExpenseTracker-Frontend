@@ -48,7 +48,6 @@ export class Budgets {
   ];
 
 
-
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
 
   protected readonly openBudgetMenu = signal<string | null>(null);
@@ -99,6 +98,11 @@ export class Budgets {
 
 
   protected openEditBudgetDialog(budget: CreateUpdateBudgetModel): void {
+    if (this.budgetStatus(budget) === 'expired') {
+      this.apiErrorService.showError('Expired budget cannot be updated.');
+      return;
+    }
+
     const dialogRef = this.dialog.open(EditBudgetDialog, {
       width: '600px',
       data: budget
