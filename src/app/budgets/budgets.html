@@ -56,7 +56,7 @@
     <div class="item-pagination flex-shrink-0 mb-3">
 
       <ep-pagination
-        [pagination]="pagination"
+        [paginationState]="pagination"
         [result]="getBudgets.value()"
         [loading]="getBudgets.isLoading()"
         [sortOptions]="sortOptions"
@@ -153,7 +153,7 @@
                             <i class="bi bi-pencil me-2"></i>
                             Edit
                           </button>
-                          
+
                           <button
                             class="dropdown-item text-danger"
                             type="button"

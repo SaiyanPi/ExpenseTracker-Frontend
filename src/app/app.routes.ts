@@ -1,14 +1,14 @@
 import { Routes } from "@angular/router";
 import { Login } from "./login/login";
-import { Home } from "./home/home";
 import { Categories } from "./categories/categories";
 import { Budgets } from "./budgets/budgets";
 import { Expenses } from "./expenses/expenses";
 import { BudgetDetail } from "./budgets/budget-detail/budget-detail";
 import { CategoryDetail } from "./categories/category-detail/category-detail";
+import { Dashboard } from "./dashboard/dashboard";
 
 export const routes: Routes = [
-  { path: '', component: Home },
+  { path: '', component: Dashboard },
 
   { path: 'login', component: Login },
 

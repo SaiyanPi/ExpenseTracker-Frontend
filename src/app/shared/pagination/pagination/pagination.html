@@ -5,7 +5,7 @@
   <select
     id="pageSize"
     class="form-select form-select-sm page-size-select"
-    [value]="pagination().pageSize()"
+    [value]="paginationState().pageSize()"
     (change)="changePageSize($event)"
   >
 
@@ -13,7 +13,7 @@
 
       <option
         [value]="size"
-        [selected]="pagination().pageSize() === size"
+        [selected]="paginationState().pageSize() === size"
       >
         {{ size }} / page
       </option>
@@ -29,13 +29,13 @@
     <select
       id="sortBy"
       class="form-select form-select-sm sort-select"
-      [value]="pagination().sortBy() ?? ''"
+      [value]="paginationState().sortBy() ?? ''"
       (change)="changeSortBy($event)"
     >
 
       <option
         value=""
-        [selected]="pagination().sortBy() === null"
+        [selected]="paginationState().sortBy() === null"
       >
         Sort by...
       </option>
@@ -44,7 +44,7 @@
 
         <option
           [value]="option.value"
-          [selected]="pagination().sortBy() === option.value"
+          [selected]="paginationState().sortBy() === option.value"
         >
           {{ option.label }}
         </option>
@@ -57,22 +57,22 @@
     <button
       type="button"
       class="btn btn-outline-secondary btn-sm sort-direction-button"
-      [disabled]="pagination().sortBy() === null"
+      [disabled]="paginationState().sortBy() === null"
       (click)="toggleSortDirection()"
       [attr.aria-label]="
-        pagination().sortDesc()
+        paginationState().sortDesc()
           ? 'Sort descending'
           : 'Sort ascending'
       "
     >
-      {{ pagination().sortDesc() ? '⬇️' : '⬆️' }}
+      {{ paginationState().sortDesc() ? '⬇️' : '⬆️' }}
     </button>
 
 
     <button
       type="button"
       class="btn btn-outline-info btn-sm reset-button"
-      [disabled]="pagination().sortBy() === null"
+      [disabled]="paginationState().sortBy() === null"
       (click)="reset()"
     >
       Reset

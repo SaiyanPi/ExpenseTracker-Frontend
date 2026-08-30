@@ -16,7 +16,7 @@ export interface SortOption {
 })
 
 export class Pagination {
-  readonly pagination = input.required<PaginationState>();
+  readonly paginationState = input.required<PaginationState>();
 
   readonly result = input<PagedResultModel<unknown> | undefined>();
   readonly loading = input(false);
@@ -26,28 +26,28 @@ export class Pagination {
   readonly pageSizeOptions = PAGE_SIZE_OPTIONS;
 
   nextPage(): void {
-    this.pagination().next(this.result()?.hasNext ?? false);
+    this.paginationState().next(this.result()?.hasNext ?? false);
   }
 
   previousPage(): void {
-    this.pagination().previous(this.result()?.hasPrevious ?? false);
+    this.paginationState().previous(this.result()?.hasPrevious ?? false);
   }
 
   changePageSize(event: Event): void {
     const size = Number((event.target as HTMLSelectElement).value);
-    this.pagination().changePageSize(size);
+    this.paginationState().changePageSize(size);
   }
 
   changeSortBy(event: Event): void {
     const value = (event.target as HTMLSelectElement).value;
-    this.pagination().changeSort(value || null);
+    this.paginationState().changeSort(value || null);
   }
 
   toggleSortDirection(): void {
-    this.pagination().toggleSortDirection();
+    this.paginationState().toggleSortDirection();
   }
 
   reset(): void {
-    this.pagination().reset();
+    this.paginationState().reset();
   }
 }

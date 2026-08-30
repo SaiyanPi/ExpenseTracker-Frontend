@@ -32,6 +32,19 @@ export class ApiErrorService {
     return { validationErrors: {} };
   }
 
+
+  // accessing error message to display in the template rather than in a snackBar popup?
+  getMessage(error: unknown): string | null {
+    if (!(error instanceof HttpErrorResponse)) {
+      return 'Something went wrong.';
+    }
+
+    const apiError = error.error as ApiErrorResponseModel;
+
+    return apiError?.message ?? 'Something went wrong.';
+  }
+
+
   private normalizeKeys(details: Record<string, string[]>): Record<string, string[]> {
 
     const normalized: Record<string, string[]> = {};
@@ -43,6 +56,7 @@ export class ApiErrorService {
     return normalized;
   }
 
+
   // success snack bar notification
   showSuccess(message: string): void {
     this.snackBar.open(message, 'Close', {
@@ -51,6 +65,7 @@ export class ApiErrorService {
     });
   }
 
+  
   // failure snack bar notification
   showError(message: string): void {
     this.snackBar.open(message, 'Close', {
