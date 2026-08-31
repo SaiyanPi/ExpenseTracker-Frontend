@@ -1,5 +1,5 @@
 import { Component, effect, inject, Signal, signal } from '@angular/core';
-import { form, FormField, FormRoot, required } from '@angular/forms/signals';
+import { disabled, form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -54,7 +54,11 @@ export class EditBudgetDialog {
 
       required(f.amount);
 
-      required(f.startDate);
+      // required(f.startDate);
+      disabled(f.startDate, {
+        when: () => this.budget.isActive
+      });
+
 
       required(f.endDate);
     },

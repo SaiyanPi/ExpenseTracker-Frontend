@@ -1,48 +1,44 @@
-<div class="row g-2 align-items-end">
+<div class="d-flex justify-content-end">
+  <div class="d-flex align-items-end gap-2">
 
-  <div class="col-12 col-md-5">
-    <label for="startDate" class="form-label">
-      From
-    </label>
+    <div>
 
-    <input
-      id="startDate"
-      type="date"
-      class="form-control"
-      [value]="dateRangeState().startDate() ?? ''"
-      (change)="onStartDateChange($any($event.target).value)"
-    />
-  </div>
-
-  <div class="col-12 col-md-5">
-    <label for="endDate" class="form-label">
-      To
-    </label>
-
-    <input
-      id="endDate"
-      type="date"
-      class="form-control"
-      [value]="dateRangeState().endDate() ?? ''"
-      (change)="onEndDateChange($any($event.target).value)"
-    />
-  </div>
-
-  <!-- @if (errorMessage(); as error) {
-    <div class="text-danger small mt-1">
-      {{ error }}
+      <input
+        id="startDate"
+        type="date"
+        class="form-control form-control-sm"
+        [value]="dateRangeState().startDate() ?? ''"
+        (change)="onStartDateChange($any($event.target).value)"
+      />
     </div>
-  } -->
 
-  <div class="col-12 col-md-2">
+    <div>
+      <i class="bi bi-arrows"></i>
+    </div>
+
+    <div>
+
+      <input
+        id="endDate"
+        type="date"
+        class="form-control form-control-sm"
+        [value]="dateRangeState().endDate() ?? ''"
+        (change)="onEndDateChange($any($event.target).value)"
+      />
+    </div>
+
     <button
       type="button"
-      class="btn btn-outline-secondary w-100"
-      [disabled]="!dateRangeState().startDate() && !dateRangeState().endDate() || loading()"
+      class="btn btn-sm btn-outline-secondary"
+      [disabled]="
+        (!dateRangeState().startDate() && !dateRangeState().endDate())
+        || loading()
+      "
       (click)="reset()"
     >
       Clear
     </button>
-  </div>
 
+  </div>
 </div>
+

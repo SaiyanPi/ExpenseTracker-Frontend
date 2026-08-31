@@ -61,10 +61,10 @@
   align-items: center;
   gap: 0.5rem;
 
-  padding: 0.35rem 0.6rem;
+  padding: 0.2rem 0.45rem;
 
   border-radius: var(--bs-border-radius);
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   background-color: var(--bs-secondary-bg);
 }
 
@@ -82,7 +82,7 @@
 
 .item-title {
   font-weight: 600;
-  font-size: large;
+  font-size: 1.10rem;
   overflow-wrap: anywhere;
 }
 

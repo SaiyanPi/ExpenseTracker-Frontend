@@ -136,7 +136,7 @@
           <div class="summary-content">
 
             <small class="text-muted">
-              Budget limit
+              Budget target
             </small>
 
             <strong>
@@ -179,9 +179,15 @@
 
           <div class="summary-content">
 
-            <small class="text-muted">
-              Remaining
-            </small>
+            @if (budget.isOverBudget) {
+              <small class="text-muted">
+                Exceeded by
+              </small>
+            } @else {
+              <small class="text-muted">
+                Remaining
+              </small>
+            }
 
             <strong
               [class.text-danger]="budget.isOverBudget"

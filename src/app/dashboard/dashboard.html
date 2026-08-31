@@ -109,7 +109,7 @@
               </div>
 
               <div class="text-danger">
-                <i class="bi bi-wallet2 fs-4"></i>
+                <i class="bi bi-wallet2 fs-3"></i>
               </div>
 
             </div>
@@ -137,7 +137,7 @@
               <div>
 
                 <span class="text-muted small">
-                  Budget Target
+                  Total Budget Target
                 </span>
 
                 <h4 class="fw-bold mb-0 mt-1">
@@ -148,7 +148,7 @@
               </div>
 
               <div class="text-primary">
-                <i class="bi bi-piggy-bank fs-4"></i>
+                <i class="bi bi-piggy-bank fs-3"></i>
               </div>
 
             </div>
@@ -196,7 +196,7 @@
               </div>
 
               <div class="text-warning">
-                <i class="bi bi-bar-chart fs-4"></i>
+                <i class="bi bi-trophy fs-3"></i>
               </div>
 
             </div>
@@ -207,9 +207,7 @@
 
                 <span class="badge rounded-pill text-bg-primary px-3 py-2">
 
-                  <i class="bi bi-currency-rupee me-1"></i>
-
-                  {{ topCategory.totalAmount | number:'1.2-2' }}
+                  Rs. {{ topCategory.totalAmount | number:'1.2-2' }}
 
                 </span>
 
@@ -275,8 +273,7 @@
 
       </div>
 
-
-      <!-- Daily Expenses -->
+      <!-- Budget Usage -->
       <div class="col-12 col-xl-7">
 
         <div class="card h-100 shadow-sm border-0 dashboard-card">
@@ -288,7 +285,7 @@
             </h5>
 
             <small class="text-muted">
-              Your spending throughout the selected period
+              Your spending against each budget's allocated target
             </small>
 
           </div>
@@ -312,7 +309,7 @@
   </section>
 
 
-  <!-- Budget Usage -->
+  <!-- Daily Expenses -->
   <section class="card shadow-sm border-0 dashboard-card mb-4">
 
     <div class="card-body">

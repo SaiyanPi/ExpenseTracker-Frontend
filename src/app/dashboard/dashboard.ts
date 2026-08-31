@@ -5,7 +5,7 @@ import { DateRange } from '../shared/date-range/date-range/date-range';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { ApiErrorService } from '../services/api-error-service';
 import { RouterLink } from "@angular/router";
-import { BarController, BarElement, CategoryScale, Chart, LinearScale, LineController, LineElement,
+import { BarController, BarElement, CategoryScale, Chart, Filler, LinearScale, LineController, LineElement,
   PointElement,
   Tooltip } from 'chart.js';
 
@@ -14,7 +14,8 @@ Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, L
   PointElement,
   CategoryScale,
   LinearScale,
-  Tooltip);
+  Tooltip,
+  Filler);
 
 
 @Component({
