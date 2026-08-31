@@ -6,9 +6,12 @@ import { Expenses } from "./expenses/expenses";
 import { BudgetDetail } from "./budgets/budget-detail/budget-detail";
 import { CategoryDetail } from "./categories/category-detail/category-detail";
 import { Dashboard } from "./dashboard/dashboard";
+import { Home } from "./home/home";
 
 export const routes: Routes = [
-  { path: '', component: Dashboard },
+  { path: '', component: Home },
+  
+  { path: 'dashboard', component: Dashboard },
 
   { path: 'login', component: Login },
 
