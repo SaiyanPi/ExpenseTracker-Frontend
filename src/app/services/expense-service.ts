@@ -7,6 +7,7 @@ import { CreateUpdateExpenseModel } from '../models/expense/create-update-expens
 import { PagedQueryModel } from '../models/pagination/paged-query-model';
 import { FilterExpenseQueryModel } from '../models/filter-expense/filter-expense-query-model';
 import { FilterExpenseModel } from '../models/expense/filter-expense-model';
+import { ExportExpensesQueryModel } from '../models/export/export-expenses-query-model';
 
 @Service()
 export class ExpenseService {
@@ -80,4 +81,23 @@ export class ExpenseService {
       };
     });
   }
+
+  exportExpenses(query: ExportExpensesQueryModel): Observable<Blob> {
+    return this.http.get(
+      'http://localhost:5167/api/v1/expenses/export',
+      {
+        params: {
+          ...(query.categoryId ? { categoryId: query.categoryId } : {}),
+          ...(query.budgetId ? { budgetId: query.budgetId } : {}),
+          ...(query.startDate ? { startDate: query.startDate } : {}),
+          ...(query.endDate ? { endDate: query.endDate } : {}),
+          ...(query.minAmount != null ? { minAmount: query.minAmount } : {}),
+          ...(query.maxAmount != null ? { maxAmount: query.maxAmount } : {}),
+          format: query.format
+        },
+        responseType: 'blob'
+      }
+    );
+  }
+  
 }

@@ -5,17 +5,29 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
 
-      <h6 class="mb-0 fw-semibold">
-        Filters
-      </h6>
+      @if(fromExport()) {
 
-      <button
-        class="btn btn-sm btn-outline-secondary"
-        type="button"
-        (click)="resetFilters()"
-      >
-        Reset
-      </button>
+        <button
+          class="btn btn-sm btn-outline-primary"
+          type="button"
+          (click)="exportRequested.emit()"
+          aria-label="Export expenses"
+        >
+          <i class="bi bi-file-earmark-arrow-down"></i>
+          Download
+        </button>
+          
+      } @else {
+        
+        <button
+          class="btn btn-sm btn-outline-secondary"
+          type="button"
+          (click)="resetFilters()"
+        >
+          Reset
+        </button>
+
+      }
 
     </div>
 
@@ -150,6 +162,29 @@
         />
 
       </div>
+
+
+      @if(fromExport()) {
+        <!-- Format -->
+        <div class="col-12 col-md-6 col-xl-3">
+
+          <label class="form-label filter-label" for="format">
+            Format
+          </label>
+
+          <select 
+            id="format"
+            class="form-select form-select-sm"
+            [value]="exportFormat()"
+            (change)="onExportFormatChange($event)"
+          >
+            <option value="pdf">PDF</option>
+            <option value="csv">CSV</option>
+            <option value="xlsx">XLSX</option>
+          </select>
+
+        </div>
+      }
 
     </div>
 

@@ -1,10 +1,5 @@
-export interface ExportExpensesQueryModel {
-  format: 'csv' | 'pdf';
-  startDate?: string;
-  endDate?: string;
-  minAmount?: number;
-  maxAmount?: number;
-  categoryId?: string;
-  budgetId?: string;
-  userId?: string;
+import { ExpenseFilterModel } from "../filter-expense/expense-filter-model";
+
+export interface ExportExpensesQueryModel extends ExpenseFilterModel {
+  format: 'csv' | 'pdf' | 'xlsx';
 }

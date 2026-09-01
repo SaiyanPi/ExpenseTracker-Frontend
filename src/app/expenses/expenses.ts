@@ -14,6 +14,7 @@ import { FilterExpenseQueryModel } from '../models/filter-expense/filter-expense
 import { ExpenseFilter } from '../expenseFilter/expense-filter/expense-filter';
 import { SearchState } from '../shared/search/search-state/search-state/search-state';
 import { Search } from '../shared/search/search/search';
+import { ExportExpensesQueryModel } from '../models/export/export-expenses-query-model';
 
 @Component({
   selector: 'ep-expenses',
@@ -116,5 +117,47 @@ export class Expenses {
       }
     });
   }
+
+  // export expenses
+  protected readonly exportFormat = signal<'pdf' | 'csv' | 'xlsx'>('pdf');
+  
+  protected readonly showExportFilters = signal(false);
+
+  protected readonly exportQuery = computed<ExportExpensesQueryModel>(() => ({
+    categoryId: this.expenseFilters.categoryId(),
+    budgetId: this.expenseFilters.budgetId(),
+    startDate: this.expenseFilters.startDate(),
+    endDate: this.expenseFilters.endDate(),
+    minAmount: this.expenseFilters.minAmount(),
+    maxAmount: this.expenseFilters.maxAmount(),
+
+    format: this.exportFormat()
+  }));
+
+  protected toggleExportFilter(): void {
+    this.showExportFilters.update(value => !value);
+  }
+
+  protected exportExpenses(): void {
+    // console.log(this.exportQuery());
+    const query = this.exportQuery()
+    this.expenseService.exportExpenses(query).subscribe({
+      next: (blob) => {
+        console.log('Export received:', blob);
+
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `expenses.${query.format}`;
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+      },
+      error: (error) => {
+        console.error('Export failed:', error);
+      }
+    });
+  }  
 
 }

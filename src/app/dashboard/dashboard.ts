@@ -47,10 +47,10 @@ export class Dashboard {
   });
 
 
-  //  chart
-  protected readonly categoryCanvas = viewChild.required<ElementRef<HTMLCanvasElement>>('categoryChart');
-  protected readonly expensesCanvas = viewChild.required<ElementRef<HTMLCanvasElement>>('dailyExpenseChart');
-  protected readonly budgetCanvas = viewChild.required<ElementRef<HTMLCanvasElement>>('budgetUtilizationChart');
+  // chart
+  protected readonly categoryCanvas = viewChild<ElementRef<HTMLCanvasElement>>('categoryChart');
+  protected readonly expensesCanvas = viewChild<ElementRef<HTMLCanvasElement>>('dailyExpenseChart');
+  protected readonly budgetCanvas = viewChild<ElementRef<HTMLCanvasElement>>('budgetUtilizationChart');
 
   constructor() {
     effect((onCleanup) => {
@@ -59,7 +59,7 @@ export class Dashboard {
       const budgetUtilizationCanvas = this.budgetCanvas();
 
       const dashboard = this.getDashboardData.value();
-      if (!dashboard) {
+      if (!dashboard || !expensesByCategoryCanvas || !dailyExpensesCanvas || !budgetUtilizationCanvas) {
         return;
       }
 
