@@ -2,10 +2,11 @@ import { JwtClaimsModel } from './../models/auth/jwt-claims-model';
 import { HttpClient } from '@angular/common/http';
 import { computed, effect, inject, Service, signal, untracked } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { LoginResponseModel } from '../models/auth/login-response-model';
+import { LoginRegisterResponseModel } from '../models/auth/login-resiter-response-model';
 import { LoginRequestModel } from '../models/auth/login-request-model';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
+import { RegisterRequestModel } from '../models/auth/register-request-model';
 
 const USER_LOCAL_STORAGE_KEY = 'rememberMe';
 
@@ -14,7 +15,7 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
 
-  private readonly user = signal<LoginResponseModel | undefined>(this.retrieveUser());
+  private readonly user = signal<LoginRegisterResponseModel | undefined>(this.retrieveUser());
 
   readonly currentUser = this.user.asReadonly();
 
@@ -55,14 +56,14 @@ export class AuthService {
   }
 
 
-  private retrieveUser(): LoginResponseModel | undefined {
+  private retrieveUser(): LoginRegisterResponseModel | undefined {
     const value = window.localStorage.getItem(USER_LOCAL_STORAGE_KEY);
     if (!value) {
       return undefined;
     }
 
     try {
-      const user = JSON.parse(value) as LoginResponseModel;
+      const user = JSON.parse(value) as LoginRegisterResponseModel;
 
       const expiresAt = new Date(user.expiresAt).getTime();
 
@@ -93,9 +94,18 @@ export class AuthService {
     this.claims()?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"] ?? null
   );
 
-  login(request: LoginRequestModel): Observable<LoginResponseModel> {
+  login(request: LoginRequestModel): Observable<LoginRegisterResponseModel> {
     return this.http
-    .post<LoginResponseModel>('http://localhost:5167/api/auth/login', request )
+    .post<LoginRegisterResponseModel>('http://localhost:5167/api/auth/login', request )
+    .pipe(tap(user => {
+      this.user.set(user);
+      this.startTokenExpirationTimer(user.expiresAt);
+    }));
+  }
+
+  register(request: RegisterRequestModel): Observable<LoginRegisterResponseModel> {
+    return this.http
+    .post<LoginRegisterResponseModel>('http://localhost:5167/api/auth/register-user', request )
     .pipe(tap(user => {
       this.user.set(user);
       this.startTokenExpirationTimer(user.expiresAt);
@@ -108,6 +118,6 @@ export class AuthService {
         this.logoutTimer = undefined;
     }
     this.user.set(undefined);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home']);
   }
 }

@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { map } from 'rxjs';
 import { AuthService } from '../services/auth-service';
@@ -16,8 +18,10 @@ import { AuthService } from '../services/auth-service';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
+    MatMenuModule,
+    MatDividerModule,
     RouterOutlet,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './layout.html',
   styleUrl: './layout.css',
@@ -37,4 +41,7 @@ export class Layout {
     { initialValue: false }
   );
 
+  logout(): void {
+    this.authService.logout();
+  }
 }

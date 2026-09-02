@@ -1,64 +1,122 @@
 <mat-sidenav-container class="sidenav-container">
 
-  <mat-sidenav #sidenav [mode]="isMobile() ? 'over' : 'side'" [opened]="!isMobile()">
+  <mat-sidenav
+    #sidenav
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="!isMobile()"
+  >
 
-    @if (user()) {
+    <!-- User Account -->
+    <button
+      type="button"
+      class="user-menu-trigger"
+      [matMenuTriggerFor]="userMenu"
+    >
       <div class="sidenav-header">
-        <h2>{{ userName() }}</h2>
-        <p class="user-email">{{ userEmail() }}</p>
+
+        <div class="user-avatar">
+          {{ userName()?.charAt(0)?.toUpperCase() }}
+        </div>
+
+        <div class="user-info">
+          <h2>{{ userName() }}</h2>
+          <p class="user-email">{{ userEmail() }}</p>
+        </div>
+
+        <mat-icon class="account-arrow">
+          expand_more
+        </mat-icon>
+
       </div>
+    </button>
 
-      <nav>
-        <a mat-button routerLink="/expenses">
-          <mat-icon>receipt</mat-icon>
-          Expenses
-        </a>
+    <mat-menu #userMenu="matMenu" class="account-menu">
 
-        <a mat-button routerLink="/budgets">
-          <mat-icon>account_balance_wallet</mat-icon>
-          Budgets
-        </a>
+      <button mat-menu-item routerLink="/app/profile">
+        <mat-icon>person</mat-icon>
+        <span>Profile</span>
+      </button>
 
-        <a mat-button routerLink="/categories">
-          <mat-icon>sell</mat-icon>
-          Categories
-        </a>
+      <button mat-menu-item routerLink="/app/account-settings">
+        <mat-icon>settings</mat-icon>
+        <span>Account Settings</span>
+      </button>
 
-        <a mat-button routerLink="/dashboard">
-          <mat-icon>bar_chart</mat-icon>
-          Reports
-        </a>
-      </nav>
-    } @else {
-      <div class="sidenav-header">
-        <h2>Expense Tracker</h2>
-      </div>
+      <mat-divider></mat-divider>
 
-      <nav>
-        <a mat-button routerLink="/login">
-          <mat-icon>login</mat-icon>
-          Sign in
-        </a>
+      <button
+        mat-menu-item
+        type="button"
+        (click)="logout()"
+      >
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
 
-        <a mat-button routerLink="/register">
-          <mat-icon>person_add</mat-icon>
-          Sign up
-        </a>
+    </mat-menu>
 
-      </nav>
-    }
+
+    <!-- Navigation -->
+    <nav>
+
+      <a
+        mat-button
+        routerLink="/app/dashboard"
+        routerLinkActive="active"
+      >
+        <mat-icon>bar_chart</mat-icon>
+        <span>Dashboard</span>
+      </a>
+
+      <a
+        mat-button
+        routerLink="/app/expenses"
+        routerLinkActive="active"
+      >
+        <mat-icon>wallet</mat-icon>
+        <span>Expenses</span>
+      </a>
+
+      <a
+        mat-button
+        routerLink="/app/budgets"
+        routerLinkActive="active"
+      >
+        <mat-icon>savings</mat-icon>
+        <span>Budgets</span>
+      </a>
+
+      <a
+        mat-button
+        routerLink="/app/categories"
+        routerLinkActive="active"
+      >
+        <mat-icon>sell</mat-icon>
+        <span>Categories</span>
+      </a>
+
+    </nav>
 
   </mat-sidenav>
+
 
   <mat-sidenav-content>
 
     <mat-toolbar>
 
       @if (isMobile()) {
-        <button mat-icon-button (click)="sidenav.toggle()">
+        <button
+          mat-icon-button
+          class="menu-button"
+          (click)="sidenav.toggle()"
+        >
           <mat-icon>menu</mat-icon>
         </button>
       }
+
+      <span class="toolbar-title">
+        Expense Tracker
+      </span>
 
     </mat-toolbar>
 

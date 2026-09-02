@@ -1,4 +1,4 @@
-export interface LoginResponseModel {
+export interface LoginRegisterResponseModel {
   success: boolean;
   token: string;
   refreshToken: string;

@@ -1,47 +1,48 @@
 import { Component, effect, inject, Signal, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { email, form, FormField, FormRoot, required } from '@angular/forms/signals';
-import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../services/auth-service';
-import { LoginRequestModel } from '../models/auth/login-request-model';
+import { email, form, FormField, FormRoot, required } from '@angular/forms/signals';
+import { RegisterRequestModel } from '../models/auth/register-request-model';
+import { firstValueFrom } from 'rxjs';
+import { Router, RouterLink } from '@angular/router';
 import { ApiErrorService } from '../services/api-error-service';
 
 @Component({
-  selector: 'ep-login',
+  selector: 'ep-register',
   imports: [FormField, FormRoot, RouterLink],
-  templateUrl: './login.html',
-  styleUrl: './login.css',
+  templateUrl: './register.html',
+  styleUrl: './register.css',
 })
-export class Login {
+export class Register {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly apiErrorService = inject(ApiErrorService);
-  protected readonly isLoggingIn = signal(false);
+  protected readonly isRegistering = signal(false);
 
-  // protected readonly loginFailed = signal(false);
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
 
   protected readonly fields = signal({
+    fullName: '',
     email: '',
-    password: ''
+    password: '',
+    phoneNumber: ''
   })
 
   protected readonly credentials = form(
     this.fields,
     f => {
+      required(f.fullName);
       required(f.email);
       email(f.email);
       required(f.password);
+      required(f.phoneNumber);
     },
     {
       submission: {
-        action: async () => await this.login()
+        action: async () => await this.register()
       }
     }
   )
 
-  // unlike in the category component here are multiple fields so using effect for clearing every
-  // field is tedious so to reduce the boilerplate code, helper is create
   private watchField<T>(
     field: () => { value: Signal<T> },
     errorKey: string
@@ -52,33 +53,32 @@ export class Login {
     });
   }
 
-  // and then use helper to clear the field errors
   constructor() {
+    this.watchField(this.credentials.fullName, 'FullName');
     this.watchField(this.credentials.email, 'Email');
     this.watchField(this.credentials.password, 'Password');
+    this.watchField(this.credentials.phoneNumber, 'PhoneNumber');
   }
 
-  private async login() {
-    // this.loginFailed.set(false);
-    this.isLoggingIn.set(true);
+  private async register() {
+    this.isRegistering.set(true);
 
     // Clearing serverValidationErrors them before every login attempt:
     this.serverValidationErrors.set({});
 
-    const { email, password } = this.credentials().value();
-    const request: LoginRequestModel = { email, password };
+    const { fullName, email, password, phoneNumber } = this.credentials().value();
+    const request: RegisterRequestModel = { fullName, email, password, phoneNumber };
 
     try {
-      await firstValueFrom(this.authService.login(request));
-      await this.router.navigateByUrl('/app/dashboard');
+      await firstValueFrom(this.authService.register(request));
+      await this.router.navigateByUrl('/login');
       return;
     } catch(error) {
       const result = this.apiErrorService.handle(error);
       this.serverValidationErrors.set(result.validationErrors);
       return [{ kind: 'server', message: 'Something went wrong.' }];
     } finally {
-      this.isLoggingIn.set(false);
+      this.isRegistering.set(false);
     }
   }
-
 }

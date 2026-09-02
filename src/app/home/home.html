@@ -1,8 +1,607 @@
-<div class="text-center" style="margin-top: 100px">
-  <h1>Hello <small>How are we feeling today!</small></h1>
+<div class="container">
+
+  @if (user()) {
+
+    <!-- Authenticated User -->
+    <div class="row justify-content-center text-center py-5">
+      <div class="col-12 col-lg-8">
+
+        <div class="mb-4">
+          <i class="bi bi-wallet2 display-1 text-primary"></i>
+        </div>
+
+        <h1 class="display-4 fw-bold">
+          Welcome back!
+        </h1>
+        <h2 class="fw-semibold mb-4">
+          {{ userName() }}
+        </h2>
+        <p class="lead text-muted mb-4">
+          Your money, your goals, your clarity.
+          Keep track of your spending and stay in control of your finances.
+        </p>
+
+        <button
+          type="button"
+          class="btn btn-primary btn-lg px-4"
+          (click)="navigateToDashboard()"
+        >
+          <i class="bi bi-speedometer2 me-2"></i>
+          Go to Dashboard
+        </button>
+
+      </div>
+    </div>
+
+  } @else {
+
+    <!-- ========================= -->
+    <!-- Hero Section -->
+    <!-- ========================= -->
+
+    <section class="row align-items-center min-vh-75 py-5">
+
+      <!-- Hero Content -->
+      <div class="col-12 col-lg-6 text-center text-lg-start">
+
+        <span class="badge text-bg-primary mb-3 px-3 py-2">
+          <i class="bi bi-stars me-1"></i>
+          Take control of your finances
+        </span>
+
+        <h1 class="display-3 fw-bold mb-3">
+          Know where your money
+          <span class="text-primary">really goes.</span>
+        </h1>
+
+        <p class="lead text-muted mb-4">
+          Track expenses, manage budgets, understand your spending habits,
+          and make smarter financial decisions — all in one simple place.
+        </p>
+
+        <div
+          class="d-flex flex-column flex-sm-row gap-2
+                 justify-content-center justify-content-lg-start"
+        >
+
+          <button
+            type="button"
+            class="btn btn-primary btn-lg px-4"
+            (click)="navigateToRegister()"
+          >
+            <i class="bi bi-person-plus me-2"></i>
+            Create an account
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-lg px-4"
+            (click)="navigateToLogin()"
+          >
+            <i class="bi bi-box-arrow-in-right me-2"></i>
+            Sign in
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- Dashboard Preview -->
+      <div class="col-12 col-lg-6 mt-5 mt-lg-0">
+
+        <div class="card border-0 shadow-lg">
+
+          <div class="card-body p-4">
+
+            <!-- Preview Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+              <div>
+                <h5 class="fw-semibold mb-1">
+                  Financial Overview
+                </h5>
+
+                <small class="text-muted">
+                  This month's activity
+                </small>
+              </div>
+
+              <div class="bg-primary-subtle rounded-3 p-2">
+                <i class="bi bi-speedometer2 fs-4 text-primary"></i>
+              </div>
+
+            </div>
+
+
+            <!-- Summary Cards -->
+            <div class="row g-2 mb-4">
+
+              <div class="col-4">
+                <div class="border rounded-3 p-3 h-100">
+
+                  <small class="text-muted d-block">
+                    Expenses
+                  </small>
+
+                  <strong class="d-block mt-1">
+                    Rs. 24,850
+                  </strong>
+
+                  <small class="text-danger">
+                    <i class="bi bi-arrow-down"></i>
+                    Spending
+                  </small>
+
+                </div>
+              </div>
+
+
+              <div class="col-4">
+                <div class="border rounded-3 p-3 h-100">
+
+                  <small class="text-muted d-block">
+                    Budget
+                  </small>
+
+                  <strong class="d-block mt-1">
+                    Rs. 36,500
+                  </strong>
+
+                  <small class="text-primary">
+                    <i class="bi bi-piggy-bank"></i>
+                    Target
+                  </small>
+
+                </div>
+              </div>
+
+
+              <div class="col-4">
+                <div class="border rounded-3 p-3 h-100">
+
+                  <small class="text-muted d-block">
+                    Top Category
+                  </small>
+
+                  <strong class="d-block mt-1">
+                    Food
+                  </strong>
+
+                  <small class="text-warning">
+                    <i class="bi bi-trophy"></i>
+                    Rs. 8,450
+                  </small>
+
+                </div>
+              </div>
+
+            </div>
+
+
+            <!-- Spending by Category -->
+            <div class="border rounded-3 p-3 mb-3">
+
+              <div class="d-flex justify-content-between mb-3">
+
+                <div>
+                  <h6 class="mb-1">
+                    Spending by Category
+                  </h6>
+
+                  <small class="text-muted">
+                    Where your money went
+                  </small>
+                </div>
+
+                <i class="bi bi-pie-chart text-primary fs-5"></i>
+
+              </div>
+
+
+              <!-- Fake Chart -->
+              <div class="d-flex align-items-end gap-2"
+                   style="height: 90px;">
+
+                <div
+                  class="bg-primary rounded-top w-25"
+                  style="height: 70%;">
+                </div>
+
+                <div
+                  class="bg-primary rounded-top w-25"
+                  style="height: 45%;">
+                </div>
+
+                <div
+                  class="bg-primary rounded-top w-25"
+                  style="height: 85%;">
+                </div>
+
+                <div
+                  class="bg-primary rounded-top w-25"
+                  style="height: 55%;">
+                </div>
+
+                <div
+                  class="bg-primary rounded-top w-25"
+                  style="height: 30%;">
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!-- Budget Utilization -->
+            <div class="border rounded-3 p-3 mb-3">
+
+              <div class="d-flex justify-content-between mb-2">
+
+                <div>
+                  <h6 class="mb-1">
+                    Budget Utilization
+                  </h6>
+
+                  <small class="text-muted">
+                    Track spending against your targets
+                  </small>
+                </div>
+
+                <i class="bi bi-bar-chart text-primary fs-5"></i>
+
+              </div>
+
+
+              <div class="mb-2">
+
+                <div class="d-flex justify-content-between small mb-1">
+                  <span>Food</span>
+                  <span>78%</span>
+                </div>
+
+                <div class="progress" style="height: 6px;">
+                  <div
+                    class="progress-bar"
+                    style="width: 78%;">
+                  </div>
+                </div>
+
+              </div>
+
+
+              <div>
+
+                <div class="d-flex justify-content-between small mb-1">
+                  <span>Transport</span>
+                  <span>52%</span>
+                </div>
+
+                <div class="progress" style="height: 6px;">
+                  <div
+                    class="progress-bar"
+                    style="width: 52%;">
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!-- Recent Expenses -->
+            <div class="border rounded-3 p-3">
+
+              <div class="d-flex justify-content-between align-items-center mb-3">
+
+                <div>
+                  <h6 class="mb-1">
+                    Recent Expenses
+                  </h6>
+
+                  <small class="text-muted">
+                    Your latest transactions
+                  </small>
+                </div>
+
+                <i class="bi bi-receipt text-primary fs-5"></i>
+
+              </div>
+
+
+              <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+
+                <div class="d-flex align-items-center gap-2">
+
+                  <div class="bg-light rounded-circle p-2">
+                    <i class="bi bi-cart"></i>
+                  </div>
+
+                  <div>
+                    <div class="small fw-semibold">
+                      Grocery Shopping
+                    </div>
+
+                    <small class="text-muted">
+                      Sep 01, 2026
+                    </small>
+                  </div>
+
+                </div>
+
+                <span class="text-danger small fw-semibold">
+                  - Rs. 2,450
+                </span>
+
+              </div>
+
+
+              <div class="d-flex justify-content-between align-items-center py-2">
+
+                <div class="d-flex align-items-center gap-2">
+
+                  <div class="bg-light rounded-circle p-2">
+                    <i class="bi bi-fuel-pump"></i>
+                  </div>
+
+                  <div>
+                    <div class="small fw-semibold">
+                      Fuel
+                    </div>
+
+                    <small class="text-muted">
+                      Aug 30, 2026
+                    </small>
+                  </div>
+
+                </div>
+
+                <span class="text-danger small fw-semibold">
+                  - Rs. 1,800
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- Features Section -->
+    <!-- ========================= -->
+
+    <section class="py-5">
+
+      <div class="text-center mb-5">
+
+        <span class="text-primary fw-semibold">
+          EVERYTHING YOU NEED
+        </span>
+
+        <h2 class="fw-bold mt-2">
+          Manage your money with confidence
+        </h2>
+
+        <p class="text-muted mx-auto" style="max-width: 650px;">
+          From recording everyday expenses to understanding your
+          overall spending patterns, keep your finances organized
+          without the complexity.
+        </p>
+
+      </div>
+
+
+      <div class="row g-4">
+
+        <!-- Expense Tracking -->
+        <div class="col-12 col-md-6 col-lg-4">
+
+          <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body p-4">
+
+              <div class="bg-primary-subtle rounded-3 d-inline-flex p-3 mb-3">
+                <i class="bi bi-receipt fs-3 text-primary"></i>
+              </div>
+
+              <h5 class="fw-semibold">
+                Track Every Expense
+              </h5>
+
+              <p class="text-muted mb-0">
+                Record your daily transactions and keep a clear
+                history of where every rupee goes.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Budgets -->
+        <div class="col-12 col-md-6 col-lg-4">
+
+          <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body p-4">
+
+              <div class="bg-success-subtle rounded-3 d-inline-flex p-3 mb-3">
+                <i class="bi bi-piggy-bank fs-3 text-success"></i>
+              </div>
+
+              <h5 class="fw-semibold">
+                Set Smarter Budgets
+              </h5>
+
+              <p class="text-muted mb-0">
+                Create spending targets and see how much of each
+                budget you've already used.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Categories -->
+        <div class="col-12 col-md-6 col-lg-4">
+
+          <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body p-4">
+
+              <div class="bg-warning-subtle rounded-3 d-inline-flex p-3 mb-3">
+                <i class="bi bi-tags fs-3 text-warning"></i>
+              </div>
+
+              <h5 class="fw-semibold">
+                Organize by Category
+              </h5>
+
+              <p class="text-muted mb-0">
+                Categorize your expenses and quickly identify
+                the areas where you're spending the most.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Analytics -->
+        <div class="col-12 col-md-6 col-lg-4">
+
+          <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body p-4">
+
+              <div class="bg-info-subtle rounded-3 d-inline-flex p-3 mb-3">
+                <i class="bi bi-bar-chart-line fs-3 text-info"></i>
+              </div>
+
+              <h5 class="fw-semibold">
+                Understand Your Spending
+              </h5>
+
+              <p class="text-muted mb-0">
+                Visualize your expenses with category, budget,
+                and daily spending insights.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Daily Spending -->
+        <div class="col-12 col-md-6 col-lg-4">
+
+          <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body p-4">
+
+              <div class="bg-danger-subtle rounded-3 d-inline-flex p-3 mb-3">
+                <i class="bi bi-graph-up-arrow fs-3 text-danger"></i>
+              </div>
+
+              <h5 class="fw-semibold">
+                Monitor Daily Spending
+              </h5>
+
+              <p class="text-muted mb-0">
+                See how your spending changes over time and
+                spot patterns before they become problems.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- Recent Activity -->
+        <div class="col-12 col-md-6 col-lg-4">
+
+          <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body p-4">
+
+              <div class="bg-secondary-subtle rounded-3 d-inline-flex p-3 mb-3">
+                <i class="bi bi-clock-history fs-3 text-secondary"></i>
+              </div>
+
+              <h5 class="fw-semibold">
+                Stay on Top of Activity
+              </h5>
+
+              <p class="text-muted mb-0">
+                Quickly review your latest transactions and
+                keep track of your financial activity.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- Final CTA -->
+    <!-- ========================= -->
+
+    <section class="py-5 mb-5">
+
+      <div class="card border-0 bg-primary text-white shadow-sm">
+
+        <div class="card-body text-center p-5">
+
+          <i class="bi bi-wallet2 display-5 mb-3"></i>
+
+          <h2 class="fw-bold">
+            Start taking control of your money today.
+          </h2>
+
+          <p class="mb-4 opacity-75">
+            A clearer view of your spending is just a few clicks away.
+          </p>
+
+          <button
+            type="button"
+            class="btn btn-light btn-lg px-4"
+            (click)="navigateToRegister()"
+          >
+            <i class="bi bi-person-plus me-2"></i>
+            Get started for free
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  }
+
 </div>
 
-<div class="text-center">
-  <!-- insert the link with the routerLink here -->
-  <!-- <a class="btn btn-large btn-primary me-2" routerLink="/login">Login</a> -->
-</div>

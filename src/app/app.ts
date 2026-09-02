@@ -1,12 +1,12 @@
 import { Component, signal } from '@angular/core';
-import { Layout } from "./layout/layout";
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'ep-root',
-  imports: [Layout],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('ExpenseTrackerFrontEnd');
+  protected readonly title = signal('ExpenseTracker');
 }

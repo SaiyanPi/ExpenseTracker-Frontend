@@ -11,47 +11,64 @@
       <div class="pe-lg-5">
 
         <div class="mb-4">
+
           <div
             class="bg-primary-subtle rounded-4 d-inline-flex align-items-center justify-content-center p-3"
           >
             <i class="bi bi-wallet2 display-6 text-primary"></i>
           </div>
+
         </div>
 
+
         <span class="badge text-bg-primary px-3 py-2 mb-3">
+
           <i class="bi bi-stars me-1"></i>
-          Welcome back
+
+          Start your financial journey
+
         </span>
 
+
         <h1 class="display-4 fw-bold mb-3">
-          Your finances are
-          <span class="text-primary">waiting for you.</span>
+
+          A clearer view of your
+          <span class="text-primary">money starts here.</span>
+
         </h1>
 
+
         <p class="lead text-muted mb-4">
-          Pick up where you left off. Review your expenses,
-          check your budgets, and stay on top of your spending.
+
+          Create your account and bring your expenses,
+          budgets, and spending insights together in one place.
+
         </p>
 
 
-        <!-- Mini Features -->
+        <!-- Benefits -->
 
         <div class="d-flex flex-column gap-3">
+
 
           <div class="d-flex align-items-center gap-3">
 
             <div class="bg-primary-subtle rounded-3 p-2">
-              <i class="bi bi-bar-chart-line text-primary fs-5"></i>
+
+              <i class="bi bi-receipt text-primary fs-5"></i>
+
             </div>
 
             <div>
+
               <div class="fw-semibold">
-                Understand your spending
+                Track every expense
               </div>
 
               <small class="text-muted">
-                See where your money goes at a glance.
+                Keep your transactions organized and accessible.
               </small>
+
             </div>
 
           </div>
@@ -60,17 +77,21 @@
           <div class="d-flex align-items-center gap-3">
 
             <div class="bg-success-subtle rounded-3 p-2">
+
               <i class="bi bi-piggy-bank text-success fs-5"></i>
+
             </div>
 
             <div>
+
               <div class="fw-semibold">
-                Stay within your budgets
+                Build better budgets
               </div>
 
               <small class="text-muted">
-                Track your progress against your targets.
+                Set targets and keep your spending under control.
               </small>
+
             </div>
 
           </div>
@@ -79,20 +100,25 @@
           <div class="d-flex align-items-center gap-3">
 
             <div class="bg-warning-subtle rounded-3 p-2">
-              <i class="bi bi-graph-up-arrow text-warning fs-5"></i>
+
+              <i class="bi bi-pie-chart text-warning fs-5"></i>
+
             </div>
 
             <div>
+
               <div class="fw-semibold">
-                Make smarter decisions
+                See the bigger picture
               </div>
 
               <small class="text-muted">
-                Turn your spending data into useful insights.
+                Turn your spending into simple, meaningful insights.
               </small>
+
             </div>
 
           </div>
+
 
         </div>
 
@@ -102,7 +128,7 @@
 
 
     <!-- ========================= -->
-    <!-- Right: Login Form -->
+    <!-- Right: Register Form -->
     <!-- ========================= -->
 
     <div class="col-12 col-md-8 col-lg-5">
@@ -111,6 +137,7 @@
 
         <div class="card-body p-4 p-md-5">
 
+
           <!-- Mobile Branding -->
 
           <div class="text-center d-lg-none mb-4">
@@ -118,7 +145,9 @@
             <div
               class="bg-primary-subtle rounded-4 d-inline-flex p-3 mb-3"
             >
+
               <i class="bi bi-wallet2 display-6 text-primary"></i>
+
             </div>
 
           </div>
@@ -127,11 +156,11 @@
           <div class="mb-4">
 
             <h2 class="fw-bold mb-1">
-              Sign in
+              Create your account
             </h2>
 
             <p class="text-muted mb-0">
-              Welcome back! Enter your details to continue.
+              Start managing your finances in a smarter way.
             </p>
 
           </div>
@@ -142,11 +171,73 @@
 
           <form [formRoot]="credentials">
 
+
+            <!-- Full Name -->
+
+            <div class="mb-3">
+
+              <label
+                for="fullName"
+                class="form-label fw-semibold"
+              >
+                Full Name
+              </label>
+
+              <div class="input-group">
+
+                <span class="input-group-text bg-transparent">
+                  <i class="bi bi-person"></i>
+                </span>
+
+                <input
+                  id="fullName"
+                  type="text"
+                  class="form-control"
+                  [formField]="credentials.fullName"
+                  placeholder="John Rai"
+                />
+
+              </div>
+
+
+              @let fullName = credentials.fullName();
+
+              @if (fullName.touched() && !fullName.valid()) {
+
+                @if (fullName.getError('required')) {
+
+                  <div class="invalid-feedback d-block mt-1">
+                    Full name is required
+                  </div>
+
+                }
+
+              }
+
+
+              @if (validationErrors['FullName']) {
+
+                @for (message of validationErrors['FullName']; track message) {
+
+                  <div class="invalid-feedback d-block mt-1">
+                    {{ message }}
+                  </div>
+
+                }
+
+              }
+
+            </div>
+
+
             <!-- Email -->
 
             <div class="mb-3">
 
-              <label for="email" class="form-label fw-semibold">
+              <label
+                for="email"
+                class="form-label fw-semibold"
+              >
                 Email
               </label>
 
@@ -207,9 +298,12 @@
 
             <!-- Password -->
 
-            <div class="mb-4">
+            <div class="mb-3">
 
-              <label for="password" class="form-label fw-semibold">
+              <label
+                for="password"
+                class="form-label fw-semibold"
+              >
                 Password
               </label>
 
@@ -224,7 +318,7 @@
                   type="password"
                   class="form-control"
                   [formField]="credentials.password"
-                  placeholder="Enter your password"
+                  placeholder="Create a password"
                 />
 
               </div>
@@ -260,49 +354,112 @@
             </div>
 
 
+            <!-- Phone Number -->
+
+            <div class="mb-4">
+
+              <label
+                for="phoneNumber"
+                class="form-label fw-semibold"
+              >
+                Phone Number
+              </label>
+
+              <div class="input-group">
+
+                <span class="input-group-text bg-transparent">
+                  <i class="bi bi-telephone"></i>
+                </span>
+
+                <input
+                  id="phoneNumber"
+                  type="tel"
+                  class="form-control"
+                  [formField]="credentials.phoneNumber"
+                  placeholder="+977 98XXXXXXXX"
+                />
+
+              </div>
+
+
+              @let phoneNumber = credentials.phoneNumber();
+
+              @if (phoneNumber.touched() && !phoneNumber.valid()) {
+
+                @if (phoneNumber.getError('required')) {
+
+                  <div class="invalid-feedback d-block mt-1">
+                    Phone number is required
+                  </div>
+
+                }
+
+              }
+
+
+              @if (validationErrors['PhoneNumber']) {
+
+                @for (
+                  message of validationErrors['PhoneNumber'];
+                  track message
+                ) {
+
+                  <div class="invalid-feedback d-block mt-1">
+                    {{ message }}
+                  </div>
+
+                }
+
+              }
+
+            </div>
+
+
             <!-- Submit -->
 
             <button
               class="btn btn-primary btn-lg w-100"
               type="submit"
-              [disabled]="isLoggingIn()"
+              [disabled]="isRegistering()"
             >
 
-              @if (isLoggingIn()) {
+              @if (isRegistering()) {
 
                 <span
                   class="spinner-border spinner-border-sm me-2"
                   aria-hidden="true"
                 ></span>
 
-                Signing in...
+                Creating account...
 
               } @else {
 
-                <i class="bi bi-box-arrow-in-right me-2"></i>
-                Sign in
+                <i class="bi bi-person-plus me-2"></i>
+
+                Create account
 
               }
 
             </button>
 
 
-            <!-- Register -->
+            <!-- Login -->
 
             <div class="text-center mt-4">
 
               <span class="text-muted">
-                Don't have an account?
+                Already have an account?
               </span>
 
               <a
-                routerLink="/register"
+                routerLink="/login"
                 class="text-primary fw-semibold text-decoration-none ms-1"
               >
-                Create one
+                Sign in
               </a>
 
             </div>
+
 
           </form>
 
@@ -315,3 +472,4 @@
   </div>
 
 </div>
+

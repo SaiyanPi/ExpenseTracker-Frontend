@@ -1,52 +1,21 @@
-.sidenav-container {
-  height: 100vh;
-}
-
-mat-sidenav {
-  width: 250px;
-}
-
-.sidenav-header {
-  padding: 20px;
-}
-
-nav {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-}
-
-nav a {
-  justify-content: flex-start;
-  gap: 10px;
-}
-
-.content {
-  padding: 24px;
-}
-
-.user-email {
-  margin-top: 0.2rem;
-  font-size: 0.85rem;
-  color: #757575;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-nav a mat-icon {
-  font-size: 24px;
-  width: 24px;
-  height: 24px;
-}
-
 :host {
   display: block;
   height: 100vh;
 }
 
+/* =========================
+   Main Layout
+   ========================= */
+
 .sidenav-container {
   height: 100%;
+  background: #f7f8fc;
+}
+
+mat-sidenav {
+  width: 250px;
+  border-right: 1px solid #e7e9ef;
+  background: #ffffff;
 }
 
 mat-sidenav-content {
@@ -55,9 +24,211 @@ mat-sidenav-content {
   flex-direction: column;
 }
 
+
+/* =========================
+   User Account
+   ========================= */
+
+.user-menu-trigger {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sidenav-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 16px;
+  border-bottom: 1px solid #eef0f4;
+  transition: background-color 0.2s ease;
+}
+
+.user-menu-trigger:hover .sidenav-header {
+  background-color: #f6f7fa;
+}
+
+.user-avatar {
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #eef2ff;
+  color: #4f46e5;
+
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.user-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.user-info h2 {
+  margin: 0;
+
+  font-size: 0.95rem;
+  font-weight: 650;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-email {
+  margin: 3px 0 0;
+
+  font-size: 0.75rem;
+  color: #8a91a0;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.account-arrow {
+  flex: 0 0 auto;
+  color: #9aa1ad;
+  font-size: 20px;
+}
+
+
+/* =========================
+   Navigation
+   ========================= */
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  padding: 18px 12px;
+}
+
+nav a {
+  min-height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  gap: 13px;
+
+  padding: 0 14px;
+
+  border-radius: 10px;
+
+  color: #596273;
+
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+nav a mat-icon {
+  width: 22px;
+  height: 22px;
+
+  font-size: 21px;
+
+  color: #7b8494;
+
+  transition: color 0.2s ease;
+}
+
+nav a:hover {
+  background-color: #f4f5f8;
+  color: #252b36;
+}
+
+nav a:hover mat-icon {
+  color: #4f46e5;
+}
+
+
+/* Active navigation item */
+
+nav a.active {
+  background-color: #eef2ff;
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+nav a.active mat-icon {
+  color: #4f46e5;
+}
+
+
+/* =========================
+   Toolbar
+   ========================= */
+
+mat-toolbar {
+  height: 64px;
+
+  background: #ffffff;
+  border-bottom: 1px solid #e7e9ef;
+
+  box-shadow: none;
+
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-title {
+  font-size: 1rem;
+  font-weight: 650;
+  color: #252b36;
+}
+
+.menu-button {
+  margin-right: 8px;
+}
+
+
+/* =========================
+   Main Content
+   ========================= */
+
 .content {
   flex: 1;
   min-height: 0;
+
+  padding: 28px;
+
   display: flex;
   flex-direction: column;
+
+  overflow-y: auto;
+}
+
+
+/* =========================
+   Responsive
+   ========================= */
+
+@media (max-width: 768px) {
+
+  mat-sidenav {
+    width: 270px;
+  }
+
+  .content {
+    padding: 20px 16px;
+  }
+
 }

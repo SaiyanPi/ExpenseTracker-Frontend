@@ -7,23 +7,34 @@ import { BudgetDetail } from "./budgets/budget-detail/budget-detail";
 import { CategoryDetail } from "./categories/category-detail/category-detail";
 import { Dashboard } from "./dashboard/dashboard";
 import { Home } from "./home/home";
+import { Register } from "./register/register";
+import { Layout } from "./layout/layout";
 
 export const routes: Routes = [
   { path: '', component: Home },
-  
-  { path: 'dashboard', component: Dashboard },
 
   { path: 'login', component: Login },
+  
+  { path: 'register', component: Register },
 
-  { path: 'categories', component: Categories },
+  { path: 'app', component: Layout, children: [
+    { path: 'dashboard', component: Dashboard },
 
-  { path: 'budgets', component: Budgets },
+    { path: 'categories', component: Categories },
 
-  { path: 'expenses', component: Expenses },
+    { path: 'budgets', component: Budgets },
 
-  // Route-based navigation not an input signal-based
-  { path: 'budgets/:budgetId', component: BudgetDetail },
+    { path: 'expenses', component: Expenses },
 
-  { path: 'categories/:categoryId', component: CategoryDetail }
+    // Route-based navigation not an input signal-based
+    { path: 'budgets/:budgetId', component: BudgetDetail },
+
+    { path: 'categories/:categoryId', component: CategoryDetail }
+  ]},
+
+  {
+    path: '**',
+    redirectTo: ''
+  }
 
 ]
