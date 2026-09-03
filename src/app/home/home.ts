@@ -14,6 +14,14 @@ export class Home {
   protected readonly userName = this.authService.name;
   private readonly router = inject(Router);
 
+  readonly isNewUser = history.state['registered'] === true;
+  
+  constructor() {
+    if (this.isNewUser) {
+      history.replaceState({}, document.title);
+    }
+  }
+
   navigateToDashboard() {
     this.router.navigate(['/app/dashboard']);
   }

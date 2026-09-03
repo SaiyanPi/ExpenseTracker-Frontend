@@ -1,7 +1,7 @@
 import { JwtClaimsModel } from './../models/auth/jwt-claims-model';
 import { HttpClient } from '@angular/common/http';
 import { computed, effect, inject, Service, signal, untracked } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { finalize, Observable, shareReplay, tap, throwError } from 'rxjs';
 import { LoginRegisterResponseModel } from '../models/auth/login-resiter-response-model';
 import { LoginRequestModel } from '../models/auth/login-request-model';
 import { jwtDecode } from 'jwt-decode';
@@ -17,29 +17,31 @@ export class AuthService {
 
   private readonly user = signal<LoginRegisterResponseModel | undefined>(this.retrieveUser());
 
+  private refreshRequest$: Observable<LoginRegisterResponseModel> | null = null;
+
   readonly currentUser = this.user.asReadonly();
 
-  private logoutTimer?: ReturnType<typeof setTimeout>;
+  // private logoutTimer?: ReturnType<typeof setTimeout>;
 
-  private startTokenExpirationTimer(expiresAt: string): void {
-    console.log('expiresAt from API:', expiresAt);
+  // private startTokenExpirationTimer(expiresAt: string): void {
+  //   console.log('expiresAt from API:', expiresAt);
 
-  const expiresIn = new Date(expiresAt).getTime() - Date.now();
+  // const expiresIn = new Date(expiresAt).getTime() - Date.now();
 
-  console.log('Parsed date:', new Date(expiresAt));
-  console.log('Now:', new Date());
-  console.log('expiresIn (ms):', expiresIn);
+  // // console.log('Parsed date:', new Date(expiresAt));
+  // // console.log('Now:', new Date());
+  // // console.log('expiresIn (ms):', expiresIn);
 
-    if (expiresIn <= 0) {
-       console.log('Token already expired!');
-      this.logout();
-      return;
-    }
-    this.logoutTimer = setTimeout(() => {
-      console.log('Token expired. Logging out.');
-      this.logout();
-    }, expiresIn);
-  }
+  //   if (expiresIn <= 0) {
+  //      console.log('Token already expired!');
+  //     this.logout();
+  //     return;
+  //   }
+  //   this.logoutTimer = setTimeout(() => {
+  //     console.log('Token expired. Logging out.');
+  //     this.logout();
+  //   }, expiresIn);
+  // }
 
   constructor() {
     effect(() => {
@@ -65,12 +67,11 @@ export class AuthService {
     try {
       const user = JSON.parse(value) as LoginRegisterResponseModel;
 
-      const expiresAt = new Date(user.expiresAt).getTime();
-
-      if (expiresAt <= Date.now()) {
-        window.localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
-        return undefined;
-      }
+      // const expiresAt = new Date(user.expiresAt).getTime();
+      // if (expiresAt <= Date.now()) {
+      //   window.localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
+      //   return undefined;
+      // }
 
       return user;
     } catch {
@@ -94,30 +95,69 @@ export class AuthService {
     this.claims()?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"] ?? null
   );
 
+
   login(request: LoginRequestModel): Observable<LoginRegisterResponseModel> {
     return this.http
     .post<LoginRegisterResponseModel>('http://localhost:5167/api/auth/login', request )
     .pipe(tap(user => {
       this.user.set(user);
-      this.startTokenExpirationTimer(user.expiresAt);
+      // this.startTokenExpirationTimer(user.expiresAt);
     }));
   }
+
 
   register(request: RegisterRequestModel): Observable<LoginRegisterResponseModel> {
     return this.http
     .post<LoginRegisterResponseModel>('http://localhost:5167/api/auth/register-user', request )
     .pipe(tap(user => {
       this.user.set(user);
-      this.startTokenExpirationTimer(user.expiresAt);
+      // this.startTokenExpirationTimer(user.expiresAt);
     }));
   }
 
-  logout(): void {
-     if (this.logoutTimer) {
-        clearTimeout(this.logoutTimer);
-        this.logoutTimer = undefined;
+
+  refreshToken(): Observable<LoginRegisterResponseModel> {
+    // If a refresh is already happening,
+    // return the same observable.
+    if (this.refreshRequest$) {
+      return this.refreshRequest$;
     }
+
+    const refreshToken = this.currentUser()?.refreshToken;
+    if (!refreshToken) {
+      return throwError(() => new Error('No refresh token available.'));
+    }
+
+    this.refreshRequest$ = this.http
+      .post<LoginRegisterResponseModel>(
+        'http://localhost:5167/api/auth/refresh-token',
+        {
+          refreshToken
+        }
+      )
+      .pipe(
+        tap(user => {
+          this.user.set(user);
+          // this.startTokenExpirationTimer(user.expiresAt);
+        }),
+
+        finalize(() => {
+          this.refreshRequest$ = null;
+        }),
+
+        shareReplay(1)
+      );
+    return this.refreshRequest$;
+  }
+
+
+  logout(): void {
+    // if (this.logoutTimer) {
+    //   clearTimeout(this.logoutTimer);
+    //   this.logoutTimer = undefined;
+    // }
     this.user.set(undefined);
     this.router.navigate(['/home']);
   }
+
 }

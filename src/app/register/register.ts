@@ -71,7 +71,9 @@ export class Register {
 
     try {
       await firstValueFrom(this.authService.register(request));
-      await this.router.navigateByUrl('/login');
+      await this.router.navigateByUrl('/home', {
+        state: { registered: true }
+      });
       return;
     } catch(error) {
       const result = this.apiErrorService.handle(error);
