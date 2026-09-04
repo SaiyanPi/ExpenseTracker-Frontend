@@ -9,6 +9,7 @@ import { Dashboard } from "./dashboard/dashboard";
 import { Home } from "./home/home";
 import { Register } from "./register/register";
 import { Layout } from "./layout/layout";
+import { Profile } from "./profile/profile";
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -18,6 +19,9 @@ export const routes: Routes = [
   { path: 'register', component: Register },
 
   { path: 'app', component: Layout, children: [
+
+    { path: 'profile', component: Profile },
+
     { path: 'dashboard', component: Dashboard },
 
     { path: 'categories', component: Categories },

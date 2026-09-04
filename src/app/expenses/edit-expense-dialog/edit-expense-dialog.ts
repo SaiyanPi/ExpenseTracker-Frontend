@@ -129,13 +129,14 @@ export class EditExpenseDialog {
     const request: CreateUpdateExpenseModel =
       { title, description, amount, date: date || null, categoryId: categoryId || null, budgetId: budgetId || null };
 
-      try {
+    try {
       await firstValueFrom(this.expenseService.update(this.expense.id, request));
       this.dialogRef.close(true);
       //this.apiErrorService.showSuccess('Budget updated successfully.');
     } catch (error) {
       const result = this.apiErrorService.handle(error);
       this.serverValidationErrors.set(result.validationErrors);
+      // console.log(this.serverValidationErrors());
     }
   }
 }

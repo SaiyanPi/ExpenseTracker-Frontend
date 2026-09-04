@@ -1,83 +1,97 @@
 <!-- Category Header -->
-<div class="flex-shrink-0">
+<div class="page-header flex-shrink-0">
 
-  @if (getCategories.hasValue()) {
-    <span class="badge text-bg-secondary mb-3">
-      {{ getCategories.value().totalCount }}
-      {{ getCategories.value().totalCount === 1 ? 'Category' : 'Categories' }}
-    </span>
-  }
+  <div class="d-flex flex-column gap-2">
 
-  @if (getCategories.hasValue()) {
+    <h4 class="page-title fw-semibold mb-0">
+      Categories
+    </h4>
+    <small class="text-muted">
+      Your categories for expenses and budgets
+    </small>
 
-    <!-- Add Category -->
-    <div class="card shadow-sm border-0 mb-4">
-      <div class="card-body">
+    <div class="flex-shrink-0">
 
-        @let validationErrors = serverValidationErrors();
+      @if (getCategories.hasValue()) {
+        <span class="badge text-bg-secondary mb-3">
+          {{ getCategories.value().totalCount }}
+          {{ getCategories.value().totalCount === 1 ? 'Category' : 'Categories' }}
+        </span>
+      }
 
-        <form class="row g-3" [formRoot]="categoryForm">
+      @if (getCategories.hasValue()) {
 
-          <div class="col-md">
+        <!-- Add Category -->
+        <div class="card shadow-sm border-0 mb-4">
+          <div class="card-body">
 
-            <label for="name" class="item-title mb-3">
-              Category name
-            </label>
+            @let validationErrors = serverValidationErrors();
 
-            <input
-              id="name"
-              class="form-control"
-              placeholder="e.g. Groceries"
-              [formField]="categoryForm.name"
-            >
+            <form class="row g-3" [formRoot]="categoryForm">
 
-            @let name = categoryForm.name();
+              <div class="col-md">
 
-            @if (name.touched() && !name.valid()) {
+                <label for="name" class="item-title mb-3">
+                  Category name
+                </label>
 
-              @if (name.getError('required')) {
-                <div class="invalid-feedback mt-1">
-                  Name is required
-                </div>
-              }
+                <input
+                  id="name"
+                  class="form-control"
+                  placeholder="e.g. Groceries"
+                  [formField]="categoryForm.name"
+                >
 
-            }
+                @let name = categoryForm.name();
 
-            <!-- Server-side validation errors -->
-            @if (validationErrors['Name']) {
+                @if (name.touched() && !name.valid()) {
 
-              @for (message of validationErrors['Name']; track message) {
+                  @if (name.getError('required')) {
+                    <div class="invalid-feedback mt-1">
+                      Name is required
+                    </div>
+                  }
 
-                <div class="invalid-feedback d-block">
-                  {{ message }}
-                </div>
+                }
 
-              }
+                <!-- Server-side validation errors -->
+                @if (validationErrors['Name']) {
 
-            }
+                  @for (message of validationErrors['Name']; track message) {
+
+                    <div class="invalid-feedback d-block">
+                      {{ message }}
+                    </div>
+
+                  }
+
+                }
+
+              </div>
+
+
+              <div class="col-auto d-flex align-items-end">
+
+                <button
+                  class="btn btn-primary"
+                  type="submit"
+                >
+                  <i class="bi bi-plus-lg me-1"></i>
+                  Add Category
+                </button>
+
+              </div>
+
+            </form>
 
           </div>
+        </div>
 
+      }
 
-          <div class="col-auto d-flex align-items-end">
-
-            <button
-              class="btn btn-primary"
-              type="submit"
-            >
-              <i class="bi bi-plus-lg me-1"></i>
-              Add Category
-            </button>
-
-          </div>
-
-        </form>
-
-      </div>
     </div>
-
-  }
-
+    
+  </div>
 </div>
 
 

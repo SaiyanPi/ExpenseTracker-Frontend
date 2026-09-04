@@ -1,73 +1,92 @@
 <!-- Header -->
-<div class="d-flex justify-content-between align-items-center mb-4 flex-shrink-0">
+<div class="page-header flex-shrink-0">
 
-  @if (getExpenses.hasValue()) {
-    <span class="badge text-bg-secondary">
-      {{ getExpenses.value().expenses.totalCount }}
-      {{ getExpenses.value().expenses.totalCount === 1 ? 'Expense' : 'Expenses' }}
-    </span>
-  }
+  <div class="d-flex flex-column gap-2">
 
-  <button
-    class="btn btn-primary"
-    type="button"
-    (click)="openCreateExpenseDialog()"
-  >
-    <i class="bi bi-plus-lg me-1"></i>
-    New Expense
-  </button>
+    <h4 class="page-title fw-semibold mb-0">
+      Expenses
+    </h4>
+    <small class="text-muted">
+      Your expenses
+    </small>
 
-</div>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-shrink-0">
 
-<!-- Show/Hide export filter option -->
-<div class="d-flex justify-content-end mb-3">
-  <button
-    class="btn btn-outline-primary btn-sm"
-    type="button"
-    (click)="toggleExportFilter()"
-  >
-    <i class="bi bi-download me-1"></i>
-    Export
-  </button>
-</div>
+      <!-- Left: Expense count -->
+        @if (getExpenses.hasValue()) {
+          <span class="badge text-bg-secondary">
+            {{ getExpenses.value().expenses.totalCount }}
+            {{ getExpenses.value().expenses.totalCount === 1 ? 'Expense' : 'Expenses' }}
+          </span>
+        }
 
-<!-- Filters -->
-@if (showExportFilters()) {
-  <ep-expense-filter
-    [expenseFilters]="expenseFilters"
-    [fromExport]="true"
-    (exportFormatChange)="exportFormat.set($event)"
-    (exportRequested)="exportExpenses()"  
-  />
-}
+        <!-- Right: Actions -->
+        <div class="d-flex align-items-center gap-2">
 
-<!-- Show/Hide expense filter option -->
-<div class="d-flex justify-content-end mb-3">
-  <button
-    type="button"
-    class="btn btn-outline-primary btn-sm"
-    (click)="toggleExpenseFilter()"
-  >
-    <i class="bi bi-funnel me-1"></i>
+          <!-- Export -->
+          <!-- Show/Hide export filter option -->
+          <button
+            class="btn btn-outline-primary btn-sm"
+            type="button"
+            (click)="toggleExportFilter()"
+          >
+            <i class="bi bi-download me-1"></i>
+            Export
+          </button>
 
-    {{ showFilters() ? 'Hide Filters' : 'Filters' }}
-  </button>
-</div>
+          <!-- Filters -->
+          <!-- Show/Hide expense filter option -->
+          <button
+            class="btn btn-outline-primary btn-sm"
+            type="button"
+            (click)="toggleExpenseFilter()"
+          >
+            <i class="bi bi-funnel me-1"></i>
+            {{ showFilters() ? 'Hide' : 'Filters' }}
+          </button>
+          
+
+          <!-- New Expense -->
+          <button
+            class="btn btn-primary btn-sm"
+            type="button"
+            (click)="openCreateExpenseDialog()"
+          >
+            <i class="bi bi-plus-lg me-1"></i>
+            New Expense
+          </button>
+
+        </div>
+
+    </div>
+
+    <!-- Filters -->
+    @if (showExportFilters()) {
+      <ep-expense-filter
+        [expenseFilters]="expenseFilters"
+        [fromExport]="true"
+        (exportFormatChange)="exportFormat.set($event)"
+        (exportRequested)="exportExpenses()"  
+      />
+    }
+
+    <!-- Filters -->
+    @if (showFilters()) {
+      <ep-expense-filter
+        [expenseFilters]="expenseFilters"
+      />
+    }
 
 
-<!-- Filters -->
-@if (showFilters()) {
-  <ep-expense-filter
-    [expenseFilters]="expenseFilters"
-  />
-}
+    <!-- Search -->
+    <div class="item-pagination flex-shrink-0 mb-3">
+      <ep-search
+        [searchState]="searchState"
+      />
+    </div>
 
+  </div>
 
-<!-- Search -->
-<div class="item-pagination flex-shrink-0 mb-3">
-  <ep-search
-    [searchState]="searchState"
-  />
 </div>
 
 

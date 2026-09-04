@@ -1,0 +1,166 @@
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.profile-page {
+  width: 100%;
+  max-width: 1200px;
+}
+
+
+/* =========================================
+   Profile Overview
+   ========================================= */
+
+.profile-overview-card {
+  width: 100%;
+  max-width: 680px;
+  margin-inline: auto;
+  overflow: hidden;
+  position: relative;
+}
+
+/* subtle accent at the top */
+.profile-overview-card::before {
+  content: "";
+  display: block;
+  height: 4px;
+  background-color: var(--bs-primary);
+}
+
+.profile-avatar {
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background-color: var(--bs-primary);
+  color: #fff;
+
+  font-size: 2.25rem;
+  font-weight: 600;
+
+  box-shadow:
+    0 0 0 6px var(--bs-tertiary-bg),
+    0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.profile-name {
+  font-size: 1.5rem;
+}
+
+.profile-email {
+  font-size: 0.95rem;
+}
+
+
+/* =========================================
+   Profile Metadata
+   ========================================= */
+
+.profile-meta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  padding: 0.45rem 0.75rem;
+
+  border-radius: 999px;
+
+  background-color: var(--bs-tertiary-bg);
+  color: var(--bs-secondary-color);
+
+  font-size: 0.8rem;
+}
+
+
+/* =========================================
+   Information Card
+   ========================================= */
+
+.profile-card {
+  overflow: hidden;
+}
+
+
+/* =========================================
+   Profile Fields
+   ========================================= */
+
+.profile-field {
+  display: flex;
+  align-items: center;
+
+  gap: 1rem;
+
+  min-height: 78px;
+  padding: 1rem;
+
+  border: 1px solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.profile-field:hover {
+  background-color: var(--bs-tertiary-bg);
+  border-color: var(--bs-primary-border-subtle);
+}
+
+.profile-field-icon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background-color: var(--bs-tertiary-bg);
+
+  font-size: 1.1rem;
+}
+
+.profile-field-content {
+  min-width: 0;
+}
+
+
+/* =========================================
+   Mobile
+   ========================================= */
+
+@media (max-width: 767.98px) {
+
+  .profile-overview-card {
+    max-width: 100%;
+  }
+
+  .profile-avatar {
+    width: 82px;
+    height: 82px;
+
+    font-size: 1.9rem;
+
+    box-shadow:
+      0 0 0 5px var(--bs-tertiary-bg),
+      0 4px 10px rgba(0, 0, 0, 0.08);
+  }
+
+  .profile-name {
+    font-size: 1.35rem;
+  }
+
+}
