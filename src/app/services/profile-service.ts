@@ -1,4 +1,4 @@
-import { HttpClient, httpResource } from '@angular/common/http';
+import { HttpClient, HttpEvent, httpResource } from '@angular/common/http';
 import { inject, ResourceRef, Service } from '@angular/core';
 import { UserProfileModel } from '../models/profile/user-profile-model';
 import { UpdateProfileRequestModel } from '../models/profile/update-profile-request-model';
@@ -17,6 +17,19 @@ export class ProfileService {
   updateProfile(request: UpdateProfileRequestModel): Observable<UserProfileModel> {
     return this.http.put<UserProfileModel>(
       'http://localhost:5167/api/profile/my/update', request
+    );
+  }
+
+  updateProfileImage(image: File): Observable<HttpEvent<UserProfileModel>> {
+    const formData = new FormData();
+    formData.append('image', image);
+
+    return this.http.put<UserProfileModel>(
+      'http://localhost:5167/api/profile/my/image/update', formData,
+      {
+        observe: 'events',
+        reportProgress: true
+      }
     );
   }
 

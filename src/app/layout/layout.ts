@@ -40,8 +40,4 @@ export class Layout {
       .pipe(map(result => result.matches)),
     { initialValue: false }
   );
-
-  logout(): void {
-    this.authService.logout();
-  }
 }

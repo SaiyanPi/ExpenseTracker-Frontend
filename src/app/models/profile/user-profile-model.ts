@@ -3,6 +3,6 @@ export interface UserProfileModel {
   fullName: string;
   email: string;
   phoneNumber: string;
-  // profilePictureUrl: string | null;
+  profileImageUrl: string | null;
   // emailConfirmed: boolean;
 }

@@ -54,6 +54,7 @@
 @else if (profile.hasValue()) {
 
   @let user = profile.value();
+  @let validationErrors = serverValidationErrors();
 
   <div class="profile-page">
 
@@ -65,12 +66,20 @@
         <div class="d-flex flex-column align-items-center text-center">
 
           <!-- Avatar -->
-          <div
-            class="profile-avatar mb-3"
-            aria-hidden="true"
-          >
-            {{ user.fullName.charAt(0).toUpperCase() }}
-          </div>
+          @if (user.profileImageUrl) {
+            <img
+              [src]="user.profileImageUrl"
+              alt="User Avatar"
+              class="profile-avatar mb-3"
+            >
+          } @else {
+            <div
+              class="profile-avatar mb-3"
+              aria-hidden="true"
+            >
+              {{ user.fullName.charAt(0).toUpperCase() }}
+            </div>
+          }
 
 
           <!-- User Summary -->
@@ -109,6 +118,150 @@
     </section>
 
 
+    <!-- Profile Picture -->
+    <section class="card shadow-sm border-0 profile-card mb-4">
+
+      <div class="card-header bg-transparent border-0 pt-4 px-4">
+
+        <h5 class="mb-1">
+          Profile Picture
+        </h5>
+
+        <small class="text-muted">
+          Add a profile picture to personalize your account
+        </small>
+
+      </div>
+
+      <div class="card-body px-4 pb-4">
+
+        <div class="profile-picture-content d-flex flex-column flex-sm-row align-items-center gap-4">
+
+          <!-- Preview -->
+          <div class="profile-picture-preview-wrapper flex-shrink-0">
+
+            @if (user.profileImageUrl) {
+
+              <img
+                [src]="user.profileImageUrl"
+                alt="Profile picture"
+                class="profile-picture-preview"
+              >
+
+            } @else {
+
+              <div
+                class="profile-picture-placeholder"
+                aria-hidden="true"
+              >
+                <i class="bi bi-person"></i>
+              </div>
+
+            }
+
+          </div>
+
+
+          <!-- Upload / Change -->
+          <div class="profile-picture-actions flex-grow-1 w-100 text-center text-sm-start">
+
+            <div class="fw-semibold mb-1">
+              {{ user.profileImageUrl
+                ? 'Change profile picture'
+                : 'Upload profile picture'
+              }}
+            </div>
+
+            <small class="text-muted d-block mb-3">
+              JPG, JPEG or PNG.
+              Maximum file size 5 MB.
+            </small>
+
+            <label
+              for="profile-picture-input"
+              class="btn btn-outline-primary"
+            >
+              <i
+                class="bi"
+                [class.bi-camera]="user.profileImageUrl"
+                [class.bi-cloud-arrow-up]="!user.profileImageUrl"
+              ></i>
+
+              {{ user.profileImageUrl
+                ? 'Change picture'
+                : 'Upload picture'
+              }}
+            </label>
+
+            <input
+              id="profile-picture-input"
+              type="file"
+              class="d-none"
+              accept="image/jpeg,image/png,image/jpg"
+              (change)="onProfilePictureSelected($event)"
+            >
+            
+            <!-- error message here -->
+            @let fullName = updateProfileForm.fullName();
+            @if (fullName.touched() && !fullName.valid()) {
+              @if (fullName.getError('required')) {
+                <div class="invalid-feedback mt-1">Full name is required</div>
+              }
+            }
+            <!-- server side validation errors in the form field-->
+            @if (validationErrors['xxx']) {
+              @for (message of validationErrors['FullName']; track message) {
+                <div class="invalid-feedback d-block mt">
+                  {{ message }}
+                </div>
+              }
+            }
+
+            
+            <!-- upload progress bar -->
+            @if (uploadingProfilePicture()) {
+
+              <div class="mt-3">
+
+                <div class="d-flex justify-content-between align-items-center mb-1">
+
+                  <small class="text-muted">
+                    Uploading picture...
+                  </small>
+
+                  <small class="fw-semibold">
+                    {{ uploadProgress() }}%
+                  </small>
+
+                </div>
+
+                <div
+                  class="progress"
+                  role="progressbar"
+                  [attr.aria-valuenow]="uploadProgress()"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
+                  <div
+                    class="progress-bar"
+                    [style.width.%]="uploadProgress() ?? 0"
+                  ></div>
+                </div>
+
+              </div>
+
+            }
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
     <!-- Personal Information -->
     <section class="card shadow-sm border-0 profile-card">
 
@@ -128,8 +281,7 @@
       <div class="card-body px-4 pb-4">
 
         <div class="row g-3">
-          @let validationErrors = serverValidationErrors();
-
+  
           <!-- FullName -->
           <div class="col-12 col-md-6">
 
@@ -209,9 +361,7 @@
                   (click)="editFullName()"
                 >
                   <i class="bi bi-pencil"></i>
-                  <span class="d-none d-sm-inline ms-1">
-                    Edit
-                  </span>
+                  <span class="d-none d-sm-inline ms-1"></span>
                 </button>
 
               }
@@ -324,9 +474,7 @@
                   (click)="editPhoneNumber()"
                 >
                   <i class="bi bi-pencil"></i>
-                  <span class="d-none d-sm-inline ms-1">
-                    Edit
-                  </span>
+                  <span class="d-none d-sm-inline ms-1"></span>
                 </button>
 
               }
@@ -371,5 +519,87 @@
     </section>
 
   </div>
+
+
+  <!-- Account Actions -->
+<section class="card shadow-sm border-0 profile-card mt-4">
+
+  <div class="card-header bg-transparent border-0 pt-4 px-4">
+
+    <h5 class="mb-1">
+      Account
+    </h5>
+
+    <small class="text-muted">
+      Manage your account settings and session
+    </small>
+
+  </div>
+
+
+  <div class="card-body px-4 pb-4">
+
+    <div class="d-flex flex-column gap-2">
+
+      <!-- Account Settings -->
+      <button
+        type="button"
+        class="btn btn-light border d-flex align-items-center text-start p-3"
+        routerLink="/app/account-settings"
+      >
+
+        <div class="profile-field-icon text-primary flex-shrink-0">
+          <i class="bi bi-gear"></i>
+        </div>
+
+        <div class="ms-3">
+
+          <div class="fw-semibold">
+            Account Settings
+          </div>
+
+          <small class="text-muted">
+            Manage your password and account preferences
+          </small>
+
+        </div>
+
+        <i class="bi bi-chevron-right ms-auto text-muted"></i>
+
+      </button>
+
+
+      <!-- Logout -->
+      <button
+        type="button"
+        class="btn btn-light border d-flex align-items-center text-start p-3"
+        (click)="logout()"
+      >
+
+        <div class="profile-field-icon text-danger flex-shrink-0">
+          <i class="bi bi-box-arrow-right"></i>
+        </div>
+
+        <div class="ms-3">
+
+          <div class="fw-semibold text-danger">
+            Logout
+          </div>
+
+          <small class="text-muted">
+            Sign out of your account
+          </small>
+
+        </div>
+
+        <i class="bi bi-chevron-right ms-auto text-muted"></i>
+
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
 
 }

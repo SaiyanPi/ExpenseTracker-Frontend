@@ -10,7 +10,7 @@
     <button
       type="button"
       class="user-menu-trigger"
-      [matMenuTriggerFor]="userMenu"
+      routerLink="/app/profile"
     >
       <div class="sidenav-header">
 
@@ -23,37 +23,8 @@
           <p class="user-email">{{ userEmail() }}</p>
         </div>
 
-        <mat-icon class="account-arrow">
-          expand_more
-        </mat-icon>
-
       </div>
     </button>
-
-    <mat-menu #userMenu="matMenu" class="account-menu">
-
-      <button mat-menu-item routerLink="/app/profile">
-        <mat-icon>person</mat-icon>
-        <span>Profile</span>
-      </button>
-
-      <button mat-menu-item routerLink="/app/account-settings">
-        <mat-icon>settings</mat-icon>
-        <span>Account Settings</span>
-      </button>
-
-      <mat-divider></mat-divider>
-
-      <button
-        mat-menu-item
-        type="button"
-        (click)="logout()"
-      >
-        <mat-icon>logout</mat-icon>
-        <span>Logout</span>
-      </button>
-
-    </mat-menu>
 
 
     <!-- Navigation -->
@@ -119,7 +90,7 @@
         </span>
 
       </mat-toolbar>
-      
+
     }
 
     <main class="content">
