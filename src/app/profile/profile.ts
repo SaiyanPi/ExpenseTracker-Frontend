@@ -19,7 +19,7 @@ export class Profile {
   protected readonly uploadingProfilePicture = signal(false);
 
   private readonly authService = inject(AuthService);
-  
+
   private readonly apiErrorService = inject(ApiErrorService);
 
   protected readonly serverValidationErrors = signal<Record<string, string[]>>({});
@@ -117,6 +117,10 @@ export class Profile {
     if (!file) {
       return;
     }
+
+    // Clear previous image upload validation errors
+    this.apiErrorService.clearServerError(this.serverValidationErrors, 'Size');
+    this.apiErrorService.clearServerError(this.serverValidationErrors, 'Format');
 
     this.uploadingProfilePicture.set(true);
     this.uploadProgress.set(0);

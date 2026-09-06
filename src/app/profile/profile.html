@@ -200,24 +200,22 @@
               accept="image/jpeg,image/png,image/jpg"
               (change)="onProfilePictureSelected($event)"
             >
-            
-            <!-- error message here -->
-            @let fullName = updateProfileForm.fullName();
-            @if (fullName.touched() && !fullName.valid()) {
-              @if (fullName.getError('required')) {
-                <div class="invalid-feedback mt-1">Full name is required</div>
+            <!-- server side validation errors in the form field-->
+            @if (validationErrors['Size']) {
+              @for (message of validationErrors['Size']; track message) {
+                <div class="invalid-feedback d-block mt">
+                  {{ message }}
+                </div>
               }
             }
-            <!-- server side validation errors in the form field-->
-            @if (validationErrors['xxx']) {
-              @for (message of validationErrors['FullName']; track message) {
+            @if (validationErrors['Format']) {
+              @for (message of validationErrors['Format']; track message) {
                 <div class="invalid-feedback d-block mt">
                   {{ message }}
                 </div>
               }
             }
 
-            
             <!-- upload progress bar -->
             @if (uploadingProfilePicture()) {
 
@@ -281,7 +279,7 @@
       <div class="card-body px-4 pb-4">
 
         <div class="row g-3">
-  
+
           <!-- FullName -->
           <div class="col-12 col-md-6">
 
