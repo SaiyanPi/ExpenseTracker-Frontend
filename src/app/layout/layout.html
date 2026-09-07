@@ -5,7 +5,7 @@
     [mode]="isMobile() ? 'over' : 'side'"
     [opened]="!isMobile()"
   >
-
+    
     <!-- User Account -->
     <button
       type="button"
@@ -13,14 +13,25 @@
       routerLink="/app/profile"
     >
       <div class="sidenav-header">
+        <!-- Avatar -->
+        @let user = profile.value();
 
-        <div class="user-avatar">
-          {{ userName()?.charAt(0)?.toUpperCase() }}
-        </div>
+        @if (user?.profileImageUrl) {
+          <img
+            [src]="user.profileImageUrl"
+            [alt]="userName ?? 'User Avatar'"
+            class="profile-avatar"
+            (error)="$event.target.style.display = 'none'"
+          >
+        } @else {
+          <div class="user-avatar">
+            {{ userName?.charAt(0)?.toUpperCase() }}
+          </div>
+        }
 
         <div class="user-info">
-          <h2>{{ userName() }}</h2>
-          <p class="user-email">{{ userEmail() }}</p>
+          <h2>{{ userName }}</h2>
+          <p class="user-email">{{ userEmail }}</p>
         </div>
 
       </div>

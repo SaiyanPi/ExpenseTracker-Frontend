@@ -6,10 +6,11 @@ import { ApiErrorService } from '../services/api-error-service';
 import { filter, firstValueFrom, lastValueFrom, tap } from 'rxjs';
 import { AuthService } from '../services/auth-service';
 import { HttpEventType } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'ep-profile',
-  imports: [FormField],
+  imports: [FormField, RouterLink],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
@@ -27,6 +28,7 @@ export class Profile {
   private readonly profileService = inject(ProfileService);
 
   protected readonly profile = this.profileService.getProfile();
+
 
   protected readonly updateProfileFields = signal<UpdateProfileRequestModel>({
     fullName: '',
@@ -126,7 +128,7 @@ export class Profile {
     this.uploadProgress.set(0);
 
     try {
-      await lastValueFrom(
+      const response = await lastValueFrom(
         this.profileService.updateProfileImage(file).pipe(
 
           tap(event => {
@@ -152,6 +154,10 @@ export class Profile {
       this.uploadProgress.set(100);
       // input.value = '';
       this.profile.reload();
+      
+      if (response.body) {
+        this.profileService.updateProfile(response.body);
+      }
 
     } catch (error) {
 

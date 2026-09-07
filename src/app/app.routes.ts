@@ -10,17 +10,20 @@ import { Home } from "./home/home";
 import { Register } from "./register/register";
 import { Layout } from "./layout/layout";
 import { Profile } from "./profile/profile";
+import { AccountSetting } from "./account-setting/account-setting";
 
 export const routes: Routes = [
   { path: '', component: Home },
 
   { path: 'login', component: Login },
-  
+
   { path: 'register', component: Register },
 
   { path: 'app', component: Layout, children: [
 
     { path: 'profile', component: Profile },
+
+    { path: 'account-setting', component: AccountSetting },
 
     { path: 'dashboard', component: Dashboard },
 

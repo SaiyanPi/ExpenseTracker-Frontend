@@ -63,14 +63,14 @@
 /* =========================================
    Profile Picture
    ========================================= */
-.profile-picture-preview {
+/* .profile-picture-preview {
   width: 120px;
   height: 120px;
   object-fit: cover;
   object-position: center;
   border-radius: 50%;
   display: block;
-}
+} */
 
 .profile-picture-placeholder {
   width: 120px;

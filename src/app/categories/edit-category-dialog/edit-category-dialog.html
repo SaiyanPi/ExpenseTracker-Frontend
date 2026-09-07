@@ -1,13 +1,11 @@
 <form id="edit-category-form" [formRoot]="categoryForm" class="px-4 py-3">
 
-  <h2 mat-dialog-title>Update Category</h2>
-
   @let validationErrors = serverValidationErrors();
 
   <mat-form-field appearance="outline" class="w-100">
     <mat-label>Category Name</mat-label>
 
-    <input id="name" class="form-control" [formField]="categoryForm.name">
+    <input matInput id="name" class="form-control" [formField]="categoryForm.name">
     <!-- error message here -->
     @let name = categoryForm.name();
     @if (name.touched() && !name.valid()) {
