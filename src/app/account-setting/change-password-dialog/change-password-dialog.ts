@@ -3,7 +3,7 @@ import { form, FormField, FormRoot, required } from '@angular/forms/signals';
 import { ChangePasswordRequestModel } from '../../models/account-setting/change-password-request-model';
 import { AccountService } from '../../services/account-service';
 import { firstValueFrom } from 'rxjs';
-import { MatDialogActions, MatDialogClose, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { ApiErrorService } from '../../services/api-error-service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,7 +18,8 @@ import { MatInputModule } from '@angular/material/input';
     MatInputModule,
     MatFormFieldModule,
     FormRoot,
-    FormField
+    FormField,
+    MatDialogContent
   ],
   templateUrl: './change-password-dialog.html',
   styleUrl: './change-password-dialog.css',

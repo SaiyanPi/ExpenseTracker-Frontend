@@ -1,0 +1,23 @@
+<mat-dialog-content>
+  <p>
+    Are you sure you want to permanently delete your account?
+  </p>
+
+  <p class="text-danger mb-0">
+    This action cannot be undone. All your associated data will be deleted.
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [mat-dialog-close]="false">
+    Cancel
+  </button>
+
+  <button
+    mat-flat-button
+    color="warn"
+    [mat-dialog-close]="true"
+  >
+    Delete Account
+  </button>
+</mat-dialog-actions>

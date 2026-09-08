@@ -2,10 +2,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { Component, inject } from '@angular/core';
 import { ApiErrorService } from '../services/api-error-service';
 import { ChangePasswordDialog } from './change-password-dialog/change-password-dialog';
+import { ConfirmDeleteDialog } from './confirm-delete-dialog/confirm-delete-dialog';
 import { AccountService } from '../services/account-service';
+import { AuthService } from '../services/auth-service';
 import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth-service';
 
 @Component({
   selector: 'ep-account-setting',
@@ -16,17 +17,20 @@ import { AuthService } from '../services/auth-service';
 export class AccountSetting {
   private readonly dialog = inject(MatDialog);
 
-  private readonly router = inject(Router);
-
-  private readonly accountService = inject(AccountService);
-
-  private readonly authService = inject(AuthService);
-
+    private readonly accountService = inject(AccountService);
+    
+    private readonly authService = inject(AuthService);
+    
   private readonly apiErrorService = inject(ApiErrorService);
+
+  private readonly router = inject(Router);
 
 
   protected openChangePasswordDialog(): void {
-    const dialogRef = this.dialog.open(ChangePasswordDialog);
+    const dialogRef = this.dialog.open(ChangePasswordDialog, {
+      width: '400px'
+    });
+
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -34,6 +38,20 @@ export class AccountSetting {
       }
     });
   }
+
+
+  protected confirmDeleteDialog( ): void {
+    const dialogRef = this.dialog.open(ConfirmDeleteDialog, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.deleteAccount();
+      }
+    });
+  }
+  
 
   protected async deleteAccount() {
     try {
