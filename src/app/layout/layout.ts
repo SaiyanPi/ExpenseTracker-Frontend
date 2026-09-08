@@ -9,7 +9,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { map } from 'rxjs';
-import { AuthService } from '../services/auth-service';
 import { ProfileService } from '../services/profile-service';
 
 @Component({
@@ -30,14 +29,15 @@ import { ProfileService } from '../services/profile-service';
 export class Layout {
   private readonly breakpointObserver = inject(BreakpointObserver);
 
-  private readonly authService = inject(AuthService);
-  protected readonly user = this.authService.currentUser();
-  protected readonly userName = this.authService.name();
-  protected readonly userEmail = this.authService.email();
-
   private readonly profileService = inject(ProfileService);
-  protected readonly profile = this.profileService.getProfile();
+  
+  // protected readonly profile = this.profileService.getProfile();
+  protected readonly profile = this.profileService.profile;
 
+  constructor() {
+    this.profileService.loadProfile().subscribe();
+  }
+  
   protected readonly isMobile = toSignal(
     this.breakpointObserver
       .observe([Breakpoints.Handset])

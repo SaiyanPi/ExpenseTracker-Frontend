@@ -1,10 +1,8 @@
-import { JwtClaimsModel } from './../models/auth/jwt-claims-model';
 import { HttpClient } from '@angular/common/http';
-import { computed, effect, inject, Service, signal, untracked } from '@angular/core';
+import { effect, inject, Service, signal, untracked } from '@angular/core';
 import { finalize, Observable, shareReplay, tap, throwError } from 'rxjs';
 import { LoginRegisterResponseModel } from '../models/auth/login-resiter-response-model';
 import { LoginRequestModel } from '../models/auth/login-request-model';
-import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { RegisterRequestModel } from '../models/auth/register-request-model';
 
@@ -20,28 +18,6 @@ export class AuthService {
   private refreshRequest$: Observable<LoginRegisterResponseModel> | null = null;
 
   readonly currentUser = this.user.asReadonly();
-
-  // private logoutTimer?: ReturnType<typeof setTimeout>;
-
-  // private startTokenExpirationTimer(expiresAt: string): void {
-  //   console.log('expiresAt from API:', expiresAt);
-
-  // const expiresIn = new Date(expiresAt).getTime() - Date.now();
-
-  // // console.log('Parsed date:', new Date(expiresAt));
-  // // console.log('Now:', new Date());
-  // // console.log('expiresIn (ms):', expiresIn);
-
-  //   if (expiresIn <= 0) {
-  //      console.log('Token already expired!');
-  //     this.logout();
-  //     return;
-  //   }
-  //   this.logoutTimer = setTimeout(() => {
-  //     console.log('Token expired. Logging out.');
-  //     this.logout();
-  //   }, expiresIn);
-  // }
 
   constructor() {
     effect(() => {
@@ -66,13 +42,6 @@ export class AuthService {
 
     try {
       const user = JSON.parse(value) as LoginRegisterResponseModel;
-
-      // const expiresAt = new Date(user.expiresAt).getTime();
-      // if (expiresAt <= Date.now()) {
-      //   window.localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
-      //   return undefined;
-      // }
-
       return user;
     } catch {
       // Corrupted/invalid localStorage value
@@ -80,20 +49,6 @@ export class AuthService {
       return undefined;
     }
   }
-
-
-  private readonly claims = computed(() => {
-    const token = this.user()?.token;
-    return token ? jwtDecode<JwtClaimsModel>(token) : null;
-  });
-
-  readonly name = computed(() =>
-    this.claims()?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] ?? null
-  );
-
-  readonly email = computed(() =>
-    this.claims()?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"] ?? null
-  );
 
 
   login(request: LoginRequestModel): Observable<LoginRegisterResponseModel> {
@@ -138,7 +93,6 @@ export class AuthService {
       .pipe(
         tap(user => {
           this.user.set(user);
-          // this.startTokenExpirationTimer(user.expiresAt);
         }),
 
         finalize(() => {
@@ -152,10 +106,6 @@ export class AuthService {
 
 
   logout(): void {
-    // if (this.logoutTimer) {
-    //   clearTimeout(this.logoutTimer);
-    //   this.logoutTimer = undefined;
-    // }
     this.user.set(undefined);
     this.router.navigate(['/home']);
   }

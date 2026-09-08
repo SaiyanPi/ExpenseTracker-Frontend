@@ -1,6 +1,6 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { form, FormField, FormRoot, required } from '@angular/forms/signals';
-import { ChangePasswordModelRequestModel } from '../../models/account-setting/change-password-model-request-model';
+import { ChangePasswordModelRequestModel } from '../../models/account-setting/change-password-request-model';
 import { AccountService } from '../../services/account-service';
 import { firstValueFrom } from 'rxjs';
 import { MatDialogActions, MatDialogClose, MatDialogRef } from '@angular/material/dialog';

@@ -5,7 +5,7 @@
     [mode]="isMobile() ? 'over' : 'side'"
     [opened]="!isMobile()"
   >
-    
+
     <!-- User Account -->
     <button
       type="button"
@@ -14,24 +14,24 @@
     >
       <div class="sidenav-header">
         <!-- Avatar -->
-        @let user = profile.value();
+        @let user = profile();
 
         @if (user?.profileImageUrl) {
           <img
             [src]="user.profileImageUrl"
-            [alt]="userName ?? 'User Avatar'"
+            [alt]="user?.fullName ?? 'User Avatar'"
             class="profile-avatar"
             (error)="$event.target.style.display = 'none'"
           >
         } @else {
           <div class="user-avatar">
-            {{ userName?.charAt(0)?.toUpperCase() }}
+            {{ (user?.fullName ?? '').charAt(0).toUpperCase() }}
           </div>
         }
 
         <div class="user-info">
-          <h2>{{ userName }}</h2>
-          <p class="user-email">{{ userEmail }}</p>
+          <h2>{{ user?.fullName }}</h2>
+          <p class="user-email">{{ user?.email }}</p>
         </div>
 
       </div>

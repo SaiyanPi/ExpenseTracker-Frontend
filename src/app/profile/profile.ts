@@ -5,8 +5,9 @@ import { UpdateProfileRequestModel } from '../models/profile/update-profile-requ
 import { ApiErrorService } from '../services/api-error-service';
 import { filter, firstValueFrom, lastValueFrom, tap } from 'rxjs';
 import { AuthService } from '../services/auth-service';
-import { HttpEventType } from '@angular/common/http';
+import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
+import { UserProfileModel } from '../models/profile/user-profile-model';
 
 @Component({
   selector: 'ep-profile',
@@ -27,7 +28,10 @@ export class Profile {
 
   private readonly profileService = inject(ProfileService);
 
-  protected readonly profile = this.profileService.getProfile();
+  // protected readonly profile = this.profileService.loadProfile();
+  protected readonly profile = this.profileService.profile;
+  protected readonly profileLoading = this.profileService.profileLoading;
+  protected readonly profileError = this.profileService.profileError;
 
 
   protected readonly updateProfileFields = signal<UpdateProfileRequestModel>({
@@ -59,11 +63,14 @@ export class Profile {
   constructor() {
     this.watchField(this.updateProfileForm.fullName, 'FullName');
     this.watchField(this.updateProfileForm.phoneNumber, 'PhoneNumber');
+
+    // to propagate change
+    this.profileService.loadProfile().subscribe();
   }
 
   // populate the form
   protected editFullName(): void {
-    const user = this.profile.value();
+    const user = this.profile();
     if (!user) { return; }
 
     this.updateProfileFields.set({
@@ -76,7 +83,7 @@ export class Profile {
 
   // populate the form
   protected editPhoneNumber(): void {
-    const user = this.profile.value();
+    const user = this.profile();
     if (!user) { return; }
 
     this.updateProfileFields.set({
@@ -95,9 +102,13 @@ export class Profile {
     }
 
     try {
-      await firstValueFrom( this.profileService.updateProfile(this.updateProfileFields()));
+      const response = await firstValueFrom( this.profileService.updateProfile(this.updateProfileFields()));
       this.editingField.set(null);
-      this.profile.reload();
+
+      if (response) {
+        // console.log(response);
+        this.profileService.updateUserProfile(response);
+      }
 
     } catch (error) {
       const result = this.apiErrorService.handle(error);
@@ -145,19 +156,20 @@ export class Profile {
           }),
 
           filter(
-            event => event.type === HttpEventType.Response
+            (event): event is HttpResponse<UserProfileModel> =>
+              event.type === HttpEventType.Response
           )
 
         )
       );
 
       this.uploadProgress.set(100);
-      // input.value = '';
-      this.profile.reload();
-      
       if (response.body) {
-        this.profileService.updateProfile(response.body);
+        // console.log(response.body);
+        this.profileService.updateUserProfile(response.body);
       }
+      // this.profile.reload(); //don't need this anymore
+
 
     } catch (error) {
 
