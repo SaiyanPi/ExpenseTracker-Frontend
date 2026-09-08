@@ -132,8 +132,3 @@ export class Categories {
 
 }
 
-
-// <span class="page-title fw-semibold mb-0">
-//       <i class="bi bi-person"></i>
-//       Profile
-//     </span>

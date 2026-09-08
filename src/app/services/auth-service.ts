@@ -1,10 +1,12 @@
+import { jwtDecode } from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
-import { effect, inject, Service, signal, untracked } from '@angular/core';
+import { computed, effect, inject, Service, signal, untracked } from '@angular/core';
 import { finalize, Observable, shareReplay, tap, throwError } from 'rxjs';
 import { LoginRegisterResponseModel } from '../models/auth/login-resiter-response-model';
 import { LoginRequestModel } from '../models/auth/login-request-model';
 import { Router } from '@angular/router';
 import { RegisterRequestModel } from '../models/auth/register-request-model';
+import { JwtClaimsModel } from '../models/auth/jwt-claims-model';
 
 const USER_LOCAL_STORAGE_KEY = 'rememberMe';
 
@@ -14,10 +16,11 @@ export class AuthService {
   private readonly router = inject(Router);
 
   private readonly user = signal<LoginRegisterResponseModel | undefined>(this.retrieveUser());
+  
+  readonly currentUser = this.user.asReadonly();
 
   private refreshRequest$: Observable<LoginRegisterResponseModel> | null = null;
 
-  readonly currentUser = this.user.asReadonly();
 
   constructor() {
     effect(() => {
@@ -49,6 +52,15 @@ export class AuthService {
       return undefined;
     }
   }
+
+  private readonly claims = computed(() => {
+    const token = this.user()?.token;
+    return token ? jwtDecode<JwtClaimsModel>(token) : null;
+  });
+
+  readonly name = computed(() =>
+    this.claims()?.["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] ?? null
+  );
 
 
   login(request: LoginRequestModel): Observable<LoginRegisterResponseModel> {
@@ -84,8 +96,7 @@ export class AuthService {
     }
 
     this.refreshRequest$ = this.http
-      .post<LoginRegisterResponseModel>(
-        'http://localhost:5167/api/auth/refresh-token',
+      .post<LoginRegisterResponseModel>('http://localhost:5167/api/auth/refresh-token',
         {
           refreshToken
         }
@@ -105,9 +116,21 @@ export class AuthService {
   }
 
 
-  logout(): void {
+  logout(): Observable<void> {
+    return this.http.post<void>('http://localhost:5167/api/auth/logout', {}).pipe(
+      finalize(() => {
+        this.clearAuthState();
+        this.router.navigate(['/home']);
+      })
+    );
+
+  }
+  
+  clearAuthState(): void {
+    localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
     this.user.set(undefined);
-    this.router.navigate(['/home']);
   }
 
 }
+
+

@@ -61,11 +61,12 @@ export class Profile {
 
 
   constructor() {
+    // to propagate change
+    this.profileService.loadProfile().subscribe();
+
     this.watchField(this.updateProfileForm.fullName, 'FullName');
     this.watchField(this.updateProfileForm.phoneNumber, 'PhoneNumber');
 
-    // to propagate change
-    this.profileService.loadProfile().subscribe();
   }
 
   // populate the form
@@ -189,9 +190,7 @@ export class Profile {
     }
   }
 
-
-
   logout(): void {
-    this.authService.logout();
+    this.authService.logout().subscribe();
   }
 }
