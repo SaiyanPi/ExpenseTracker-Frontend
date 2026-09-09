@@ -7,6 +7,7 @@ import { AccountService } from '../services/account-service';
 import { AuthService } from '../services/auth-service';
 import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
+import { ProfileService } from '../services/profile-service';
 
 @Component({
   selector: 'ep-account-setting',
@@ -17,13 +18,17 @@ import { Router } from '@angular/router';
 export class AccountSetting {
   private readonly dialog = inject(MatDialog);
 
-    private readonly accountService = inject(AccountService);
-    
-    private readonly authService = inject(AuthService);
-    
+  private readonly accountService = inject(AccountService);
+
+  private readonly authService = inject(AuthService);
+
   private readonly apiErrorService = inject(ApiErrorService);
 
   private readonly router = inject(Router);
+
+  private readonly profileService = inject(ProfileService);
+
+  protected readonly profile = this.profileService.profile;
 
 
   protected openChangePasswordDialog(): void {
@@ -51,7 +56,7 @@ export class AccountSetting {
       }
     });
   }
-  
+
 
   protected async deleteAccount() {
     try {

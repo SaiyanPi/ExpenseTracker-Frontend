@@ -8,7 +8,7 @@ import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
 export class ProfileService {
   private readonly http = inject(HttpClient);
 
-    // To maintain the reactive state for the changes to propagate in other component
+  // To maintain the reactive state for the changes to propagate in other component
   private readonly _profile = signal<UserProfileModel | null>(null);
   private readonly _profileLoading = signal(false);
   private readonly _profileError = signal<unknown | null>(null);

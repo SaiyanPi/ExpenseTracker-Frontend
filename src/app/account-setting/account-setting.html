@@ -76,6 +76,61 @@
   </section>
 
 
+  <!-- Email -->
+  @if(!profile()?.emailConfirmed) {
+    <section class="card shadow-sm border-0 profile-card mb-4">
+
+      <div class="card-header bg-transparent border-0 pt-4 px-4">
+
+        <h5 class="mb-1">
+          Email
+        </h5>
+
+        <small class="text-muted">
+          Manage your email address and confirmation status
+        </small>
+
+      </div>
+
+      <div class="card-body px-4 pb-4">
+
+        <div class="d-flex flex-column gap-2">
+
+          <!-- Request Email Confirmation -->
+
+          <button
+            type="button"
+            class="btn btn-light border d-flex align-items-center text-start p-3"
+            /* (click)="requestEmailConfirmation()" */
+          >
+
+            <div class="profile-field-icon text-primary flex-shrink-0">
+              <i class="bi bi-envelope-check"></i>
+            </div>
+
+            <div class="ms-3">
+
+              <div class="fw-semibold">
+                Confirm Email Address
+              </div>
+
+              <small class="text-muted">
+                Request a new confirmation link for your email address
+              </small>
+
+            </div>
+
+            <i class="bi bi-chevron-right ms-auto text-muted"></i>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+  }
+
 
   <!-- Account -->
 

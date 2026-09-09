@@ -4,5 +4,5 @@ export interface UserProfileModel {
   email: string;
   phoneNumber: string;
   profileImageUrl: string | null;
-  // emailConfirmed: boolean;
+  emailConfirmed: boolean;
 }
