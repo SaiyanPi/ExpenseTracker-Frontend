@@ -1,5 +1,5 @@
 import { MatDialog } from '@angular/material/dialog';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ApiErrorService } from '../services/api-error-service';
 import { ChangePasswordDialog } from './change-password-dialog/change-password-dialog';
 import { ConfirmDeleteDialog } from './confirm-delete-dialog/confirm-delete-dialog';
@@ -30,6 +30,7 @@ export class AccountSetting {
 
   protected readonly profile = this.profileService.profile;
 
+  protected readonly isRequestingConfirmation = signal(false);
 
   protected openChangePasswordDialog(): void {
     const dialogRef = this.dialog.open(ChangePasswordDialog, {
@@ -68,4 +69,23 @@ export class AccountSetting {
       this.apiErrorService.handle(error);
     }
   }
+
+
+  protected async requestEmailConfirmation(): Promise<void> {
+    if (this.isRequestingConfirmation()) {
+      return;
+    }
+    this.isRequestingConfirmation.set(true);
+    try {
+      await firstValueFrom(this.accountService.requestEmailConfirmation());
+      this.apiErrorService.showSuccess('Confirmation link sent to email.');
+    } catch (error) {
+      this.apiErrorService.handle(error);
+
+    } finally {
+      this.isRequestingConfirmation.set(false);
+    }
+  }
+
+
 }

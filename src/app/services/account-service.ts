@@ -14,4 +14,8 @@ export class AccountService{
   deleteAccount() : Observable<void> {
     return this.http.delete<void>(`http://localhost:5167/api/profile/my/delete`);
   }
+
+  requestEmailConfirmation(): Observable<void> {
+    return this.http.post<void>(`http://localhost:5167/api/auth/request/confirm-email`, {});
+  }
 }
