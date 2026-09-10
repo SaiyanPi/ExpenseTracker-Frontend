@@ -11,11 +11,14 @@ import { Register } from "./register/register";
 import { Layout } from "./layout/layout";
 import { Profile } from "./profile/profile";
 import { AccountSetting } from "./account-setting/account-setting";
+import { ForgotPassword } from "./forgot-password/forgot-password";
 
 export const routes: Routes = [
   { path: '', component: Home },
 
   { path: 'login', component: Login },
+  
+  { path: 'forgot-password', component: ForgotPassword },
 
   { path: 'register', component: Register },
 

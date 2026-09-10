@@ -81,7 +81,6 @@ export class AccountSetting {
       this.apiErrorService.showSuccess('Confirmation link sent to email.');
     } catch (error) {
       this.apiErrorService.handle(error);
-
     } finally {
       this.isRequestingConfirmation.set(false);
     }

@@ -7,6 +7,7 @@ import { LoginRequestModel } from '../models/auth/login-request-model';
 import { Router } from '@angular/router';
 import { RegisterRequestModel } from '../models/auth/register-request-model';
 import { JwtClaimsModel } from '../models/auth/jwt-claims-model';
+import { ForgotPasswordModel } from '../models/forgot-password/forgot-password-model';
 
 const USER_LOCAL_STORAGE_KEY = 'rememberMe';
 
@@ -129,6 +130,10 @@ export class AuthService {
   clearAuthState(): void {
     localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
     this.user.set(undefined);
+  }
+
+  forgotPassword(email: ForgotPasswordModel): Observable<void> {
+    return this.http.post<void>('http://localhost:5167/api/auth/forgot-password', email);
   }
 
 }
