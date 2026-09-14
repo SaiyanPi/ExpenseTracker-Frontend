@@ -12,13 +12,16 @@ import { Layout } from "./layout/layout";
 import { Profile } from "./profile/profile";
 import { AccountSetting } from "./account-setting/account-setting";
 import { ForgotPassword } from "./forgot-password/forgot-password";
+import { ResetPassword } from "./reset-password/reset-password";
 
 export const routes: Routes = [
   { path: '', component: Home },
 
   { path: 'login', component: Login },
-  
+
   { path: 'forgot-password', component: ForgotPassword },
+  
+  { path: 'reset-password', component: ResetPassword },
 
   { path: 'register', component: Register },
 

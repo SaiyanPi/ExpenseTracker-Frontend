@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { RegisterRequestModel } from '../models/auth/register-request-model';
 import { JwtClaimsModel } from '../models/auth/jwt-claims-model';
 import { ForgotPasswordModel } from '../models/forgot-password/forgot-password-model';
+import { PasswordResetModel } from '../models/password-reset/password-reset-model';
 
 const USER_LOCAL_STORAGE_KEY = 'rememberMe';
 
@@ -17,7 +18,7 @@ export class AuthService {
   private readonly router = inject(Router);
 
   private readonly user = signal<LoginRegisterResponseModel | undefined>(this.retrieveUser());
-  
+
   readonly currentUser = this.user.asReadonly();
 
   private refreshRequest$: Observable<LoginRegisterResponseModel> | null = null;
@@ -126,7 +127,7 @@ export class AuthService {
     );
 
   }
-  
+
   clearAuthState(): void {
     localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
     this.user.set(undefined);
@@ -134,6 +135,15 @@ export class AuthService {
 
   forgotPassword(email: ForgotPasswordModel): Observable<void> {
     return this.http.post<void>('http://localhost:5167/api/auth/forgot-password', email);
+  }
+
+  resetPassword(userId: string, token: string, newPassword: PasswordResetModel): Observable<void> {
+    return this.http.post<void>('http://localhost:5167/api/auth/reset-password', newPassword, {
+      params: {
+        userId,
+        token
+      }
+    });
   }
 
 }
