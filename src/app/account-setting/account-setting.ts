@@ -8,6 +8,7 @@ import { AuthService } from '../services/auth-service';
 import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { ProfileService } from '../services/profile-service';
+import { ChangeEmailDialog } from './change-email-dialog/change-email-dialog';
 
 @Component({
   selector: 'ep-account-setting',
@@ -84,6 +85,20 @@ export class AccountSetting {
     } finally {
       this.isRequestingConfirmation.set(false);
     }
+  }
+
+
+  protected openChangeEmailDialog(): void {
+    const dialogRef = this.dialog.open(ChangeEmailDialog, {
+      width: '500px'
+    });
+
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.apiErrorService.showSuccess('Email change link sent to your new email.');
+      }
+    });
   }
 
 

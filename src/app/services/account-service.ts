@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ChangePasswordRequestModel } from '../models/account-setting/change-password-request-model';
+import { ChangeEmailRequestModel } from '../models/change-email/change-email-request-model';
 
 @Service()
 export class AccountService{
@@ -17,5 +18,9 @@ export class AccountService{
 
   requestEmailConfirmation(): Observable<void> {
     return this.http.post<void>(`http://localhost:5167/api/auth/request/confirm-email`, {});
+  }
+
+  requestEmailChange(newEmail: ChangeEmailRequestModel): Observable<void> {
+    return this.http.post<void>(`http://localhost:5167/api/auth/change-email`, newEmail);
   }
 }

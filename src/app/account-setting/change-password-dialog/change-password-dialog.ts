@@ -25,7 +25,7 @@ import { MatInputModule } from '@angular/material/input';
   styleUrl: './change-password-dialog.css',
 })
 export class ChangePasswordDialog {
-  private readonly passwordService = inject(AccountService);
+  private readonly accountService = inject(AccountService);
 
   private readonly dialogRef = inject(MatDialogRef<ChangePasswordDialog>);
 
@@ -66,7 +66,7 @@ export class ChangePasswordDialog {
     const request: ChangePasswordRequestModel = { currentPassword, newPassword }
 
     try {
-      await firstValueFrom(this.passwordService.changePassword(request));
+      await firstValueFrom(this.accountService.changePassword(request));
       this.dialogRef.close(true);
     } catch (error) {
       const result = this.apiErrorService.handle(error);

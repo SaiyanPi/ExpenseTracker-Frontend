@@ -1,0 +1,68 @@
+<mat-dialog-content class="change-email-dialog">
+
+  <div class="dialog-header">
+
+    <div class="dialog-icon">
+      <i class="bi bi-envelope-at"></i>
+    </div>
+
+    <div class="dialog-title">
+      <h2>Change Email Address</h2>
+      <p>Enter the new email address you want to use for your account.</p>
+    </div>
+
+  </div>
+
+  <form id="change-email-form" [formRoot]="changeEmailForm">
+
+    <mat-form-field appearance="outline" class="email-field">
+
+      <mat-label>New Email Address</mat-label>
+
+      <input
+        matInput
+        type="email"
+        autocomplete="email"
+        placeholder="you@example.com"
+        [formField]="changeEmailForm.newEmail"
+      >
+
+      <mat-icon matSuffix>email</mat-icon>
+
+      @if (
+        changeEmailForm.newEmail().touched() &&
+        changeEmailForm.newEmail().invalid()
+      ) {
+        <mat-error>
+          Please enter a valid email address.
+        </mat-error>
+      }
+
+    </mat-form-field>
+
+  </form>
+
+  <div class="confirmation-note">
+
+    <i class="bi bi-info-circle"></i>
+    <span>
+      A confirmation link will be sent to your new email address.
+    </span>
+
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog-actions">
+
+  <button mat-button [mat-dialog-close]="false">Cancel</button>
+
+  <button
+  mat-flat-button
+  color="primary"
+  [disabled]="changeEmailForm().invalid()"
+  (click)="requestEmailChange()">
+    Request Change
+  </button>
+
+</mat-dialog-actions>
