@@ -13,6 +13,7 @@ import { Profile } from "./profile/profile";
 import { AccountSetting } from "./account-setting/account-setting";
 import { ForgotPassword } from "./forgot-password/forgot-password";
 import { ResetPassword } from "./reset-password/reset-password";
+import { loggedInGuard } from "./logged-in-guard";
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -20,30 +21,34 @@ export const routes: Routes = [
   { path: 'login', component: Login },
 
   { path: 'forgot-password', component: ForgotPassword },
-  
+
   { path: 'reset-password', component: ResetPassword },
 
   { path: 'register', component: Register },
 
-  { path: 'app', component: Layout, children: [
+  { path: 'app',
+    component: Layout,
+    canActivate: [loggedInGuard],
+    children: [
 
-    { path: 'profile', component: Profile },
+      { path: 'profile', component: Profile },
 
-    { path: 'account-setting', component: AccountSetting },
+      { path: 'account-setting', component: AccountSetting },
 
-    { path: 'dashboard', component: Dashboard },
+      { path: 'dashboard', component: Dashboard },
 
-    { path: 'categories', component: Categories },
+      { path: 'categories', component: Categories },
 
-    { path: 'budgets', component: Budgets },
+      { path: 'budgets', component: Budgets },
 
-    { path: 'expenses', component: Expenses },
+      { path: 'expenses', component: Expenses },
 
-    // Route-based navigation not an input signal-based
-    { path: 'budgets/:budgetId', component: BudgetDetail },
+      // Route-based navigation not an input signal-based
+      { path: 'budgets/:budgetId', component: BudgetDetail },
 
-    { path: 'categories/:categoryId', component: CategoryDetail }
-  ]},
+      { path: 'categories/:categoryId', component: CategoryDetail }
+    ]
+  },
 
   {
     path: '**',
