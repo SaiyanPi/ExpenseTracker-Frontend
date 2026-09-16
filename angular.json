@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "ponyracer": {
+    "ExpenseTracker": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -55,13 +55,13 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ponyracer:build:production"
+              "buildTarget": "ExpenseTracker:build:production"
             },
             "development": {
-              "buildTarget": "ponyracer:build:development"
+              "buildTarget": "ExpenseTracker:build:development"
             },
             "e2e": {
-              "buildTarget": "ponyracer:build:development",
+              "buildTarget": "ExpenseTracker:build:development",
               "port": 4201,
               "liveReload": false
             }
@@ -95,11 +95,11 @@
         "e2e": {
           "builder": "playwright-ng-schematics:playwright",
           "options": {
-            "devServerTarget": "ponyracer:serve:e2e"
+            "devServerTarget": "ExpenseTracker:serve:e2e"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "ponyracer:serve:production"
+              "devServerTarget": "ExpenseTracker:serve:production"
             }
           }
         }

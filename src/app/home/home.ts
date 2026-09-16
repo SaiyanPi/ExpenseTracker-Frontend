@@ -15,7 +15,7 @@ export class Home {
   private readonly router = inject(Router);
 
   readonly isNewUser = history.state['registered'] === true;
-  
+
   constructor() {
     if (this.isNewUser) {
       history.replaceState({}, document.title);
@@ -23,7 +23,7 @@ export class Home {
   }
 
   navigateToDashboard() {
-    this.router.navigate(['/app/dashboard']);
+    this.router.navigate(['/layout/dashboard']);
   }
 
   navigateToLogin() {

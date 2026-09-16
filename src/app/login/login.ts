@@ -70,7 +70,7 @@ export class Login {
 
     try {
       await firstValueFrom(this.authService.login(request));
-      await this.router.navigateByUrl('/app/dashboard');
+      await this.router.navigateByUrl('/layout/dashboard');
       return;
     } catch(error) {
       const result = this.apiErrorService.handle(error);
