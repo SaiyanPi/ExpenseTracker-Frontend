@@ -11,7 +11,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const isAuthRequest =
     req.url.includes('/api/auth/login') ||
     req.url.includes('/api/auth/register-user') ||
-    req.url.includes('/api/auth/refresh-token');
+    req.url.includes('/api/auth/refresh');
 
   const authReq =  loggedUser && !isAuthRequest ? req.clone({ setHeaders:
     { Authorization: `Bearer ${loggedUser.token}`}}) : req;
@@ -40,7 +40,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
         }),
 
         catchError(refreshError => {
-          authService.logout();
+          authService.clearAuthState();
           return throwError(() => refreshError);
         })
       );

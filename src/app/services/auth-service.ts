@@ -98,7 +98,7 @@ export class AuthService {
     }
 
     this.refreshRequest$ = this.http
-      .post<LoginRegisterResponseModel>('http://localhost:5167/api/auth/refresh-token',
+      .post<LoginRegisterResponseModel>('http://localhost:5167/api/auth/refresh',
         {
           refreshToken
         }
