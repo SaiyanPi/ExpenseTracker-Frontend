@@ -1,0 +1,21 @@
+@if (notification(); as notification) {
+  <div class="notification-toast">
+    <div class="notification-icon">
+      <mat-icon>warning</mat-icon>
+    </div>
+
+    <div class="notification-content">
+      <strong>{{ notification.title }}</strong>
+      <p>{{ notification.message }}</p>
+    </div>
+
+    <button
+      type="button"
+      class="close-button"
+      (click)="close()"
+      aria-label="Close notification"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+}
