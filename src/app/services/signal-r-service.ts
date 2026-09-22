@@ -11,11 +11,9 @@ export class SignalRService {
 
   readonly connected = signal(false);
 
-  private readonly _notificationReceived =
-    signal<NotificationModel | null>(null);
+  private readonly _notificationReceived = signal<NotificationModel | null>(null);
 
-  readonly notificationReceived =
-    this._notificationReceived.asReadonly();
+  readonly notificationReceived = this._notificationReceived.asReadonly();
 
   async start(): Promise<void> {
     if (this.hubConnection?.state === HubConnectionState.Connected) {

@@ -1,9 +1,10 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { routes } from './app.routes';
 import { PreloadAllModules, provideRouter, withPreloading } from '@angular/router';
 import { provideSignalFormsConfig } from '@angular/forms/signals';
 import { jwtInterceptor } from './interceptor/jwt-interceptor';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { AuthService } from './services/auth-service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,6 +18,12 @@ export const appConfig: ApplicationConfig = {
       }
     }),
 
-    provideHttpClient(withInterceptors([jwtInterceptor]))
+    provideHttpClient(withInterceptors([jwtInterceptor])),
+
+    provideAppInitializer(() => {
+      const authService = inject(AuthService);
+
+      return authService.initialize();
+    })
   ]
 };

@@ -1,0 +1,272 @@
+<div class="notifications-page">
+
+  <!-- Page header -->
+  <div class="notifications-header">
+
+    <div>
+      <h1 class="page-title">Notifications</h1>
+      <p class="page-subtitle">
+        Stay updated with your expenses and budgets.
+      </p>
+    </div>
+
+    @if ((getAllUnreadCount.value() ?? 0) > 0) {
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-sm"
+        (click)="markAllAsRead()">
+
+        <i class="bi bi-check2-all me-1"></i>
+
+        Mark all as read
+      </button>
+    }
+
+  </div>
+
+
+  <!-- Summary -->
+  <div class="notification-summary">
+
+    <div class="summary-left">
+
+      <span class="summary-label">
+        Notifications
+      </span>
+
+      @if ((getAllUnreadCount.value() ?? 0) > 0) {
+
+        <span class="unread-count">
+          {{ getAllUnreadCount.value() }} unread
+        </span>
+
+      } @else {
+
+        <span class="all-read">
+          All caught up
+        </span>
+
+      }
+
+    </div>
+
+  </div>
+
+
+  <!-- Search -->
+  <div class="notification-search">
+
+    <div class="search-wrapper">
+
+      <i class="bi bi-search search-icon"></i>
+
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search notifications..."
+        [value]="searchState.search()"
+        (input)="searchState.search.set($any($event.target).value)"
+      />
+
+      @if (searchState.search()) {
+
+        <button
+          type="button"
+          class="clear-search"
+          (click)="searchState.search.set('')">
+
+          <i class="bi bi-x"></i>
+
+        </button>
+
+      }
+
+    </div>
+
+  </div>
+
+
+  <!-- Loading -->
+  @if (getNotifications.isLoading()) {
+
+    <div class="notification-loading">
+
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">
+          Loading...
+        </span>
+      </div>
+
+      <span>Loading notifications...</span>
+
+    </div>
+
+  }
+
+
+  <!-- Error -->
+  @if (getNotifications.error()) {
+
+    <div class="notification-error">
+
+      <div class="error-icon">
+        <i class="bi bi-exclamation-triangle"></i>
+      </div>
+
+      <div class="error-content">
+        <h6>Unable to load notifications</h6>
+        <p>
+          Something went wrong while loading your notifications.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-outline-secondary btn-sm"
+        (click)="getNotifications.reload()">
+
+        Try again
+
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- Notification list -->
+  @if (!getNotifications.isLoading() && !getNotifications.error()) {
+
+    <div class="notification-list">
+
+      @for (
+        notification of getNotifications.value()?.items ?? [];
+        track notification.id
+      ) {
+
+        <div
+          class="notification-item"
+          [class.unread]="!notification.isRead"
+          role="button"
+          tabindex="0"
+          [attr.aria-label]="notification.title + ': ' + notification.message"
+          (click)="markAsRead(notification)"
+          (keydown.enter)="markAsRead(notification)"
+          (keydown.space)="markAsRead(notification); $event.preventDefault()">
+
+          <!-- Icon -->
+          <div
+            class="notification-icon"
+            [class]="getNotificationClass(notification.type)">
+
+            <i
+              class="bi"
+              [class]="getNotificationIcon(notification.type)">
+            </i>
+
+          </div>
+
+
+          <!-- Notification body -->
+          <div class="notification-body">
+
+            <div class="notification-top">
+
+              <div class="notification-title-wrapper">
+
+                @if (!notification.isRead) {
+                  <span class="unread-dot"></span>
+                }
+
+                <h6 class="notification-title">
+                  {{ notification.title }}
+                </h6>
+
+              </div>
+
+              <span class="notification-time">
+                {{ notification.createdAt }}
+              </span>
+
+            </div>
+
+
+            <p class="notification-message">
+              {{ notification.message }}
+            </p>
+
+
+            @if (!notification.isRead) {
+
+              <span class="mark-read-hint">
+                <i class="bi bi-check2"></i>
+                Click to mark as read
+              </span>
+
+            }
+
+          </div>
+
+        </div>
+
+      }
+
+
+      <!-- Empty state -->
+      @if ((getNotifications.value()?.items?.length ?? 0) === 0) {
+
+        <div class="notification-empty">
+
+          <div class="empty-icon">
+            <i class="bi bi-bell-slash"></i>
+          </div>
+
+          @if (searchState.search()) {
+
+            <h5>No notifications found</h5>
+
+            <p>
+              We couldn't find any notifications matching
+              <strong>"{{ searchState.search() }}"</strong>.
+            </p>
+
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-sm"
+              (click)="searchState.search.set('')">
+
+              Clear search
+
+            </button>
+
+          } @else {
+
+            <h5>You're all caught up</h5>
+
+            <p>
+              You don't have any notifications right now.
+            </p>
+
+          }
+
+        </div>
+
+      }
+
+    </div>
+
+  }
+
+
+  <!-- Pagination -->
+  @if ((getNotifications.value()?.items?.length ?? 0) > 0) {
+
+    <div class="notification-pagination">
+
+      <!-- Put your existing pagination component here -->
+
+    </div>
+
+  }
+
+</div>

@@ -8,6 +8,7 @@ import { Categories } from "./categories/categories";
 import { Dashboard } from "./dashboard/dashboard";
 import { AccountSetting } from "./account-setting/account-setting";
 import { Profile } from "./profile/profile";
+import { Notifications } from "./notifications/notifications";
 
 export const layoutRoutes: Routes = [
   { path: '',
@@ -28,7 +29,9 @@ export const layoutRoutes: Routes = [
       // Route-based navigation not an input signal-based
       { path: 'budgets/:budgetId', component: BudgetDetail },
 
-      { path: 'categories/:categoryId', component: CategoryDetail }
+      { path: 'categories/:categoryId', component: CategoryDetail },
+
+      { path: 'notifications', component: Notifications }
     ]
   }
 ];

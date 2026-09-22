@@ -1,8 +1,8 @@
 import { jwtDecode } from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
 import { computed, effect, inject, Service, signal, untracked } from '@angular/core';
-import { finalize, Observable, shareReplay, tap, throwError } from 'rxjs';
-import { LoginRegisterResponseModel } from '../models/auth/login-resiter-response-model';
+import { finalize, firstValueFrom, Observable, shareReplay, tap, throwError } from 'rxjs';
+import { LoginRegisterResponseModel } from '../models/auth/login-register-response-model';
 import { LoginRequestModel } from '../models/auth/login-request-model';
 import { Router } from '@angular/router';
 import { RegisterRequestModel } from '../models/auth/register-request-model';
@@ -17,9 +17,38 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
 
-  private readonly user = signal<LoginRegisterResponseModel | undefined>(this.retrieveUser());
+  private readonly user = signal<LoginRegisterResponseModel | undefined>(undefined);
 
   readonly currentUser = this.user.asReadonly();
+
+  async initialize(): Promise<void> {
+    const storedUser = this.retrieveUser();
+
+    if (!storedUser) {
+      return;
+    }
+
+    if (!this.isTokenExpired(storedUser.expiresAt)) {
+      this.user.set(storedUser);
+      return;
+    }
+
+    if (!storedUser.refreshToken) {
+      this.clearAuthState();
+      return;
+    }
+
+    try {
+      this.user.set(storedUser);
+      await firstValueFrom(this.refreshToken());
+    } catch {
+      this.clearAuthState();
+    }
+  }
+
+  private isTokenExpired(expiresAt: string): boolean {
+    return new Date(expiresAt).getTime() <= Date.now();
+  }
 
   private refreshRequest$: Observable<LoginRegisterResponseModel> | null = null;
 
