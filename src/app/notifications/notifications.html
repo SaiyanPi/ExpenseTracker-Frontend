@@ -131,9 +131,10 @@
           role="button"
           tabindex="0"
           [attr.aria-label]="notification.title + ': ' + notification.message"
-          (click)="markAsRead(notification)"
-          (keydown.enter)="markAsRead(notification)"
-          (keydown.space)="markAsRead(notification); $event.preventDefault()">
+          /* (click)="markAsRead(notification)" */
+          (click)="handleNotificationClick(notification)"
+          (keydown.enter)="handleNotificationClick(notification)"
+          (keydown.space)="handleNotificationClick(notification); $event.preventDefault()">
 
           <!-- Icon -->
           <div [class]="getNotificationClass(notification.type)">

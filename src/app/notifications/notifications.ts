@@ -9,6 +9,7 @@ import { NotificationType } from '../enums/notification-type';
 import { NotificationModel } from '../models/notification/notification-model';
 import { DatePipe } from '@angular/common';
 import { Search } from '../shared/search/search/search';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ep-notifications',
@@ -18,6 +19,8 @@ import { Search } from '../shared/search/search/search';
 })
 export class Notifications {
   private readonly notificationService = inject(NotificationService);
+
+  private readonly router = inject(Router);
 
   readonly pagination = new PaginationState();
   readonly searchState = new SearchState()
@@ -54,6 +57,17 @@ export class Notifications {
 
   protected readonly getAllUnreadCount = this.notificationService.allUnreadCount;
 
+  protected handleNotificationClick(notification: NotificationModel): void {
+    if (!notification.isRead) {
+      this.markAsRead(notification);
+      return;
+    }
+
+    if (notification.type === NotificationType.BudgetExceeded && notification.relatedEntityId) {
+      this.router.navigate(['/layout/budgets', notification.relatedEntityId]);
+    }
+  }
+  
   protected async markAsRead(notification: NotificationModel): Promise<void> {
     if (notification.isRead) {
       return;
