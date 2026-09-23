@@ -208,13 +208,12 @@
 .notification-item.unread {
   border-left: 3px solid #3d5afe;
 
-  background: #f8faff;
+  background-color: #f1f3f5;
 }
 
 .notification-item.unread:hover {
-  background: #f4f7ff;
+  background-color: #e9ecef;
 }
-
 
 /* --------------------------------
    Notification icon

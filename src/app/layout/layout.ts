@@ -10,7 +10,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { map } from 'rxjs';
 import { ProfileService } from '../services/profile-service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationService } from '../services/notification-service';
 import { NotificationToast } from '../shared/notification-toast/notification-toast';
 
@@ -35,25 +34,19 @@ export class Layout {
 
   private readonly profileService = inject(ProfileService);
 
-  // protected readonly profile = this.profileService.getProfile();
   protected readonly profile = this.profileService.profile;
-
-  private readonly snackBar = inject(MatSnackBar);
 
   private readonly notificationService = inject(NotificationService);
 
-  readonly latestNotification = this.notificationService.latestNotification;
+  protected readonly latestNotification = this.notificationService.latestNotification;
 
-  readonly notifications = this.notificationService.notifications;
-
-  readonly unreadCount = this.notificationService.unreadCount;
+  protected readonly unreadCount = this.notificationService.allUnreadCount;
 
   constructor() {
     this.profileService.loadProfile().subscribe();
 
     effect(() => {
       const notification = this.latestNotification();
-
       if (!notification) {
         return;
       }

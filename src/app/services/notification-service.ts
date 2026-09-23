@@ -1,4 +1,4 @@
-import { computed, effect, inject, ResourceRef, Service, signal } from '@angular/core';
+import { effect, inject, ResourceRef, Service, signal } from '@angular/core';
 import { SignalRService } from './signal-r-service';
 import { NotificationModel } from '../models/notification/notification-model';
 import { MAX_PAGE_SIZE } from '../shared/constants/service.constants';
@@ -25,12 +25,6 @@ export class NotificationService {
     this._latestNotification.set(null);
   }
 
-  readonly unreadCount = computed(() =>
-    this._notifications()
-      .filter(notification => !notification.isRead)
-      .length
-  );
-
   constructor() {
     effect(() => {
       const notification = this.signalRService.notificationReceived();
@@ -47,6 +41,8 @@ export class NotificationService {
           ...notifications,
         ]
       );
+
+      this.allUnreadCount.reload();
 
       setTimeout(() => {
         this._latestNotification.update(
@@ -79,11 +75,17 @@ export class NotificationService {
     });
   }
 
-  allUnreadCount(): ResourceRef<number | undefined> {
-    return httpResource<number>(() => ({
-      url: 'http://localhost:5167/api/v1/notifications/unread-count'
-    }));
-  }
+  // allUnreadCount(): ResourceRef<number | undefined> {
+  //   return httpResource<number>(() => ({
+  //     url: 'http://localhost:5167/api/v1/notifications/unread-count'
+  //   }));
+  // }
+
+  // Shared resource for the whole application.
+  readonly allUnreadCount = httpResource<number>(() => ({
+    url: 'http://localhost:5167/api/v1/notifications/unread-count'
+  }));
+
 
   markAsRead(notificationId: string): Observable<void> {
     return this.http.patch<void>(

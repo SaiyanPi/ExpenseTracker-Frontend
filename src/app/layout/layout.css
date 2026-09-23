@@ -251,3 +251,21 @@ mat-toolbar {
   object-fit: cover;
   display: block;
 }
+
+
+/* =========================
+  Notification
+  ========================= */
+.notification-count {
+  margin-left: 6px;
+  padding: 2px 7px;
+
+  border-radius: 999px;
+
+  background: #dc3545;
+  color: #fff;
+
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+}

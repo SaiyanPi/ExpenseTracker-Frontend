@@ -1,3 +1,3 @@
 export enum NotificationType {
-  BudgetExceeded = 1,
+  BudgetExceeded = 'BudgetExceeded'
 }

@@ -7,10 +7,12 @@ import { ApiErrorService } from '../services/api-error-service';
 import { firstValueFrom } from 'rxjs';
 import { NotificationType } from '../enums/notification-type';
 import { NotificationModel } from '../models/notification/notification-model';
+import { DatePipe } from '@angular/common';
+import { Search } from '../shared/search/search/search';
 
 @Component({
   selector: 'ep-notifications',
-  imports: [],
+  imports: [DatePipe, Search],
   templateUrl: './notifications.html',
   styleUrl: './notifications.css',
 })
@@ -29,28 +31,28 @@ export class Notifications {
 
   protected readonly getNotifications = this.notificationService.allNotifications(this.query);
 
-  protected getNotificationIcon(type: number): string {
+  protected getNotificationIcon(type: string): string {
     switch (type) {
       case NotificationType.BudgetExceeded:
-        return 'account_balance_wallet';
+        return 'bi bi-wallet2';
 
       default:
-        return 'notifications';
+        return 'bi bi-bell';
     }
   }
 
-  protected getNotificationClass(type: number): string {
+  protected getNotificationClass(type: string): string {
     switch (type) {
       case NotificationType.BudgetExceeded:
-        return 'budget';
+        return 'notification-icon budget';
 
       default:
-        return 'default';
+        return 'notification-icon default';
     }
   }
 
 
-  protected readonly getAllUnreadCount = this.notificationService.allUnreadCount();
+  protected readonly getAllUnreadCount = this.notificationService.allUnreadCount;
 
   protected async markAsRead(notification: NotificationModel): Promise<void> {
     if (notification.isRead) {

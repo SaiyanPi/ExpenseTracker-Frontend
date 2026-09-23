@@ -58,28 +58,9 @@
 
     <div class="search-wrapper">
 
-      <i class="bi bi-search search-icon"></i>
-
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Search notifications..."
-        [value]="searchState.search()"
-        (input)="searchState.search.set($any($event.target).value)"
+      <ep-search
+        [searchState]="searchState"
       />
-
-      @if (searchState.search()) {
-
-        <button
-          type="button"
-          class="clear-search"
-          (click)="searchState.search.set('')">
-
-          <i class="bi bi-x"></i>
-
-        </button>
-
-      }
 
     </div>
 
@@ -155,17 +136,11 @@
           (keydown.space)="markAsRead(notification); $event.preventDefault()">
 
           <!-- Icon -->
-          <div
-            class="notification-icon"
-            [class]="getNotificationClass(notification.type)">
+          <div [class]="getNotificationClass(notification.type)">
 
-            <i
-              class="bi"
-              [class]="getNotificationIcon(notification.type)">
-            </i>
+            <i [class]="getNotificationIcon(notification.type)"> </i>
 
           </div>
-
 
           <!-- Notification body -->
           <div class="notification-body">
@@ -185,7 +160,7 @@
               </div>
 
               <span class="notification-time">
-                {{ notification.createdAt }}
+                {{ notification.createdAt | date:'mediumDate'}}
               </span>
 
             </div>

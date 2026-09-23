@@ -84,6 +84,12 @@
       >
         <mat-icon>notifications</mat-icon>
         <span>Notifications</span>
+
+        @if ((unreadCount.value() ?? 0) > 0) {
+          <span class="notification-count">
+            {{ unreadCount.value() }}
+          </span>
+        }
       </a>
 
     </nav>
