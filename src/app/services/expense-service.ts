@@ -8,6 +8,7 @@ import { PagedQueryModel } from '../models/pagination/paged-query-model';
 import { FilterExpenseQueryModel } from '../models/filter-expense/filter-expense-query-model';
 import { FilterExpenseModel } from '../models/expense/filter-expense-model';
 import { ExportExpensesQueryModel } from '../models/export/export-expenses-query-model';
+import { environment } from '../../environments/environment.development';
 
 @Service()
 export class ExpenseService {
@@ -30,15 +31,15 @@ export class ExpenseService {
   // }
 
   create(request: CreateUpdateExpenseModel): Observable<void> {
-    return this.http.post<void>('http://localhost:5167/api/v1/expenses', request);
+    return this.http.post<void>(`${environment.baseUrl}/v1/expenses`, request);
   }
 
   delete(expenseId: string): Observable<void> {
-    return this.http.delete<void>(`http://localhost:5167/api/v1/expenses/${expenseId}`);
+    return this.http.delete<void>(`${environment.baseUrl}/v1/expenses/${expenseId}`);
   }
 
   update(expenseId: string, expense: CreateUpdateExpenseModel): Observable<void> {
-    return this.http.put<void>(`http://localhost:5167/api/v1/expenses/${expenseId}`, expense);
+    return this.http.put<void>(`${environment.baseUrl}/v1/expenses/${expenseId}`, expense);
   }
 
   categoryDetailsWithExpenses(categoryId: string, query: () => PagedQueryModel)
@@ -46,7 +47,7 @@ export class ExpenseService {
     return httpResource<PagedResultModel<ExpenseModel>>(() => {
       const q = query();
       return {
-        url: 'http://localhost:5167/api/v1/expenses/category-expenses/my',
+        url: `${environment.baseUrl}/v1/expenses/category-expenses/my`,
         params: {
           categoryId: categoryId,
 
@@ -64,7 +65,7 @@ export class ExpenseService {
     return httpResource<FilterExpenseModel>(() =>{
       const q = query();
       return {
-        url: 'http://localhost:5167/api/v1/expenses/filter',
+        url: `${environment.baseUrl}/v1/expenses/filter`,
         params: {
           ...(q.categoryId !== null? { categoryId: q.categoryId }: {}),
           ...(q.budgetId !== null? { budgetId: q.budgetId }: {}),
@@ -84,7 +85,7 @@ export class ExpenseService {
 
   exportExpenses(query: ExportExpensesQueryModel): Observable<Blob> {
     return this.http.get(
-      'http://localhost:5167/api/v1/expenses/export',
+      `${environment.baseUrl}/v1/expenses/export`,
       {
         params: {
           ...(query.categoryId ? { categoryId: query.categoryId } : {}),

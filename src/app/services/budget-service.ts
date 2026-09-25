@@ -8,6 +8,7 @@ import { PagedResultModel } from '../models/pagination/paged-result-model';
 import { MAX_PAGE_SIZE } from '../shared/constants/service.constants';
 import { SearchPagedQueryModel } from '../models/search/search-paged-query-model';
 import { PagedQueryModel } from '../models/pagination/paged-query-model';
+import { environment } from '../../environments/environment.development';
 
 
 @Service()
@@ -18,7 +19,7 @@ export class BudgetService {
     return httpResource<PagedResultModel<BudgetModel>>(() => {
       const q = query?.();
       return {
-        url: 'http://localhost:5167/api/v1/budgets/my',
+        url: `${environment.baseUrl}/v1/budgets/my`,
         params: q? {
           ...(q.search !== null? { search: q.search }: {}),
           page: q.page,
@@ -40,7 +41,7 @@ export class BudgetService {
     return httpResource<PagedResultModel<BudgetModel>>(() => {
       const q = query?.();
       return {
-        url: 'http://localhost:5167/api/v1/budgets/active',
+        url: `${environment.baseUrl}/v1/budgets/active`,
         params: q? {
           page: q.page,
           pageSize: q.pageSize,
@@ -57,15 +58,15 @@ export class BudgetService {
   }
 
   create(request: CreateUpdateBudgetModel): Observable<void> {
-    return this.http.post<void>('http://localhost:5167/api/v1/budgets', request);
+    return this.http.post<void>(`${environment.baseUrl}/v1/budgets`, request);
   }
 
   delete(budgetId: string): Observable<void> {
-    return this.http.delete<void>(`http://localhost:5167/api/v1/budgets/${budgetId}`);
+    return this.http.delete<void>(`${environment.baseUrl}/v1/budgets/${budgetId}`);
   }
 
   update(budgetId: string, budget: CreateUpdateBudgetModel): Observable<void> {
-    return this.http.put<void>(`http://localhost:5167/api/v1/budgets/${budgetId}`, budget);
+    return this.http.put<void>(`${environment.baseUrl}/v1/budgets/${budgetId}`, budget);
   }
 
   budgetDetailsWithExpenses(budgetId: string, query: () => PagedQueryModel)
@@ -73,7 +74,7 @@ export class BudgetService {
     return httpResource<BudgetDetailModel>(() =>{
       const q = query();
       return {
-        url: 'http://localhost:5167/api/v1/budgets/budget-detail-with-expenses',
+        url: `${environment.baseUrl}/v1/budgets/budget-detail-with-expenses`,
         params: {
           budgetId: budgetId,
 

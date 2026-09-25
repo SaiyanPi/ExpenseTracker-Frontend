@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { CreateUpdateCategoryModel } from '../models/category/create-update-category-model';
 import { MAX_PAGE_SIZE } from '../shared/constants/service.constants';
 import { SearchPagedQueryModel } from '../models/search/search-paged-query-model';
+import { environment } from '../../environments/environment.development';
 
 @Service()
 export class CategoryService {
@@ -16,7 +17,7 @@ export class CategoryService {
     return httpResource<PagedResultModel<CategoryModel>>(() => {
       const q = query?.();
       return {
-        url: 'http://localhost:5167/api/v1/categories/my',
+        url: `${environment.baseUrl}/v1/categories/my`,
         params: q? {
           ...(q.search !== null? { search: q.search }: {}),
           page: q.page,
@@ -34,14 +35,14 @@ export class CategoryService {
   }
 
   create(request: CreateUpdateCategoryModel): Observable<void> {
-    return this.http.post<void>('http://localhost:5167/api/v1/categories', request);
+    return this.http.post<void>(`${environment.baseUrl}/v1/categories`, request);
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`http://localhost:5167/api/v1/categories/${id}`);
+    return this.http.delete<void>(`${environment.baseUrl}/v1/categories/${id}`);
   }
 
   update(id: string, category: CreateUpdateCategoryModel): Observable<void> {
-    return this.http.put<void>(`http://localhost:5167/api/v1/categories/${id}`, category);
+    return this.http.put<void>(`${environment.baseUrl}/v1/categories/${id}`, category);
   }
 }

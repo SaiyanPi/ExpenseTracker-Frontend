@@ -3,6 +3,7 @@ import { inject, Service, signal } from '@angular/core';
 import { UserProfileModel } from '../models/profile/user-profile-model';
 import { UpdateProfileRequestModel } from '../models/profile/update-profile-request-model';
 import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
+import { environment } from '../../environments/environment.development';
 
 @Service()
 export class ProfileService {
@@ -25,7 +26,7 @@ export class ProfileService {
 
   loadProfile(): Observable<UserProfileModel> {
     return this.http
-    .get<UserProfileModel>('http://localhost:5167/api/profile/my')
+    .get<UserProfileModel>(`${environment.baseUrl}/profile/my`)
     .pipe(
       tap(profile => {
         this._profile.set(profile);
@@ -42,7 +43,7 @@ export class ProfileService {
 
   updateProfile(request: UpdateProfileRequestModel): Observable<UserProfileModel> {
     return this.http.put<UserProfileModel>(
-      'http://localhost:5167/api/profile/my/update', request
+      `${environment.baseUrl}/profile/my/update`, request
     );
   }
 
@@ -51,7 +52,7 @@ export class ProfileService {
     formData.append('image', image);
 
     return this.http.put<UserProfileModel>(
-      'http://localhost:5167/api/profile/my/image/update', formData,
+      `${environment.baseUrl}/profile/my/image/update`, formData,
       {
         observe: 'events',
         reportProgress: true

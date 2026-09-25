@@ -9,6 +9,7 @@ import { RegisterRequestModel } from '../models/auth/register-request-model';
 import { JwtClaimsModel } from '../models/auth/jwt-claims-model';
 import { ForgotPasswordModel } from '../models/forgot-password/forgot-password-model';
 import { PasswordResetModel } from '../models/password-reset/password-reset-model';
+import { environment } from '../../environments/environment.development';
 
 const USER_LOCAL_STORAGE_KEY = 'rememberMe';
 
@@ -96,7 +97,7 @@ export class AuthService {
 
   login(request: LoginRequestModel): Observable<LoginRegisterResponseModel> {
     return this.http
-    .post<LoginRegisterResponseModel>('http://localhost:5167/api/auth/login', request )
+    .post<LoginRegisterResponseModel>(`${environment.baseUrl}/auth/login`, request )
     .pipe(tap(user => {
       this.user.set(user);
       // this.startTokenExpirationTimer(user.expiresAt);
@@ -106,7 +107,7 @@ export class AuthService {
 
   register(request: RegisterRequestModel): Observable<LoginRegisterResponseModel> {
     return this.http
-    .post<LoginRegisterResponseModel>('http://localhost:5167/api/auth/register-user', request )
+    .post<LoginRegisterResponseModel>(`${environment.baseUrl}/auth/register-user`, request )
     .pipe(tap(user => {
       this.user.set(user);
       // this.startTokenExpirationTimer(user.expiresAt);
@@ -127,7 +128,7 @@ export class AuthService {
     }
 
     this.refreshRequest$ = this.http
-      .post<LoginRegisterResponseModel>('http://localhost:5167/api/auth/refresh',
+      .post<LoginRegisterResponseModel>(`${environment.baseUrl}/auth/refresh`,
         {
           refreshToken
         }
@@ -148,7 +149,7 @@ export class AuthService {
 
 
   logout(): Observable<void> {
-    return this.http.post<void>('http://localhost:5167/api/auth/logout', {}).pipe(
+    return this.http.post<void>(`${environment.baseUrl}/auth/logout`, {}).pipe(
       finalize(() => {
         this.clearAuthState();
         this.router.navigate(['/home']);
@@ -163,11 +164,11 @@ export class AuthService {
   }
 
   forgotPassword(email: ForgotPasswordModel): Observable<void> {
-    return this.http.post<void>('http://localhost:5167/api/auth/forgot-password', email);
+    return this.http.post<void>(`${environment.baseUrl}/auth/forgot-password`, email);
   }
 
   resetPassword(userId: string, token: string, newPassword: PasswordResetModel): Observable<void> {
-    return this.http.post<void>('http://localhost:5167/api/auth/reset-password', newPassword, {
+    return this.http.post<void>(`${environment.baseUrl}/auth/reset-password`, newPassword, {
       params: {
         userId,
         token

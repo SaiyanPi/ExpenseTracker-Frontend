@@ -2,6 +2,7 @@ import { httpResource } from '@angular/common/http';
 import { ResourceRef, Service } from '@angular/core';
 import { DashboardSummaryModel } from '../models/dashboard/dashboard-summary-model';
 import { DashboardQueryModel } from '../models/dashboard/dashboard-query-model';
+import { environment } from '../../environments/environment.development';
 
 @Service()
 export class DashboardService {
@@ -9,7 +10,7 @@ export class DashboardService {
     return httpResource<DashboardSummaryModel>(() => {
       const q = query();
       return {
-        url: 'http://localhost:5167/api/v1/dashboard/dashboard',
+        url: `${environment.baseUrl}/v1/dashboard/dashboard`,
         params: {
           ...(q.startDate !== null? { startDate: q.startDate }: {}),
           ...(q.endDate !== null? { endDate: q.endDate }: {})

@@ -6,6 +6,7 @@ import { SearchPagedQueryModel } from '../models/search/search-paged-query-model
 import { PagedResultModel } from '../models/pagination/paged-result-model';
 import { HttpClient, httpResource } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment.development';
 
 @Service()
 export class NotificationService {
@@ -62,7 +63,7 @@ export class NotificationService {
       const q = query?.();
 
       return {
-        url: 'http://localhost:5167/api/v1/notifications',
+        url: `${environment.baseUrl}/v1/notifications`,
         params: q? {
           ...(q.search !== null? { search: q.search }: {}),
           page: q.page,
@@ -83,20 +84,20 @@ export class NotificationService {
 
   // Shared resource for the whole application.
   readonly allUnreadCount = httpResource<number>(() => ({
-    url: 'http://localhost:5167/api/v1/notifications/unread-count'
+    url: `${environment.baseUrl}/v1/notifications/unread-count`
   }));
 
 
   markAsRead(notificationId: string): Observable<void> {
     return this.http.patch<void>(
-      `http://localhost:5167/api/v1/notifications/${notificationId}/read`,
+      `${environment.baseUrl}/v1/notifications/${notificationId}/read`,
       {}
     );
   }
 
   markAllAsRead(): Observable<void> {
     return this.http.patch<void>(
-      'http://localhost:5167/api/v1/notifications/read-all',
+      `${environment.baseUrl}/v1/notifications/read-all`,
       {}
     );
   }
