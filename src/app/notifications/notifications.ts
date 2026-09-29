@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { NotificationService } from '../services/notification-service';
 import { PaginationState } from '../shared/pagination/pagination-state/pagination-state';
 import { SearchState } from '../shared/search/search-state/search-state/search-state';
@@ -34,6 +34,53 @@ export class Notifications {
 
   protected readonly getNotifications = this.notificationService.allNotifications(this.query);
 
+  // occumulated notifications - load more notification
+  readonly notifications = signal<NotificationModel[]>([]);
+
+  // Append/replace API results
+  private readonly notificationsEffect = effect(() => {
+    const result = this.getNotifications.value();
+
+    if (!result) {
+      return;
+    }
+
+    const currentPage = this.pagination.query().page;
+
+    if (currentPage === 1) {
+
+      // First page / refreshed search
+      this.notifications.set(result.items);
+      return;
+    }
+
+    // Load more
+    this.notifications.update(current => [
+      ...current,
+      ...result.items
+    ]);
+
+  });
+
+  // load more
+  protected loadMore(): void {
+    if (this.getNotifications.isLoading()) {
+      return;
+    }
+    this.pagination.next(this.hasMoreNotifications());
+  }
+
+  // has more? - load more notification
+  readonly hasMoreNotifications = computed(() => {
+    const result = this.getNotifications.value();
+
+    if (!result) {
+      return false;
+    }
+    return this.notifications().length < result.totalCount;
+  });
+
+
   protected getNotificationIcon(type: string): string {
     switch (type) {
       case NotificationType.BudgetExceeded:
@@ -67,20 +114,24 @@ export class Notifications {
       this.router.navigate(['/layout/budgets', notification.relatedEntityId]);
     }
   }
-  
+
   protected async markAsRead(notification: NotificationModel): Promise<void> {
     if (notification.isRead) {
       return;
     }
-
     try {
       await firstValueFrom(
         this.notificationService.markAsRead(notification.id)
       );
-
-      this.getNotifications.reload();
+      this.notifications.update(notifications =>
+        notifications.map(item =>
+          item.id === notification.id
+            ? { ...item, isRead: true }
+            : item
+        )
+      );
       this.getAllUnreadCount.reload();
-
+      this.apiErrorService.showSuccess('Notification marked as read.');
     } catch (error) {
       this.apiErrorService.handle(error);
     }
@@ -91,12 +142,14 @@ export class Notifications {
       await firstValueFrom(
         this.notificationService.markAllAsRead()
       );
-
-      this.getNotifications.reload();
+      this.notifications.update(notifications =>
+        notifications.map(notification => ({
+          ...notification,
+          isRead: true
+        }))
+      );
       this.getAllUnreadCount.reload();
-
       this.apiErrorService.showSuccess('All notifications marked as read.');
-
     } catch (error) {
       this.apiErrorService.handle(error);
     }
