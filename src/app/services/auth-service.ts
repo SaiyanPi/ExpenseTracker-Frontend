@@ -22,6 +22,8 @@ export class AuthService {
 
   readonly currentUser = this.user.asReadonly();
 
+  readonly isAuthenticated = computed(() => this.currentUser() !== undefined);
+
   async initialize(): Promise<void> {
     const storedUser = this.retrieveUser();
 
