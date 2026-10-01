@@ -131,6 +131,14 @@ The layout also displays the currently authenticated user's profile information 
 ![Notifications](screenshots/Notification1.png)
 ![Notifications](screenshots/Notification2.png)
 
+### Profile
+
+![Profile](screenshots/Profile.png)
+
+### Account Setting
+
+![Account Setting](screenshots/AccountSetting.png)
+
 ---
 
 ## Tech Stack
