@@ -120,17 +120,18 @@ The layout also displays the currently authenticated user's profile information 
 
 ### Budget Management
 
-![Budgets](screenshots/CategoryMgmt.png)
+![Budgets](screenshots/BudgetMgmt.png)
 
 ### Category Management
 
-![Budgets](screenshots/BudgetMgmt.png)
+![Budgets](screenshots/CategoryMgmt.png)
 
 ### Notifications
 
 ![Notifications](screenshots/Notification1.png)
 ![Notifications](screenshots/Notification2.png)
 
+---
 
 ## Tech Stack
 
